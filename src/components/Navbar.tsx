@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
   DropdownMenu, 
@@ -22,6 +23,21 @@ import {
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRoleSelect = (roleId: string) => {
+    const roleRoutes = {
+      'OWNER': '/dashboard/owner',
+      'ADMIN': '/dashboard/admin',
+      'PROJECT_MANAGER': '/dashboard/project-manager',
+      'TEAM_LEAD': '/dashboard/team-lead',
+      'MEMBER': '/dashboard/member',
+      'FINANCE': '/dashboard/finance',
+      'CLIENT': '/dashboard/client',
+    };
+    navigate(roleRoutes[roleId as keyof typeof roleRoutes]);
+    setIsMobileMenuOpen(false);
+  };
 
   const roles = [
     { id: 'OWNER', label: 'Owner', icon: Crown, description: 'Full platform access' },
@@ -82,7 +98,11 @@ const Navbar = () => {
                 </div>
                 <DropdownMenuSeparator />
                 {roles.map((role) => (
-                  <DropdownMenuItem key={role.id} className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer">
+                  <DropdownMenuItem 
+                    key={role.id} 
+                    className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
+                    onClick={() => handleRoleSelect(role.id)}
+                  >
                     <role.icon className="h-4 w-4 text-primary" />
                     <div>
                       <div className="font-medium">{role.label}</div>
@@ -138,7 +158,11 @@ const Navbar = () => {
                     </div>
                     <DropdownMenuSeparator />
                     {roles.map((role) => (
-                      <DropdownMenuItem key={role.id} className="flex items-center space-x-3 p-3">
+                      <DropdownMenuItem 
+                        key={role.id} 
+                        className="flex items-center space-x-3 p-3"
+                        onClick={() => handleRoleSelect(role.id)}
+                      >
                         <role.icon className="h-4 w-4 text-primary" />
                         <div>
                           <div className="font-medium">{role.label}</div>
