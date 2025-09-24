@@ -89,29 +89,14 @@ const App = () => (
           <Route path="/" element={<AuthGuard requireAuth={false}><Index /></AuthGuard>} />
           <Route path="/auth" element={<AuthGuard requireAuth={false}><Auth /></AuthGuard>} />
           <Route path="/pricing" element={<AuthGuard requireAuth={false}><Pricing /></AuthGuard>} />
+          
+          {/* Protected Dashboard Routes */}
           <Route path="/dashboard/owner" element={<AuthGuard><OwnerDashboard /></AuthGuard>} />
           <Route path="/dashboard/admin" element={<AuthGuard><AdminDashboard /></AuthGuard>} />
           <Route path="/dashboard/project-manager" element={<AuthGuard><ProjectManagerDashboard /></AuthGuard>} />
           <Route path="/dashboard/team-lead" element={<AuthGuard><TeamLeadDashboard /></AuthGuard>} />
-          <Route path="/dashboard/team-lead/approvals" element={<TeamLeadApprovals />} />
-          <Route path="/dashboard/team-lead/development" element={<TeamDevelopment />} />
-          <Route path="/dashboard/team-lead/one-on-ones" element={<TeamLeadOneOnOne />} />
-          <Route path="/dashboard/team-lead/feedback" element={<TeamLeadFeedback />} />
-          <Route path="/dashboard/team-lead/tasks" element={<TeamLeadTasks />} />
-          <Route path="/dashboard/team-lead/time-management" element={<TeamLeadTimeManagement />} />
-          <Route path="/dashboard/team-lead/performance" element={<TeamLeadPerformance />} />
-          <Route path="/dashboard/team-lead/members" element={<TeamLeadMembers />} />
           <Route path="/dashboard/member" element={<AuthGuard><MemberDashboard /></AuthGuard>} />
           <Route path="/dashboard/finance" element={<AuthGuard><FinanceDashboard /></AuthGuard>} />
-          <Route path="/dashboard/finance/payroll" element={<FinancePayroll />} />
-          <Route path="/dashboard/finance/forecasting" element={<FinanceForecasting />} />
-          <Route path="/dashboard/finance/expenses" element={<FinanceExpenseManagement />} />
-          <Route path="/dashboard/finance/revenue" element={<FinanceRevenue />} />
-          <Route path="/dashboard/finance/invoicing" element={<FinanceInvoicing />} />
-          <Route path="/dashboard/finance/reports" element={<FinanceReports />} />
-          <Route path="/dashboard/finance/budget" element={<FinanceBudget />} />
-          <Route path="/dashboard/finance/tax" element={<FinanceTax />} />
-          <Route path="/dashboard/finance/transactions/:transactionId" element={<TransactionDetails />} />
           <Route path="/dashboard/client" element={<AuthGuard><ClientDashboard /></AuthGuard>} />
           
           {/* Owner Dashboard Routes */}
@@ -123,7 +108,6 @@ const App = () => (
           <Route path="/dashboard/owner/billing" element={<AuthGuard><OwnerBilling /></AuthGuard>} />
           <Route path="/dashboard/owner/goals" element={<AuthGuard><OwnerGoals /></AuthGuard>} />
           <Route path="/dashboard/owner/reports" element={<AuthGuard><OwnerAdvancedReports /></AuthGuard>} />
-          <Route path="/dashboard/finance/claims" element={<AuthGuard><FinanceExpenseClaims /></AuthGuard>} />
           
           {/* Admin Dashboard Routes */}
           <Route path="/dashboard/admin/users" element={<AuthGuard><AdminUsers /></AuthGuard>} />
@@ -142,6 +126,16 @@ const App = () => (
           <Route path="/dashboard/project-manager/tasks" element={<AuthGuard><AllTasks /></AuthGuard>} />
           <Route path="/dashboard/project-manager/time-report" element={<AuthGuard><TimeTrackingReport /></AuthGuard>} />
           
+          {/* Team Lead Dashboard Routes */}
+          <Route path="/dashboard/team-lead/approvals" element={<AuthGuard><TeamLeadApprovals /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/development" element={<AuthGuard><TeamDevelopment /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/one-on-ones" element={<AuthGuard><TeamLeadOneOnOne /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/feedback" element={<AuthGuard><TeamLeadFeedback /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/tasks" element={<AuthGuard><TeamLeadTasks /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/time-management" element={<AuthGuard><TeamLeadTimeManagement /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/performance" element={<AuthGuard><TeamLeadPerformance /></AuthGuard>} />
+          <Route path="/dashboard/team-lead/members" element={<AuthGuard><TeamLeadMembers /></AuthGuard>} />
+          
           {/* Member Dashboard Routes */}
           <Route path="/dashboard/member/tasks" element={<AuthGuard><MemberTasks /></AuthGuard>} />
           <Route path="/dashboard/member/time" element={<AuthGuard><MemberTimeTracking /></AuthGuard>} />
@@ -149,6 +143,18 @@ const App = () => (
           <Route path="/dashboard/member/chat" element={<AuthGuard><MemberTeamChat /></AuthGuard>} />
           <Route path="/dashboard/member/schedule" element={<AuthGuard><MemberSchedule /></AuthGuard>} />
           <Route path="/dashboard/member/settings" element={<AuthGuard><MemberSettings /></AuthGuard>} />
+          
+          {/* Finance Dashboard Routes */}
+          <Route path="/dashboard/finance/payroll" element={<AuthGuard><FinancePayroll /></AuthGuard>} />
+          <Route path="/dashboard/finance/forecasting" element={<AuthGuard><FinanceForecasting /></AuthGuard>} />
+          <Route path="/dashboard/finance/expenses" element={<AuthGuard><FinanceExpenseManagement /></AuthGuard>} />
+          <Route path="/dashboard/finance/revenue" element={<AuthGuard><FinanceRevenue /></AuthGuard>} />
+          <Route path="/dashboard/finance/invoicing" element={<AuthGuard><FinanceInvoicing /></AuthGuard>} />
+          <Route path="/dashboard/finance/reports" element={<AuthGuard><FinanceReports /></AuthGuard>} />
+          <Route path="/dashboard/finance/budget" element={<AuthGuard><FinanceBudget /></AuthGuard>} />
+          <Route path="/dashboard/finance/tax" element={<AuthGuard><FinanceTax /></AuthGuard>} />
+          <Route path="/dashboard/finance/transactions/:transactionId" element={<AuthGuard><TransactionDetails /></AuthGuard>} />
+          <Route path="/dashboard/finance/claims" element={<AuthGuard><FinanceExpenseClaims /></AuthGuard>} />
           
           {/* Client Dashboard Routes */}
           <Route path="/dashboard/client/projects" element={<AuthGuard><ClientProjects /></AuthGuard>} />
