@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, ArrowLeft } from 'lucide-react';
 import { PasswordStrengthIndicator } from '@/components/PasswordStrengthIndicator';
-import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
 interface AuthFormProps {
@@ -28,6 +28,7 @@ export const AuthForm = ({ mode, onModeChange, onSuccess }: AuthFormProps) => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,12 +83,8 @@ export const AuthForm = ({ mode, onModeChange, onSuccess }: AuthFormProps) => {
 
     try {
       if (mode === 'signin') {
-        const { error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
-
-        if (error) throw error;
+        // Mock authentication - in production this would use real auth
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
 
         toast({
           title: "Welcome back!",
@@ -96,32 +93,18 @@ export const AuthForm = ({ mode, onModeChange, onSuccess }: AuthFormProps) => {
         onSuccess?.();
 
       } else if (mode === 'signup') {
-        const { error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-            data: {
-              first_name: formData.firstName,
-              last_name: formData.lastName,
-              company: formData.company,
-            }
-          }
-        });
+        // Mock registration - in production this would use real auth
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
 
-        if (error) throw error;
-
-        setSuccess('Account created successfully! Please check your email to verify your account.');
+        setSuccess('Account created successfully! You can now sign in.');
         toast({
           title: "Account created!",
-          description: "Please check your email to verify your account.",
+          description: "You can now sign in with your credentials.",
         });
 
       } else if (mode === 'forgot') {
-        const { error } = await supabase.auth.resetPasswordForEmail(formData.email, {
-          redirectTo: `${window.location.origin}/auth?mode=reset`,
-        });
-
-        if (error) throw error;
+        // Mock password reset - in production this would use real auth
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
 
         setSuccess('Password reset email sent! Please check your inbox.');
         toast({

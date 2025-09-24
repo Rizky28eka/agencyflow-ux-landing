@@ -19,7 +19,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
 const roleNavigation = {
@@ -98,19 +98,22 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
   const { state } = useSidebar();
   const location = useLocation();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const navigation = roleNavigation[role as keyof typeof roleNavigation] || [];
   
   const isActive = (path: string) => location.pathname === path;
   
   const handleLogout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      // Mock logout - in production this would use real auth
+      await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
       
       toast({
         title: "Signed out",
         description: "You've been successfully logged out.",
       });
+      
+      navigate('/auth');
     } catch (error: any) {
       toast({
         title: "Error",

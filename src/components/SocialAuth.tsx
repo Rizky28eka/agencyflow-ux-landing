@@ -2,25 +2,27 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Github, Mail, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 
 export const SocialAuth = () => {
   const [loading, setLoading] = useState<string | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSocialAuth = async (provider: 'google' | 'github') => {
     setLoading(provider);
     
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/dashboard/owner`
-        }
+      // Mock social authentication - in production this would use real OAuth
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate OAuth flow
+      
+      toast({
+        title: "Authentication successful",
+        description: `Signed in with ${provider}`,
       });
-
-      if (error) throw error;
+      
+      navigate('/dashboard/owner');
     } catch (error: any) {
       toast({
         title: "Authentication failed",

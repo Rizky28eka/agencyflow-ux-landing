@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { User, Edit, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 export const UserProfile = () => {
@@ -29,15 +28,8 @@ export const UserProfile = () => {
     setLoading(true);
     
     try {
-      const { error } = await supabase.auth.updateUser({
-        data: {
-          first_name: profileData.firstName,
-          last_name: profileData.lastName,
-          company: profileData.company,
-        }
-      });
-
-      if (error) throw error;
+      // Mock profile update - in production this would use real API
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
 
       toast({
         title: "Profile updated",

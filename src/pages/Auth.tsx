@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { AuthForm } from '@/components/AuthForm';
 import { SocialAuth } from '@/components/SocialAuth';
 import { ArrowLeft, Building2, Shield, Users, Zap } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const Auth = () => {
@@ -15,25 +14,8 @@ const Auth = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Check if user is already authenticated
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        navigate('/dashboard/owner');
-      }
-    };
-    checkUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' && session) {
-        navigate('/dashboard/owner');
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+  // For demo purposes, we'll skip authentication checks
+  // In production, this would check actual authentication state
 
   const getTitle = () => {
     switch (mode) {
