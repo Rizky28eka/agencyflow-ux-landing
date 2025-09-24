@@ -125,22 +125,30 @@ const OwnerDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full justify-start" variant="outline">
-                <Users className="mr-2 h-4 w-4" />
-                Manage Team Members
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <DollarSign className="mr-2 h-4 w-4" />
-                Financial Reports
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <BarChart3 className="mr-2 h-4 w-4" />
-                Performance Analytics
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Settings className="mr-2 h-4 w-4" />
-                System Configuration
-              </Button>
+              <Link to="/dashboard/owner/team" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <Users className="mr-2 h-4 w-4" />
+                  Manage Team Members
+                </Button>
+              </Link>
+              <Link to="/dashboard/owner/finance" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <DollarSign className="mr-2 h-4 w-4" />
+                  Financial Reports
+                </Button>
+              </Link>
+              <Link to="/dashboard/owner/analytics" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <BarChart3 className="mr-2 h-4 w-4" />
+                  Performance Analytics
+                </Button>
+              </Link>
+              <Link to="/dashboard/owner/settings" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <Settings className="mr-2 h-4 w-4" />
+                  System Configuration
+                </Button>
+              </Link>
               <Link to="/dashboard/owner/goals" className="w-full">
                 <Button className="w-full justify-start" variant="outline">
                     <Target className="mr-2 h-4 w-4" />

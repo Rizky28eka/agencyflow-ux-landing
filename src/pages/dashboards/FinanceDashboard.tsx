@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { DollarSign, TrendingUp, PieChart, CreditCard, Receipt, Calculator, FileText, Target, BarChart3 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const FinanceDashboard = () => {
@@ -100,22 +101,35 @@ const FinanceDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
+            <Link to="/dashboard/finance/expenses" className="w-full">
               <Button className="w-full justify-start" variant="outline">
-                <FileText className="mr-2 h-4 w-4" />
-                Invoice Management
+                <Receipt className="mr-2 h-4 w-4" />
+                Expense Management
               </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <PieChart className="mr-2 h-4 w-4" />
-                Budget Planning
-              </Button>
+            </Link>
+                          <Link to="/dashboard/finance/invoicing" className="w-full">
+                            <Button className="w-full justify-start" variant="outline">
+                              <FileText className="mr-2 h-4 w-4" />
+                              Invoice Management
+                            </Button>
+                          </Link>            <Link to="/dashboard/finance/reports" className="w-full">
               <Button className="w-full justify-start" variant="outline">
                 <TrendingUp className="mr-2 h-4 w-4" />
                 Financial Reports
               </Button>
+            </Link>
+            <Link to="/dashboard/finance/budget" className="w-full">
               <Button className="w-full justify-start" variant="outline">
-                <Calculator className="mr-2 h-4 w-4" />
-                Tax Calculations
+                <PieChart className="mr-2 h-4 w-4" />
+                Budget Planning
               </Button>
+            </Link>
+            <Link to="/dashboard/finance/tax" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                    <Calculator className="mr-2 h-4 w-4" />
+                    Tax Calculations
+                </Button>
+            </Link>
             </CardContent>
           </Card>
         </div>

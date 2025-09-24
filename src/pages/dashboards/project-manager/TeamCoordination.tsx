@@ -1,15 +1,26 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, MessageSquare, Calendar, UserCheck, Clock, Plus } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
+import { toast } from 'sonner';
 
 const ProjectManagerTeamCoordination = () => {
   const teamMembers = [
-    { name: 'Sarah Johnson', role: 'UI/UX Designer', project: 'Website Redesign', status: 'Available', workload: 75 },
-    { name: 'Mike Chen', role: 'Frontend Developer', project: 'Mobile App', status: 'Busy', workload: 90 },
-    { name: 'Emily Davis', role: 'Backend Developer', project: 'E-commerce Platform', status: 'Available', workload: 60 },
-    { name: 'Alex Rodriguez', role: 'QA Engineer', project: 'Brand Identity', status: 'Available', workload: 45 },
+    { id: 1, name: 'Sarah Johnson', role: 'UI/UX Designer', project: 'Website Redesign', status: 'Available', workload: 75 },
+    { id: 2, name: 'Mike Chen', role: 'Frontend Developer', project: 'Mobile App', status: 'Busy', workload: 90 },
+    { id: 3, name: 'Emily Davis', role: 'Backend Developer', project: 'E-commerce Platform', status: 'Available', workload: 60 },
+    { id: 4, name: 'Alex Rodriguez', role: 'QA Engineer', project: 'Brand Identity', status: 'Available', workload: 45 },
   ];
+
+  const handleScheduleMeeting = () => {
+    toast.success('Meeting scheduled successfully!');
+  };
 
   return (
     <DashboardLayout
@@ -111,10 +122,52 @@ const ProjectManagerTeamCoordination = () => {
             <CardTitle>Team Coordination</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start" variant="outline">
-              <Calendar className="mr-2 h-4 w-4" />
-              Schedule Team Meeting
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="w-full justify-start" variant="outline">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Schedule Team Meeting
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[500px]">
+                <DialogHeader>
+                  <DialogTitle>Schedule a New Meeting</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-6 py-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="title">Meeting Title</Label>
+                    <Input id="title" placeholder="e.g., Project Alpha Sync-up" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="datetime">Date & Time</Label>
+                    <Input id="datetime" type="datetime-local" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Participants</Label>
+                    <div className="space-y-2 rounded-md border p-4 max-h-48 overflow-y-auto">
+                      {teamMembers.map(member => (
+                        <div key={member.id} className="flex items-center space-x-2">
+                          <Checkbox id={`member-${member.id}`} />
+                          <Label htmlFor={`member-${member.id}`} className="font-normal">{member.name} - <span className="text-muted-foreground">{member.role}</span></Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="agenda">Agenda</Label>
+                    <Textarea id="agenda" placeholder="Discuss project milestones, blockers, and next steps." />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button type="button" variant="secondary">Cancel</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button type="button" onClick={handleScheduleMeeting}>Schedule Meeting</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             <Button className="w-full justify-start" variant="outline">
               <MessageSquare className="mr-2 h-4 w-4" />
               Send Team Update

@@ -1,11 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Target, Plus, Calendar, Users, Clock, MoreHorizontal } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const ProjectManagerProjects = () => {
   const projects = [
     { 
+      id: 1,
       name: 'Website Redesign', 
       client: 'TechCorp', 
       status: 'In Progress', 
@@ -15,6 +17,7 @@ const ProjectManagerProjects = () => {
       priority: 'High'
     },
     { 
+      id: 2,
       name: 'Mobile App Development', 
       client: 'StartupXYZ', 
       status: 'Planning', 
@@ -24,6 +27,7 @@ const ProjectManagerProjects = () => {
       priority: 'Medium'
     },
     { 
+      id: 3,
       name: 'Brand Identity', 
       client: 'RetailCo', 
       status: 'Review', 
@@ -33,6 +37,7 @@ const ProjectManagerProjects = () => {
       priority: 'High'
     },
     { 
+      id: 4,
       name: 'E-commerce Platform', 
       client: 'ShopLocal', 
       status: 'In Progress', 
@@ -154,9 +159,11 @@ const ProjectManagerProjects = () => {
                 }`}>
                   {project.status}
                 </span>
-                <Button size="sm" variant="outline">
-                  View Details
-                </Button>
+                <Link to={`/dashboard/project-manager/projects/${project.id}`}>
+                  <Button size="sm" variant="outline">
+                    View Details
+                  </Button>
+                </Link>
               </div>
             </CardContent>
           </Card>

@@ -3,7 +3,7 @@ import {
   Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap,
   Shield, UserCheck, Calendar, CheckSquare, Clock, Star, Target, Plus,
   FileText, PieChart, CreditCard, Receipt, Calculator, Briefcase,
-  Home, LogOut, User, Bell
+  Home, LogOut, User, Bell, List, Share2, AlertTriangle, Banknote, MessageSquare, BrainCircuit
 } from 'lucide-react';
 import {
   Sidebar,
@@ -22,258 +22,66 @@ import { Button } from '@/components/ui/button';
 
 const roleNavigation = {
   owner: [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/owner', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'Company Analytics', 
-      url: '/dashboard/owner/analytics', 
-      icon: BarChart3, 
-      description: 'Performance metrics' 
-    },
-    { 
-      title: 'Team Management', 
-      url: '/dashboard/owner/team', 
-      icon: Users, 
-      description: 'Manage all team members' 
-    },
-    { 
-      title: 'Financial Overview', 
-      url: '/dashboard/owner/finance', 
-      icon: DollarSign, 
-      description: 'Revenue and expenses' 
-    },
-    { 
-      title: 'Company Settings', 
-      url: '/dashboard/owner/settings', 
-      icon: Settings, 
-      description: 'System configuration' 
-    },
+    { title: 'Dashboard', url: '/dashboard/owner', icon: Home },
+    { title: 'Analytics', url: '/dashboard/owner/analytics', icon: BarChart3 },
+    { title: 'Team', url: '/dashboard/owner/team', icon: Users },
+    { title: 'Finance', url: '/dashboard/owner/finance', icon: DollarSign },
+    { title: 'Goal Tracking', url: '/dashboard/owner/goals', icon: Target },
+    { title: 'Billing & Plan', url: '/dashboard/owner/billing', icon: CreditCard },
+    { title: 'Settings', url: '/dashboard/owner/settings', icon: Settings },
   ],
   admin: [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/admin', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'User Management', 
-      url: '/dashboard/admin/users', 
-      icon: Users, 
-      description: 'Manage all users' 
-    },
-    { 
-      title: 'Role Permissions', 
-      url: '/dashboard/admin/roles', 
-      icon: Shield, 
-      description: 'Configure access levels' 
-    },
-    { 
-      title: 'System Reports', 
-      url: '/dashboard/admin/reports', 
-      icon: FileText, 
-      description: 'Generate system reports' 
-    },
-    { 
-      title: 'System Settings', 
-      url: '/dashboard/admin/settings', 
-      icon: Settings, 
-      description: 'Platform configuration' 
-    },
+    { title: 'Dashboard', url: '/dashboard/admin', icon: Home },
+    { title: 'Users', url: '/dashboard/admin/users', icon: Users },
+    { title: 'Roles', url: '/dashboard/admin/roles', icon: Shield },
+    { title: 'Reports', url: '/dashboard/admin/reports', icon: FileText },
+    { title: 'Audit Log', url: '/dashboard/admin/audit-log', icon: List },
+    { title: 'Integrations', url: '/dashboard/admin/integrations', icon: Share2 },
+    { title: 'Settings', url: '/dashboard/admin/settings', icon: Settings },
   ],
   'project-manager': [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/project-manager', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'Active Projects', 
-      url: '/dashboard/project-manager/projects', 
-      icon: Target, 
-      description: 'Manage all projects' 
-    },
-    { 
-      title: 'Team Coordination', 
-      url: '/dashboard/project-manager/team', 
-      icon: Users, 
-      description: 'Team assignments' 
-    },
-    { 
-      title: 'Task Management', 
-      url: '/dashboard/project-manager/tasks', 
-      icon: CheckSquare, 
-      description: 'Track project tasks' 
-    },
-    { 
-      title: 'Time Tracking', 
-      url: '/dashboard/project-manager/time', 
-      icon: Clock, 
-      description: 'Monitor work hours' 
-    },
-    { 
-      title: 'Project Reports', 
-      url: '/dashboard/project-manager/reports', 
-      icon: FileText, 
-      description: 'Project analytics' 
-    },
-  ],
-  'team-lead': [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/team-lead', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'Team Performance', 
-      url: '/dashboard/team-lead/performance', 
-      icon: TrendingUp, 
-      description: 'Track team metrics' 
-    },
-    { 
-      title: 'Team Members', 
-      url: '/dashboard/team-lead/members', 
-      icon: Users, 
-      description: 'Manage team members' 
-    },
-    { 
-      title: '1-on-1 Meetings', 
-      url: '/dashboard/team-lead/meetings', 
-      icon: Calendar, 
-      description: 'Schedule meetings' 
-    },
-    { 
-      title: 'Task Assignment', 
-      url: '/dashboard/team-lead/tasks', 
-      icon: CheckSquare, 
-      description: 'Assign and track tasks' 
-    },
-    { 
-      title: 'Team Feedback', 
-      url: '/dashboard/team-lead/feedback', 
-      icon: Star, 
-      description: 'Performance reviews' 
-    },
+    { title: 'Dashboard', url: '/dashboard/project-manager', icon: Home },
+    { title: 'Projects', url: '/dashboard/project-manager/projects', icon: Briefcase },
+    { title: 'All Tasks', url: '/dashboard/project-manager/tasks', icon: CheckSquare },
+    { title: 'Resource Mgmt', url: '/dashboard/project-manager/resource-management', icon: Users },
+    { title: 'Risk Mgmt', url: '/dashboard/project-manager/risk-management', icon: AlertTriangle },
+    { title: 'Time Reports', url: '/dashboard/project-manager/time-report', icon: Clock },
+    { title: 'Team Coordination', url: '/dashboard/project-manager/team', icon: UserCheck },
   ],
   member: [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/member', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'My Tasks', 
-      url: '/dashboard/member/tasks', 
-      icon: CheckSquare, 
-      description: 'View assigned tasks' 
-    },
-    { 
-      title: 'Time Tracking', 
-      url: '/dashboard/member/time', 
-      icon: Clock, 
-      description: 'Log work hours' 
-    },
-    { 
-      title: 'My Projects', 
-      url: '/dashboard/member/projects', 
-      icon: Target, 
-      description: 'Current projects' 
-    },
-    { 
-      title: 'Performance', 
-      url: '/dashboard/member/performance', 
-      icon: TrendingUp, 
-      description: 'View my metrics' 
-    },
-    { 
-      title: 'Team Calendar', 
-      url: '/dashboard/member/calendar', 
-      icon: Calendar, 
-      description: 'Team events' 
-    },
+    { title: 'Dashboard', url: '/dashboard/member', icon: Home },
+    { title: 'My Tasks', url: '/dashboard/member/tasks', icon: CheckSquare },
+    { title: 'Time Tracking', url: '/dashboard/member/time', icon: Clock },
+  ],
+  'team-lead': [
+    { title: 'Dashboard', url: '/dashboard/team-lead', icon: Home },
+    { title: 'Approvals', url: '/dashboard/team-lead/approvals', icon: UserCheck },
+    { title: 'Team Performance', url: '/dashboard/team-lead/performance', icon: TrendingUp },
+    { title: 'Team Members', url: '/dashboard/team-lead/members', icon: Users },
+    { title: '1-on-1 Meetings', url: '/dashboard/team-lead/one-on-ones', icon: Calendar },
+    { title: 'Task Assignment', url: '/dashboard/team-lead/tasks', icon: CheckSquare },
+    { title: 'Development', url: '/dashboard/team-lead/development', icon: Star },
+    { title: 'Feedback', url: '/dashboard/team-lead/feedback', icon: MessageSquare },
+    { title: 'Time Mgmt', url: '/dashboard/team-lead/time-management', icon: Clock },
   ],
   finance: [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/finance', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'Revenue Tracking', 
-      url: '/dashboard/finance/revenue', 
-      icon: DollarSign, 
-      description: 'Monitor income' 
-    },
-    { 
-      title: 'Expense Management', 
-      url: '/dashboard/finance/expenses', 
-      icon: Receipt, 
-      description: 'Track expenses' 
-    },
-    { 
-      title: 'Invoicing', 
-      url: '/dashboard/finance/invoicing', 
-      icon: FileText, 
-      description: 'Manage invoices' 
-    },
-    { 
-      title: 'Financial Reports', 
-      url: '/dashboard/finance/reports', 
-      icon: PieChart, 
-      description: 'Generate reports' 
-    },
-    { 
-      title: 'Budget Planning', 
-      url: '/dashboard/finance/budget', 
-      icon: Calculator, 
-      description: 'Plan budgets' 
-    },
+    { title: 'Dashboard', url: '/dashboard/finance', icon: Home },
+    { title: 'Payroll', url: '/dashboard/finance/payroll', icon: Banknote },
+    { title: 'Revenue Tracking', url: '/dashboard/finance/revenue', icon: DollarSign },
+    { title: 'Expense Management', url: '/dashboard/finance/expenses', icon: Receipt },
+    { title: 'Invoicing', url: '/dashboard/finance/invoicing', icon: FileText },
+    { title: 'Financial Reports', url: '/dashboard/finance/reports', icon: PieChart },
+    { title: 'Forecasting', url: '/dashboard/finance/forecasting', icon: BrainCircuit },
+    { title: 'Budget Planning', url: '/dashboard/finance/budget', icon: Calculator },
+    { title: 'Tax Calculations', url: '/dashboard/finance/tax', icon: Calculator },
   ],
   client: [
-    { 
-      title: 'Dashboard Overview', 
-      url: '/dashboard/client', 
-      icon: Home, 
-      description: 'Main dashboard view' 
-    },
-    { 
-      title: 'My Projects', 
-      url: '/dashboard/client/projects', 
-      icon: Briefcase, 
-      description: 'View project status' 
-    },
-    { 
-      title: 'Invoices & Billing', 
-      url: '/dashboard/client/billing', 
-      icon: CreditCard, 
-      description: 'Payment information' 
-    },
-    { 
-      title: 'Communication', 
-      url: '/dashboard/client/messages', 
-      icon: FileText, 
-      description: 'Project updates' 
-    },
-    { 
-      title: 'Documents', 
-      url: '/dashboard/client/documents', 
-      icon: FileText, 
-      description: 'Project files' 
-    },
-    { 
-      title: 'Support', 
-      url: '/dashboard/client/support', 
-      icon: Users, 
-      description: 'Get help' 
-    },
+    { title: 'Dashboard', url: '/dashboard/client', icon: Home },
+    { title: 'My Projects', url: '/dashboard/client/projects', icon: Briefcase },
+    { title: 'Invoices & Billing', url: '/dashboard/client/billing', icon: CreditCard },
+    { title: 'Communication', url: '/dashboard/client/messages', icon: FileText },
+    { title: 'Settings', url: '/dashboard/client/settings', icon: Settings },
+    { title: 'Custom Reports', url: '/dashboard/client/reports', icon: FileText },
   ],
 };
 

@@ -1,11 +1,19 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Calendar, Users, MessageSquare, FileText, Eye } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 const ClientProjects = () => {
   const projects = [
     { 
+      id: 1,
       name: 'Website Redesign', 
       status: 'In Progress', 
       progress: 75, 
@@ -15,6 +23,7 @@ const ClientProjects = () => {
       lastUpdate: '2 hours ago'
     },
     { 
+      id: 2,
       name: 'Mobile App Development', 
       status: 'Planning', 
       progress: 25, 
@@ -24,6 +33,7 @@ const ClientProjects = () => {
       lastUpdate: '1 day ago'
     },
     { 
+      id: 3,
       name: 'Brand Identity Package', 
       status: 'Review', 
       progress: 90, 
@@ -33,6 +43,10 @@ const ClientProjects = () => {
       lastUpdate: '3 hours ago'
     },
   ];
+
+  const handleAction = (action: string) => {
+    toast.success(`${action} sent successfully!`);
+  };
 
   return (
     <DashboardLayout
@@ -108,10 +122,12 @@ const ClientProjects = () => {
                   }`}>
                     {project.status}
                   </span>
-                  <Button variant="outline" size="sm">
-                    <Eye className="mr-2 h-4 w-4" />
-                    View Details
-                  </Button>
+                  <Link to={`/dashboard/client/projects/${project.id}`}>
+                    <Button variant="outline" size="sm">
+                      <Eye className="mr-2 h-4 w-4" />
+                      View Details
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardHeader>
@@ -152,18 +168,41 @@ const ClientProjects = () => {
               </div>
               
               <div className="flex space-x-3">
-                <Button size="sm" className="flex-1">
-                  <FileText className="mr-2 h-4 w-4" />
-                  View Deliverables
-                </Button>
-                <Button size="sm" variant="outline" className="flex-1">
-                  <MessageSquare className="mr-2 h-4 w-4" />
-                  Send Message
-                </Button>
-                <Button size="sm" variant="outline" className="flex-1">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Schedule Call
-                </Button>
+                <Link to={`/dashboard/client/projects/${project.id}`} className="flex-1">
+                    <Button size="sm" className="w-full">
+                        <FileText className="mr-2 h-4 w-4" />
+                        View Deliverables
+                    </Button>
+                </Link>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button size="sm" variant="outline" className="flex-1"><MessageSquare className="mr-2 h-4 w-4" /> Send Message</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader><DialogTitle>Send a Message to the Team</DialogTitle></DialogHeader>
+                        <Textarea placeholder="Type your message here..." />
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                            <DialogClose asChild><Button type="button" onClick={() => handleAction('Message')}>Send</Button></DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button size="sm" variant="outline" className="flex-1"><Calendar className="mr-2 h-4 w-4" /> Schedule Call</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader><DialogTitle>Schedule a Call</DialogTitle></DialogHeader>
+                        <div className="space-y-4">
+                            <div className="space-y-2"><Label>Subject</Label><Input placeholder="e.g., Quick question about the design" /></div>
+                            <div className="space-y-2"><Label>Preferred Date & Time</Label><Input type="datetime-local" /></div>
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                            <DialogClose asChild><Button type="button" onClick={() => handleAction('Call Request')}>Request Call</Button></DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
               </div>
             </CardContent>
           </Card>

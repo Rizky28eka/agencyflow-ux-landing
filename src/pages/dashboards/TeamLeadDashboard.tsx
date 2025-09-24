@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { UserCheck, Users, TrendingUp, Calendar, MessageSquare, CheckSquare, Clock, Star } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const TeamLeadDashboard = () => {
@@ -100,23 +101,30 @@ const TeamLeadDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full justify-start" variant="outline">
-                <Calendar className="mr-2 h-4 w-4" />
-                Schedule 1-on-1s
-              </Button>
+                        <Link to="/dashboard/team-lead/one-on-ones" className="w-full">
+                          <Button className="w-full justify-start" variant="outline">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Schedule 1-on-1s
+                          </Button>
+                        </Link>
+            <Link to="/dashboard/team-lead/feedback" className="w-full">
               <Button className="w-full justify-start" variant="outline">
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Team Feedback
               </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <CheckSquare className="mr-2 h-4 w-4" />
-                Assign Tasks
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Clock className="mr-2 h-4 w-4" />
-                Time Management
-              </Button>
-            </CardContent>
+            </Link>
+                        <Link to="/dashboard/team-lead/tasks" className="w-full">
+                          <Button className="w-full justify-start" variant="outline">
+                            <CheckSquare className="mr-2 h-4 w-4" />
+                            Assign Tasks
+                          </Button>
+                        </Link>
+                        <Link to="/dashboard/team-lead/time-management" className="w-full">
+                          <Button className="w-full justify-start" variant="outline">
+                            <Clock className="mr-2 h-4 w-4" />
+                            Time Management
+                          </Button>
+                        </Link>            </CardContent>
           </Card>
         </div>
     </DashboardLayout>

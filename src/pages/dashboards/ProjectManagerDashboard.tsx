@@ -1,9 +1,21 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, Calendar, CheckSquare, Clock, TrendingUp, Plus, FileText, Target } from 'lucide-react';
+import { Users, Calendar, CheckSquare, Clock, TrendingUp, Plus, FileText, Target, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 const ProjectManagerDashboard = () => {
+
+  const handleAction = (action: string) => {
+    toast.success(`${action} action completed successfully!`);
+  };
+
   return (
     <DashboardLayout
       role="project-manager"
@@ -11,10 +23,24 @@ const ProjectManagerDashboard = () => {
       description="Project oversight and team coordination"
       headerIcon={<Users className="h-8 w-8 text-primary" />}
       headerAction={
-        <Button className="bg-gradient-primary">
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button className="bg-gradient-primary"><Plus className="mr-2 h-4 w-4" /> New Project</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader><DialogTitle>Create New Project</DialogTitle></DialogHeader>
+                <div className="grid gap-4 py-4">
+                    <div className="space-y-2"><Label>Project Name</Label><Input placeholder="e.g., Q3 Marketing Campaign" /></div>
+                    <div className="space-y-2"><Label>Client</Label><Input placeholder="e.g., TechCorp" /></div>
+                    <div className="space-y-2"><Label>Start Date</Label><Input type="date" /></div>
+                    <div className="space-y-2"><Label>End Date</Label><Input type="date" /></div>
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                    <DialogClose asChild><Button type="button" onClick={() => handleAction('Project Creation')}>Create Project</Button></DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
       }
     >
 
@@ -100,22 +126,65 @@ const ProjectManagerDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full justify-start" variant="outline">
-                <Plus className="mr-2 h-4 w-4" />
-                Create New Project
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Calendar className="mr-2 h-4 w-4" />
-                Schedule Meeting
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <CheckSquare className="mr-2 h-4 w-4" />
-                Review Tasks
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Clock className="mr-2 h-4 w-4" />
-                Time Tracking Report
-              </Button>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button className="w-full justify-start" variant="outline"><Plus className="mr-2 h-4 w-4" /> Create New Project</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader><DialogTitle>Create New Project</DialogTitle></DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="space-y-2"><Label>Project Name</Label><Input placeholder="e.g., Q3 Marketing Campaign" /></div>
+                            <div className="space-y-2"><Label>Client</Label><Input placeholder="e.g., TechCorp" /></div>
+                            <div className="space-y-2"><Label>Start Date</Label><Input type="date" /></div>
+                            <div className="space-y-2"><Label>End Date</Label><Input type="date" /></div>
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                            <DialogClose asChild><Button type="button" onClick={() => handleAction('Project Creation')}>Create Project</Button></DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button className="w-full justify-start" variant="outline"><Calendar className="mr-2 h-4 w-4" /> Schedule Meeting</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader><DialogTitle>Schedule Meeting</DialogTitle></DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="space-y-2"><Label>Meeting Title</Label><Input placeholder="e.g., Project Alpha Sync-up" /></div>
+                            <div className="space-y-2"><Label>Date & Time</Label><Input type="datetime-local" /></div>
+                            <div className="space-y-2"><Label>Agenda</Label><Textarea placeholder="Key discussion topics..." /></div>
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                            <DialogClose asChild><Button type="button" onClick={() => handleAction('Meeting Scheduling')}>Schedule</Button></DialogClose>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+              <Link to="/dashboard/project-manager/tasks" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <CheckSquare className="mr-2 h-4 w-4" />
+                  Review Tasks
+                </Button>
+              </Link>
+              <Link to="/dashboard/project-manager/time-report" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <Clock className="mr-2 h-4 w-4" />
+                  Time Tracking Report
+                </Button>
+              </Link>
+              <Link to="/dashboard/project-manager/resource-management" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                    <Users className="mr-2 h-4 w-4" />
+                    Resource Management
+                </Button>
+              </Link>
+              <Link to="/dashboard/project-manager/risk-management" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                    <AlertTriangle className="mr-2 h-4 w-4" />
+                    Risk Management
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

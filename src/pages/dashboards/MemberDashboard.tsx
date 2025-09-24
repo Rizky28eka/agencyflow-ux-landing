@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, CheckSquare, Clock, Target, TrendingUp, Calendar, FileText, Award } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const MemberDashboard = () => {
@@ -100,22 +101,30 @@ const MemberDashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <Button className="w-full justify-start" variant="outline">
-                <Clock className="mr-2 h-4 w-4" />
-                Log Time
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <FileText className="mr-2 h-4 w-4" />
-                Submit Report
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Calendar className="mr-2 h-4 w-4" />
-                Team Chat
-              </Button>
-              <Button className="w-full justify-start" variant="outline">
-                <Calendar className="mr-2 h-4 w-4" />
-                My Schedule
-              </Button>
+              <Link to="/dashboard/member/time" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <Clock className="mr-2 h-4 w-4" />
+                  Log Time
+                </Button>
+              </Link>
+              <Link to="/dashboard/member/submit-report" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <FileText className="mr-2 h-4 w-4" />
+                  Submit Report
+                </Button>
+              </Link>
+              <Link to="/dashboard/member/chat" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  Team Chat
+                </Button>
+              </Link>
+              <Link to="/dashboard/member/schedule" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                  <Calendar className="mr-2 h-4 w-4" />
+                  My Schedule
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
