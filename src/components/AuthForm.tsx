@@ -112,8 +112,12 @@ export const AuthForm = ({ mode, onModeChange, onSuccess }: AuthFormProps) => {
           description: "Please check your email for password reset instructions.",
         });
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred.");
+      }
     } finally {
       setLoading(false);
     }

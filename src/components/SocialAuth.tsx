@@ -23,12 +23,20 @@ export const SocialAuth = () => {
       });
       
       navigate('/dashboard/owner');
-    } catch (error: any) {
-      toast({
-        title: "Authentication failed",
-        description: error.message,
-        variant: "destructive"
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast({
+          title: "Authentication failed",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Authentication failed",
+          description: "An unknown error occurred.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setLoading(null);
     }

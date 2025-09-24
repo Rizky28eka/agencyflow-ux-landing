@@ -1,5 +1,4 @@
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -25,6 +24,12 @@ import OwnerBilling from "./pages/dashboards/owner/Billing";
 import OwnerGoals from "./pages/dashboards/owner/Goals";
 import TeamMemberDetails from "./pages/dashboards/owner/TeamMemberDetails";
 import OwnerAdvancedReports from "./pages/dashboards/owner/AdvancedReports";
+import OwnerReportDetails from "./pages/dashboards/owner/ReportDetails";
+import OwnerGoalDetails from "./pages/dashboards/owner/GoalDetails";
+import AIInsights from "./pages/dashboards/owner/AIInsights";
+import Clients from "./pages/dashboards/owner/Clients";
+import ClientDetails from "./pages/dashboards/owner/ClientDetails";
+import CRM from "./pages/dashboards/owner/CRM";
 
 // Admin Dashboard Pages
 import AdminUsers from "./pages/dashboards/admin/Users";
@@ -33,6 +38,7 @@ import AdminReports from "./pages/dashboards/admin/Reports";
 import AdminSystemSettings from "./pages/dashboards/admin/SystemSettings";
 import AdminAuditLog from "./pages/dashboards/admin/AuditLog";
 import AdminIntegrations from "./pages/dashboards/admin/Integrations";
+import AdminSecurity from "./pages/dashboards/admin/Security";
 
 // Project Manager Dashboard Pages
 import ProjectManagerProjects from "./pages/dashboards/project-manager/Projects";
@@ -52,6 +58,7 @@ import TeamLeadTasks from "./pages/dashboards/team-lead/Tasks";
 import TeamLeadTimeManagement from "./pages/dashboards/team-lead/TimeManagement";
 import TeamLeadPerformance from "./pages/dashboards/team-lead/Performance";
 import TeamLeadMembers from "./pages/dashboards/team-lead/Members";
+import IndividualPerformance from "./pages/dashboards/team-lead/IndividualPerformance";
 
 // Member Dashboard Pages
 import MemberTasks from "./pages/dashboards/member/Tasks";
@@ -60,6 +67,9 @@ import MemberSubmitReport from "./pages/dashboards/member/SubmitReport";
 import MemberTeamChat from "./pages/dashboards/member/TeamChat";
 import MemberSchedule from "./pages/dashboards/member/Schedule";
 import MemberSettings from "./pages/dashboards/member/Settings";
+import KnowledgeBase from "./pages/dashboards/member/KnowledgeBase";
+import Article from "./pages/dashboards/member/Article";
+import EditArticle from "./pages/dashboards/member/EditArticle";
 
 // Finance Dashboard Pages
 import FinancePayroll from "./pages/dashboards/finance/Payroll";
@@ -72,6 +82,9 @@ import FinanceBudget from "./pages/dashboards/finance/Budget";
 import FinanceTax from "./pages/dashboards/finance/Tax";
 import TransactionDetails from "./pages/dashboards/finance/TransactionDetails";
 import FinanceExpenseClaims from "./pages/dashboards/finance/ExpenseClaims";
+import CreateInvoice from "./pages/dashboards/finance/CreateInvoice";
+import ProfitAndLoss from "./pages/dashboards/finance/ProfitAndLoss";
+import CashFlow from "./pages/dashboards/finance/CashFlow";
 
 // Client Dashboard Pages
 import ClientProjects from "./pages/dashboards/client/Projects";
@@ -83,6 +96,8 @@ import ClientMessages from "./pages/dashboards/client/Messages";
 
 // Billing Management
 import BillingManagement from "./pages/BillingManagement";
+import InvoiceDetails from "./pages/InvoiceDetails";
+import ProfilePage from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -90,7 +105,6 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -114,7 +128,13 @@ const App = () => (
           <Route path="/dashboard/owner/settings" element={<OwnerSettings />} />
           <Route path="/dashboard/owner/billing" element={<OwnerBilling />} />
           <Route path="/dashboard/owner/goals" element={<OwnerGoals />} />
+          <Route path="/dashboard/owner/goals/:goalId" element={<OwnerGoalDetails />} />
           <Route path="/dashboard/owner/reports" element={<OwnerAdvancedReports />} />
+          <Route path="/dashboard/owner/reports/:reportId" element={<OwnerReportDetails />} />
+          <Route path="/dashboard/owner/ai-insights" element={<AIInsights />} />
+          <Route path="/dashboard/owner/clients" element={<Clients />} />
+          <Route path="/dashboard/owner/clients/:clientId" element={<ClientDetails />} />
+          <Route path="/dashboard/owner/crm" element={<CRM />} />
 
           {/* Admin Dashboard Routes */}
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
@@ -123,6 +143,7 @@ const App = () => (
           <Route path="/dashboard/admin/settings" element={<AdminSystemSettings />} />
           <Route path="/dashboard/admin/audit-log" element={<AdminAuditLog />} />
           <Route path="/dashboard/admin/integrations" element={<AdminIntegrations />} />
+          <Route path="/dashboard/admin/security" element={<AdminSecurity />} />
 
           {/* Project Manager Dashboard Routes */}
           <Route path="/dashboard/project-manager/projects" element={<ProjectManagerProjects />} />
@@ -141,6 +162,7 @@ const App = () => (
           <Route path="/dashboard/team-lead/tasks" element={<TeamLeadTasks />} />
           <Route path="/dashboard/team-lead/time-management" element={<TeamLeadTimeManagement />} />
           <Route path="/dashboard/team-lead/performance" element={<TeamLeadPerformance />} />
+          <Route path="/dashboard/team-lead/performance/:memberId" element={<IndividualPerformance />} />
           <Route path="/dashboard/team-lead/members" element={<TeamLeadMembers />} />
 
           {/* Member Dashboard Routes */}
@@ -150,6 +172,9 @@ const App = () => (
           <Route path="/dashboard/member/chat" element={<MemberTeamChat />} />
           <Route path="/dashboard/member/schedule" element={<MemberSchedule />} />
           <Route path="/dashboard/member/settings" element={<MemberSettings />} />
+          <Route path="/dashboard/member/kb" element={<KnowledgeBase />} />
+          <Route path="/dashboard/member/kb/new" element={<EditArticle />} />
+          <Route path="/dashboard/member/kb/:articleId" element={<Article />} />
 
           {/* Finance Dashboard Routes */}
           <Route path="/dashboard/finance/payroll" element={<FinancePayroll />} />
@@ -157,11 +182,14 @@ const App = () => (
           <Route path="/dashboard/finance/expenses" element={<FinanceExpenseManagement />} />
           <Route path="/dashboard/finance/revenue" element={<FinanceRevenue />} />
           <Route path="/dashboard/finance/invoicing" element={<FinanceInvoicing />} />
+          <Route path="/dashboard/finance/invoicing/new" element={<CreateInvoice />} />
           <Route path="/dashboard/finance/reports" element={<FinanceReports />} />
           <Route path="/dashboard/finance/budget" element={<FinanceBudget />} />
           <Route path="/dashboard/finance/tax" element={<FinanceTax />} />
           <Route path="/dashboard/finance/transactions/:transactionId" element={<TransactionDetails />} />
           <Route path="/dashboard/finance/claims" element={<FinanceExpenseClaims />} />
+          <Route path="/dashboard/finance/pnl" element={<ProfitAndLoss />} />
+          <Route path="/dashboard/finance/cash-flow" element={<CashFlow />} />
 
           {/* Client Dashboard Routes */}
           <Route path="/dashboard/client/projects" element={<ClientProjects />} />
@@ -173,6 +201,10 @@ const App = () => (
 
           {/* Billing Management */}
           <Route path="/billing" element={<BillingManagement />} />
+          <Route path="/invoices/:invoiceId" element={<InvoiceDetails />} />
+
+          {/* Profile */}
+          <Route path="/profile" element={<ProfilePage />} />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />

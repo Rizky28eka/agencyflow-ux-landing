@@ -50,7 +50,7 @@ const ProjectDetails = () => {
             <CardHeader>
               <CardTitle>Project Overview</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <CardContent className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="flex flex-col space-y-1">
                 <span className="text-sm text-muted-foreground">Status</span>
                 <Badge className="w-fit" variant="default">{project.status}</Badge>
@@ -62,6 +62,10 @@ const ProjectDetails = () => {
               <div className="flex flex-col space-y-1">
                 <span className="text-sm text-muted-foreground">Budget</span>
                 <div className="flex items-center"><DollarSign className="h-4 w-4 mr-2" /> ${project.spent.toLocaleString()} / ${project.budget.toLocaleString()}</div>
+              </div>
+              <div className="flex flex-col space-y-1">
+                <span className="text-sm text-muted-foreground">Hourly Rate</span>
+                <div className="flex items-center"><DollarSign className="h-4 w-4 mr-2" /> $100.00 / hour</div>
               </div>
             </CardContent>
             <div className="p-6 pt-0">

@@ -4,10 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { List, Filter } from 'lucide-react';
+import { List, Filter, Lock } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const AdminAuditLog = () => {
+  // Mock current plan
+  const currentPlan = 'professional'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
+  const canUseAuditLog = currentPlan === 'enterprise';
+
   const auditLog = [
     { event: 'User Login', actor: 'john@agency.com', target: 'Session', ip: '192.168.1.10', timestamp: '2025-09-24 10:00:00' },
     { event: 'Role Updated', actor: 'admin@agency.com', target: 'User: emily@agency.com', ip: '127.0.0.1', timestamp: '2025-09-24 09:30:15' },
@@ -31,46 +35,58 @@ const AdminAuditLog = () => {
       description="Track all important activities across the system."
       headerIcon={<List className="h-8 w-8 text-primary" />}
     >
-      <Card>
-        <CardHeader>
-          <div className="flex justify-between items-center">
-            <CardTitle>System Events</CardTitle>
-            <div className="flex items-center space-x-2">
-              <Input placeholder="Filter by user or target..." className="w-64" />
-              <Button variant="outline">
-                <Filter className="mr-2 h-4 w-4" />
-                Filter
-              </Button>
+      <div className="relative">
+        {!canUseAuditLog && (
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
+                <Lock className="h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-2xl font-bold mb-2">Upgrade to Unlock Audit Log</h3>
+                <p className="text-muted-foreground mb-6">This feature is available on the Enterprise plan.</p>
+                <Button size="lg" className="bg-gradient-primary">Upgrade Your Plan</Button>
             </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Event</TableHead>
-                <TableHead>Actor</TableHead>
-                <TableHead>Target</TableHead>
-                <TableHead>IP Address</TableHead>
-                <TableHead>Timestamp</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {auditLog.map((log, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Badge variant={getEventTypeVariant(log.event)}>{log.event}</Badge>
-                  </TableCell>
-                  <TableCell className="font-medium">{log.actor}</TableCell>
-                  <TableCell>{log.target}</TableCell>
-                  <TableCell className="text-muted-foreground">{log.ip}</TableCell>
-                  <TableCell className="text-muted-foreground">{log.timestamp}</TableCell>
+        )}
+        <Card>
+          <CardHeader>
+            <div className="flex justify-between items-center">
+              <CardTitle>System Events</CardTitle>
+              <div className="flex items-center space-x-2">
+                <Input placeholder="Filter by user or target..." className="w-64" />
+                <Input type="date" />
+                <Input type="date" />
+                <Button variant="outline">
+                  <Filter className="mr-2 h-4 w-4" />
+                  Filter
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Event</TableHead>
+                  <TableHead>Actor</TableHead>
+                  <TableHead>Target</TableHead>
+                  <TableHead>IP Address</TableHead>
+                  <TableHead>Timestamp</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+              </TableHeader>
+              <TableBody>
+                {auditLog.map((log, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Badge variant={getEventTypeVariant(log.event)}>{log.event}</Badge>
+                    </TableCell>
+                    <TableCell className="font-medium">{log.actor}</TableCell>
+                    <TableCell>{log.target}</TableCell>
+                    <TableCell className="text-muted-foreground">{log.ip}</TableCell>
+                    <TableCell className="text-muted-foreground">{log.timestamp}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
     </DashboardLayout>
   );
 };

@@ -135,15 +135,17 @@ export const UsageMetrics = ({ usage, planName }: UsageMetricsProps) => {
         </CardHeader>
         <CardContent>
           <ChartContainer config={{}} className="h-64 w-full">
-            <LineChart data={usageHistory}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Line type="monotone" dataKey="projects" stroke="#3b82f6" strokeWidth={2} name="Projects" />
-              <Line type="monotone" dataKey="members" stroke="#8b5cf6" strokeWidth={2} name="Team Members" />
-              <Line type="monotone" dataKey="storage" stroke="#10b981" strokeWidth={2} name="Storage (GB)" />
-            </LineChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={usageHistory}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Line type="monotone" dataKey="projects" stroke="#3b82f6" strokeWidth={2} name="Projects" />
+                <Line type="monotone" dataKey="members" stroke="#8b5cf6" strokeWidth={2} name="Team Members" />
+                <Line type="monotone" dataKey="storage" stroke="#10b981" strokeWidth={2} name="Storage (GB)" />
+              </LineChart>
+            </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
       </Card>

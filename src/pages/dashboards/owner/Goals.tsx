@@ -5,10 +5,12 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Target, Plus, TrendingUp, Users, DollarSign } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Link } from 'react-router-dom';
 
 const OwnerGoals = () => {
   const goals = [
     {
+      id: 'increase-quarterly-revenue',
       title: 'Increase Quarterly Revenue',
       target: '$500,000',
       current: 284500,
@@ -17,6 +19,7 @@ const OwnerGoals = () => {
       icon: <DollarSign className="h-6 w-6 text-yellow-500" />,
     },
     {
+      id: 'improve-client-retention-rate',
       title: 'Improve Client Retention Rate',
       target: '95%',
       current: 94.2,
@@ -25,6 +28,7 @@ const OwnerGoals = () => {
       icon: <Users className="h-6 w-6 text-blue-500" />,
     },
     {
+      id: 'achieve-team-utilization-of-90',
       title: 'Achieve Team Utilization of 90%',
       target: '90%',
       current: 87.3,
@@ -33,6 +37,7 @@ const OwnerGoals = () => {
       icon: <TrendingUp className="h-6 w-6 text-purple-500" />,
     },
     {
+        id: 'launch-new-marketing-website',
         title: 'Launch New Marketing Website',
         target: 'Completed',
         current: 100,
@@ -77,7 +82,7 @@ const OwnerGoals = () => {
                     <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center">
                         {goal.icon}
                     </div>
-                    <CardTitle>{goal.title}</CardTitle>
+                    <CardTitle className="break-words">{goal.title}</CardTitle>
                 </div>
                 <Badge className={getStatusColor(goal.status)}>{goal.status}</Badge>
               </div>
@@ -91,7 +96,9 @@ const OwnerGoals = () => {
               </div>
             </CardContent>
             <CardFooter>
-                <Button variant="outline" size="sm">View Details</Button>
+                <Link to={`/dashboard/owner/goals/${goal.id}`}>
+                    <Button variant="outline" size="sm">View Details</Button>
+                </Link>
             </CardFooter>
           </Card>
         ))}

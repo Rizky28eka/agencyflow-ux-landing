@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, TrendingUp, CreditCard, Receipt, PieChart, Download, ArrowUp, ArrowDown } from 'lucide-react';
+import { DollarSign, TrendingUp, CreditCard, Receipt, PieChart, Download, ArrowUp, ArrowDown, BarChart3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
@@ -146,35 +146,83 @@ const OwnerFinance = () => {
           <CardTitle>Recent Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Transaction ID</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {recentTransactions.map((trx) => (
-                <TableRow key={trx.id} className="cursor-pointer hover:bg-muted/50">
-                  <TableCell className="font-medium"><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.id}</Link></TableCell>
-                  <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.date}</Link></TableCell>
-                  <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.description}</Link></TableCell>
-                  <TableCell className={`text-right font-semibold ${trx.type === 'Income' ? 'text-green-600' : 'text-red-600'}`}>
-                    <Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">
-                        <div className="flex items-center justify-end">
+          {/* Desktop Table */}
+          <div className="hidden sm:block overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Transaction ID</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Description</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentTransactions.map((trx) => (
+                  <TableRow key={trx.id} className="cursor-pointer hover:bg-muted/50">
+                    <TableCell className="font-medium"><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.id}</Link></TableCell>
+                    <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.date}</Link></TableCell>
+                    <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.description}</Link></TableCell>
+                    <TableCell className={`text-right font-semibold ${trx.type === 'Income' ? 'text-green-600' : 'text-red-600'}`}>
+                      <Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">
+                          <div className="flex items-center justify-end">
+                          {trx.type === 'Income' ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
+                          ${Math.abs(trx.amount).toLocaleString()}
+                          </div>
+                      </Link>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          {/* Mobile Card List */}
+          <div className="sm:hidden space-y-4">
+            {recentTransactions.map((trx) => (
+              <Link to={`/dashboard/finance/transactions/${trx.id}`} key={trx.id} className="block">
+                <Card className="hover:bg-muted/50">
+                  <CardContent className="p-4 flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold">{trx.description}</p>
+                      <p className="text-sm text-muted-foreground">{trx.id} - {trx.date}</p>
+                    </div>
+                    <div className={`text-right font-semibold ${trx.type === 'Income' ? 'text-green-600' : 'text-red-600'}`}>
+                      <div className="flex items-center justify-end">
                         {trx.type === 'Income' ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
                         ${Math.abs(trx.amount).toLocaleString()}
-                        </div>
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
         </CardContent>
       </Card>
+
+      {/* Financial Reports */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <Link to="/dashboard/finance/pnl">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                    <CardTitle className="flex items-center text-lg">
+                        <BarChart3 className="mr-2 h-5 w-5" />
+                        Profit & Loss Statement
+                    </CardTitle>
+                </CardHeader>
+            </Card>
+        </Link>
+        <Link to="/dashboard/finance/cash-flow">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+                <CardHeader>
+                    <CardTitle className="flex items-center text-lg">
+                        <TrendingUp className="mr-2 h-5 w-5" />
+                        Cash Flow Statement
+                    </CardTitle>
+                </CardHeader>
+            </Card>
+        </Link>
+      </div>
     </DashboardLayout>
   );
 };

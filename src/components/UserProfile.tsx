@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 import { User, Edit, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +18,16 @@ export const UserProfile = () => {
     firstName: user?.user_metadata?.first_name || '',
     lastName: user?.user_metadata?.last_name || '',
     company: user?.user_metadata?.company || '',
+    skills: user?.user_metadata?.skills || [],
   });
+  const [newSkill, setNewSkill] = useState('');
+
+  const handleAddSkill = () => {
+    if (newSkill && !profileData.skills.includes(newSkill)) {
+      setProfileData(prev => ({ ...prev, skills: [...prev.skills, newSkill] }));
+      setNewSkill('');
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,12 +45,20 @@ export const UserProfile = () => {
         title: "Profile updated",
         description: "Your profile has been successfully updated.",
       });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "An unknown error occurred.",
+          variant: "destructive"
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -63,6 +81,11 @@ export const UserProfile = () => {
         {profileData.company && (
           <p className="text-sm text-muted-foreground">{profileData.company}</p>
         )}
+        <div className="flex flex-wrap gap-2 justify-center mt-4">
+          {profileData.skills.map(skill => (
+            <Badge key={skill}>{skill}</Badge>
+          ))}
+        </div>
       </CardHeader>
       
       <CardContent>
@@ -113,6 +136,26 @@ export const UserProfile = () => {
                 <p className="text-xs text-muted-foreground">
                   Email cannot be changed. Contact support if needed.
                 </p>
+              </div>
+              <div className="space-y-2">
+                <Label>Skills</Label>
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Add a skill"
+                    value={newSkill} 
+                    onChange={(e) => setNewSkill(e.target.value)} 
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()}
+                  />
+                  <Button onClick={handleAddSkill}>Add</Button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {profileData.skills.map(skill => (
+                    <Badge key={skill} variant="secondary">
+                      {skill}
+                      <button className="ml-2 text-muted-foreground hover:text-foreground" onClick={() => setProfileData(prev => ({ ...prev, skills: prev.skills.filter(s => s !== skill) }))}>x</button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
             </div>
             <DialogFooter>

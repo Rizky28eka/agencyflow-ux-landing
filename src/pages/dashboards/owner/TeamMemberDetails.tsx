@@ -101,17 +101,17 @@ const TeamMemberDetails = () => {
                       <DialogTitle>Edit Member Details</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">Name</Label>
-                        <Input id="name" value={formData.name} onChange={handleInputChange} className="col-span-3" />
+                      <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="sm:text-right">Name</Label>
+                        <Input id="name" value={formData.name} onChange={handleInputChange} className="col-span-1 sm:col-span-3" />
                       </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="role" className="text-right">Role</Label>
-                        <Input id="role" value={formData.role} onChange={handleInputChange} className="col-span-3" />
+                      <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                        <Label htmlFor="role" className="sm:text-right">Role</Label>
+                        <Input id="role" value={formData.role} onChange={handleInputChange} className="col-span-1 sm:col-span-3" />
                       </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="email" className="text-right">Email</Label>
-                        <Input id="email" type="email" value={formData.email} onChange={handleInputChange} className="col-span-3" />
+                      <div className="grid grid-cols-1 sm:grid-cols-4 items-center gap-4">
+                        <Label htmlFor="email" className="sm:text-right">Email</Label>
+                        <Input id="email" type="email" value={formData.email} onChange={handleInputChange} className="col-span-1 sm:col-span-3" />
                       </div>
                     </div>
                     <DialogFooter>

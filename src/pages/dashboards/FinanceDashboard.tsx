@@ -216,6 +216,32 @@ const FinanceDashboard = () => {
               </CardContent>
             </Card>
           </Link>
+          <Link to="/dashboard/finance/pnl">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardHeader>
+                <CardTitle className="flex items-center text-lg">
+                  <BarChart3 className="mr-2 h-5 w-5" />
+                  Profit & Loss
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">View P&L statements</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to="/dashboard/finance/cash-flow">
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardHeader>
+                <CardTitle className="flex items-center text-lg">
+                  <TrendingUp className="mr-2 h-5 w-5" />
+                  Cash Flow
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Analyze cash flow statements</p>
+              </CardContent>
+            </Card>
+          </Link>
         </div>
     </DashboardLayout>
   );

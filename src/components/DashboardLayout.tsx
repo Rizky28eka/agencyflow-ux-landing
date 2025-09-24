@@ -42,14 +42,14 @@ export function DashboardLayout({
                 <div className="flex items-center space-x-3">
                   {headerIcon}
                   <div>
-                    <h1 className="text-2xl font-bold text-foreground">{title}</h1>
-                    <p className="text-sm text-muted-foreground">{description}</p>
+                    <h1 className="text-lg sm:text-2xl font-bold text-foreground">{title}</h1>
+                    <p className="text-sm text-muted-foreground hidden sm:block">{description}</p>
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-4">
                 {user && (
-                  <div className="text-right">
+                  <div className="text-right hidden md:block">
                     <p className="text-sm font-medium">{user.user_metadata.first_name} {user.user_metadata.last_name}</p>
                     <p className="text-xs text-muted-foreground">{getRoleDisplayName(user.role)}</p>
                   </div>

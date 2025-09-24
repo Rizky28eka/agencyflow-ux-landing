@@ -8,6 +8,16 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 
+interface Request {
+  id: string;
+  member: string;
+  type: string;
+  details: string;
+  submitted: string;
+  status: string;
+}
+
+
 const TeamLeadApprovals = () => {
   const requests = [
     { id: 'REQ-001', member: 'Mike Chen', type: 'Leave', details: 'Vacation (5 days)', submitted: '2024-01-22', status: 'Pending' },
@@ -30,7 +40,7 @@ const TeamLeadApprovals = () => {
     toast.success('Selected requests have been approved.');
   };
 
-  const renderRequestRow = (request: any, isPendingTab: boolean) => (
+  const renderRequestRow = (request: Request, isPendingTab: boolean) => (
     <TableRow key={request.id}>
         {isPendingTab && <TableCell><Checkbox /></TableCell>}
         <TableCell className="font-medium">{request.id}</TableCell>

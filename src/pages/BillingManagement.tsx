@@ -12,11 +12,25 @@ import { UsageMetrics } from '@/components/billing/UsageMetrics';
 import { BillingOverview } from '@/components/billing/BillingOverview';
 import { SubscriptionManagement } from '@/components/billing/SubscriptionManagement';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
+
+interface PaymentMethod {
+  id: string;
+  type: 'card' | 'bank';
+  brand: string;
+  last4: string;
+  expiryMonth?: number;
+  expiryYear?: number;
+  isDefault: boolean;
+  holderName: string;
+}
+
 
 const BillingManagement = () => {
   const [loading, setLoading] = useState(false);
+  const [isPaymentMethodDialogOpen, setIsPaymentMethodDialogOpen] = useState(false);
   const [currentPlanStatus, setCurrentPlanStatus] = useState<'active' | 'cancelled' | 'past_due'>('active');
-  const [paymentMethods, setPaymentMethods] = useState([
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
     {
       id: '1',
       type: 'card' as const,
@@ -39,46 +53,87 @@ const BillingManagement = () => {
     },
   ]);
 
-  const plans = [
+  const [plans, setPlans] = useState([
     {
       id: 'starter',
       name: 'Starter',
       price: 0,
       period: 'month',
-      description: 'Perfect for small teams getting started',
+      description: 'For small teams and freelancers',
       features: [
         'Up to 5 projects',
         'Up to 10 team members',
-        '10GB storage',
-        'Basic analytics',
-        'Email support',
-        'Standard integrations'
+        'Basic Project Management',
+        'Time Tracking',
+        '10GB Storage',
+        'Email Support',
       ],
       isCurrent: false,
       icon: <Zap className="w-8 h-8 text-white" />,
       color: 'bg-gradient-to-br from-gray-500 to-gray-600',
     },
     {
+      id: 'basic',
+      name: 'Basic',
+      price: 49,
+      period: 'month',
+      description: 'For growing teams that need more power',
+      features: [
+        'Up to 15 projects',
+        'Up to 25 team members',
+        'Includes all Starter features, plus:',
+        'Team Lead Dashboard',
+        'Standard Analytics & Reports',
+        '50GB Storage',
+        'Standard Integrations',
+      ],
+      isCurrent: false,
+      icon: <Rocket className="w-8 h-8 text-white" />,
+      color: 'bg-gradient-to-br from-blue-500 to-blue-600',
+    },
+    {
       id: 'professional',
       name: 'Professional',
       price: 99,
       period: 'month',
-      description: 'For growing agencies and teams',
+      description: 'For established agencies and businesses',
       features: [
         'Unlimited projects',
         'Up to 100 team members',
-        '100GB storage',
-        'Advanced analytics & reports',
-        'Priority support',
-        'Custom integrations',
-        'API access',
-        'Advanced permissions',
-        'Client portal branding'
+        'Includes all Basic features, plus:',
+        'Project Manager Dashboard',
+        'Finance Dashboard',
+        'Client Portal',
+        'Advanced Analytics & Reports',
+        'Customizable Roles',
+        '100GB Storage',
+        'Priority Support',
       ],
       isCurrent: true,
       isPopular: true,
       icon: <Rocket className="w-8 h-8 text-white" />,
       color: 'bg-gradient-to-br from-primary to-primary-light',
+    },
+    {
+      id: 'business',
+      name: 'Business',
+      price: 199,
+      period: 'month',
+      description: 'For larger businesses with more needs',
+      features: [
+        'Unlimited projects',
+        'Up to 250 team members',
+        'Includes all Professional features, plus:',
+        'Owner Dashboard',
+        'Goal Tracking',
+        'Advanced Security (2FA)',
+        '500GB Storage',
+        'API Access',
+        'Team Training',
+      ],
+      isCurrent: false,
+      icon: <Crown className="w-8 h-8 text-white" />,
+      color: 'bg-gradient-to-br from-purple-500 to-purple-600',
     },
     {
       id: 'enterprise',
@@ -87,22 +142,31 @@ const BillingManagement = () => {
       period: 'month',
       description: 'For large organizations with advanced needs',
       features: [
-        'Everything in Professional',
+        'Unlimited projects',
         'Unlimited team members',
-        'Unlimited storage',
-        'White-label solution',
-        'Dedicated account manager',
-        'SLA guarantee',
-        'Advanced security',
-        'Custom integrations',
-        'On-premise deployment',
-        'Training & onboarding'
+        'Includes all Business features, plus:',
+        'White-label Solution',
+        'Single Sign-On (SSO)',
+        'Audit Log',
+        'Dedicated Account Manager',
+        'SLA Guarantee',
       ],
       isCurrent: false,
       icon: <Crown className="w-8 h-8 text-white" />,
       color: 'bg-gradient-to-br from-accent to-accent-light',
     },
-  ];
+  ]);
+
+  const [currentPlanData, setCurrentPlanData] = useState(() => {
+    const currentPlan = plans.find(p => p.isCurrent);
+    return {
+      name: currentPlan?.name || '',
+      price: currentPlan?.price || 0,
+      period: currentPlan?.period || '',
+      renewalDate: '2024-02-24',
+      status: currentPlanStatus,
+    }
+  });
 
   const invoices = [
     {
@@ -139,14 +203,6 @@ const BillingManagement = () => {
     },
   ];
 
-  const currentPlanData = {
-    name: 'Professional',
-    price: 99,
-    period: 'month',
-    renewalDate: '2024-02-24',
-    status: currentPlanStatus,
-  };
-
   const nextInvoiceData = {
     amount: 99.00,
     date: '2024-02-24',
@@ -168,12 +224,24 @@ const BillingManagement = () => {
       if (planId === 'enterprise') {
         toast.success('Enterprise plan inquiry sent! Our sales team will contact you within 24 hours.');
       } else {
-        toast.success(`Successfully upgraded to ${plans.find(p => p.id === planId)?.name} plan!`);
+        const newPlans = plans.map(p => ({ ...p, isCurrent: p.id === planId }));
+        setPlans(newPlans);
+        const newPlan = newPlans.find(p => p.isCurrent);
+        if (newPlan) {
+          setCurrentPlanData({
+            name: newPlan.name,
+            price: newPlan.price,
+            period: newPlan.period,
+            renewalDate: '2024-03-24', // Mock new renewal date
+            status: 'active',
+          });
+        }
+        toast.success(`Successfully upgraded to ${newPlan?.name} plan!`);
       }
     }, 2000);
   };
 
-  const handleAddPaymentMethod = (method: any) => {
+  const handleAddPaymentMethod = (method: Omit<PaymentMethod, 'id'>) => {
     const newMethod = {
       ...method,
       id: Date.now().toString(),
@@ -237,7 +305,7 @@ const BillingManagement = () => {
       )}
 
       <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="flex overflow-x-auto whitespace-nowrap">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="plans">Plans</TabsTrigger>
           <TabsTrigger value="usage">Usage</TabsTrigger>
@@ -262,15 +330,18 @@ const BillingManagement = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {plans.map((plan) => (
               <PlanCard
                 key={plan.id}
                 plan={plan}
+                currentPlan={currentPlanData}
                 onSelect={handlePlanSelect}
                 loading={loading}
               />
             ))}
+            </div>
           </div>
 
           {/* Plan Comparison Table */}
@@ -285,40 +356,66 @@ const BillingManagement = () => {
                     <tr className="border-b">
                       <th className="text-left py-3 px-4">Feature</th>
                       <th className="text-center py-3 px-4">Starter</th>
+                      <th className="text-center py-3 px-4">Basic</th>
                       <th className="text-center py-3 px-4">Professional</th>
+                      <th className="text-center py-3 px-4">Business</th>
                       <th className="text-center py-3 px-4">Enterprise</th>
                     </tr>
                   </thead>
                   <tbody className="text-sm">
                     <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Projects</td>
-                      <td className="text-center py-3 px-4">5</td>
-                      <td className="text-center py-3 px-4">Unlimited</td>
-                      <td className="text-center py-3 px-4">Unlimited</td>
-                    </tr>
-                    <tr className="border-b">
                       <td className="py-3 px-4 font-medium">Team Members</td>
                       <td className="text-center py-3 px-4">10</td>
+                      <td className="text-center py-3 px-4">25</td>
                       <td className="text-center py-3 px-4">100</td>
+                      <td className="text-center py-3 px-4">250</td>
                       <td className="text-center py-3 px-4">Unlimited</td>
                     </tr>
                     <tr className="border-b">
                       <td className="py-3 px-4 font-medium">Storage</td>
                       <td className="text-center py-3 px-4">10GB</td>
+                      <td className="text-center py-3 px-4">50GB</td>
                       <td className="text-center py-3 px-4">100GB</td>
+                      <td className="text-center py-3 px-4">500GB</td>
                       <td className="text-center py-3 px-4">Unlimited</td>
                     </tr>
                     <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Support</td>
-                      <td className="text-center py-3 px-4">Email</td>
-                      <td className="text-center py-3 px-4">Priority</td>
-                      <td className="text-center py-3 px-4">24/7 Phone</td>
+                      <td className="py-3 px-4 font-medium">Advanced Reports</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 px-4 font-medium">Customizable Roles</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 px-4 font-medium">SSO</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">✓</td>
+                    </tr>
+                    <tr className="border-b">
+                      <td className="py-3 px-4 font-medium">Audit Log</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">-</td>
+                      <td className="text-center py-3 px-4">✓</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-            </CardContent>
-          </Card>
+                 </CardContent>
+              </Card>
         </TabsContent>
 
         <TabsContent value="usage" className="space-y-6">
@@ -334,6 +431,8 @@ const BillingManagement = () => {
             onAdd={handleAddPaymentMethod}
             onRemove={handleRemovePaymentMethod}
             onSetDefault={handleSetDefaultPaymentMethod}
+            isDialogOpen={isPaymentMethodDialogOpen}
+            setIsDialogOpen={setIsPaymentMethodDialogOpen}
           />
         </TabsContent>
 
@@ -346,6 +445,7 @@ const BillingManagement = () => {
             currentPlan={currentPlanData}
             onCancel={handleCancelSubscription}
             onReactivate={handleReactivateSubscription}
+            onUpdatePaymentMethod={() => setIsPaymentMethodDialogOpen(true)}
           />
         </TabsContent>
       </Tabs>

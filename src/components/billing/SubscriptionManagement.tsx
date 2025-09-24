@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Settings, AlertTriangle, Calendar, CreditCard, RefreshCw, X } from 'lucide-react';
 import { format, addMonths } from 'date-fns';
 import { toast } from 'sonner';
+import { ChangeCycleDialog } from './ChangeCycleDialog';
 
 interface SubscriptionManagementProps {
   currentPlan: {
@@ -21,11 +22,18 @@ interface SubscriptionManagementProps {
   };
   onCancel: () => void;
   onReactivate: () => void;
+  onUpdatePaymentMethod: () => void;
 }
 
-export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate }: SubscriptionManagementProps) => {
+export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate, onUpdatePaymentMethod }: SubscriptionManagementProps) => {
   const [autoRenew, setAutoRenew] = useState(true);
   const [cancelReason, setCancelReason] = useState('');
+  const [isCycleDialogOpen, setIsCycleDialogOpen] = useState(false);
+
+  const handleCycleChange = (newCycle: string) => {
+    // In a real app, you would make an API call to update the subscription
+    toast.success(`Billing cycle changed to ${newCycle}ly.`);
+  };
 
   const handleCancelSubscription = () => {
     onCancel();
@@ -76,7 +84,7 @@ export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate }: 
                 Currently billed {currentPlan.period}ly
               </p>
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => setIsCycleDialogOpen(true)}>
               <Calendar className="mr-2 h-4 w-4" />
               Change Cycle
             </Button>
@@ -90,13 +98,20 @@ export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate }: 
                 Visa •••• 4242
               </p>
             </div>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={onUpdatePaymentMethod}>
               <CreditCard className="mr-2 h-4 w-4" />
               Update
             </Button>
           </div>
         </CardContent>
       </Card>
+
+      <ChangeCycleDialog 
+        isOpen={isCycleDialogOpen} 
+        onOpenChange={setIsCycleDialogOpen} 
+        currentPlan={currentPlan} 
+        onCycleChange={handleCycleChange} 
+      />
 
       {/* Subscription Actions */}
       <Card>
@@ -105,20 +120,20 @@ export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate }: 
         </CardHeader>
         <CardContent className="space-y-4">
           {currentPlan.status === 'active' ? (
-            <>
-              <div className="flex items-center justify-between p-4 border rounded-lg">
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg">
                 <div>
                   <h4 className="font-medium">Pause Subscription</h4>
                   <p className="text-sm text-muted-foreground">
                     Temporarily pause your subscription for up to 3 months
                   </p>
                 </div>
-                <Button variant="outline">
+                <Button variant="outline" className="mt-4 sm:mt-0"> 
                   Pause
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between p-4 border rounded-lg">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg">
                 <div>
                   <h4 className="font-medium text-red-600">Cancel Subscription</h4>
                   <p className="text-sm text-muted-foreground">
@@ -127,7 +142,7 @@ export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate }: 
                 </div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button variant="destructive">
+                    <Button variant="destructive" className="mt-4 sm:mt-0">
                       <X className="mr-2 h-4 w-4" />
                       Cancel
                     </Button>
@@ -166,7 +181,7 @@ export const SubscriptionManagement = ({ currentPlan, onCancel, onReactivate }: 
                   </DialogContent>
                 </Dialog>
               </div>
-            </>
+            </div>
           ) : (
             <div className="flex items-center justify-between p-4 border rounded-lg bg-green-50/50 border-green-200">
               <div>

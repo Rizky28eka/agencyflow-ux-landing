@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator 
 } from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { 
   Crown, 
   Shield, 
@@ -24,7 +25,6 @@ import {
 import { Role } from '@/lib/rolePermissions';
 
 const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { setUserRole } = useAuth();
 
@@ -42,7 +42,6 @@ const Navbar = () => {
       'CLIENT': '/dashboard/client',
     };
     navigate(roleRoutes[role]);
-    setIsMobileMenuOpen(false);
   };
 
   const roles = [
@@ -74,9 +73,9 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
+          {/* Desktop Navigation & Login */}
+          <div className="hidden md:flex items-center space-x-8">
+            <div className="flex items-baseline space-x-8">
               {navigationLinks.map((link) => (
                 link.isRoute ? (
                   <button
@@ -97,10 +96,7 @@ const Navbar = () => {
                 )
               ))}
             </div>
-          </div>
 
-          {/* Login Dropdown */}
-          <div className="hidden md:block">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="bg-background hover:bg-muted">
@@ -142,92 +138,83 @@ const Navbar = () => {
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm">
+                  <Menu className="h-6 w-6" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left">
+                <div className="px-2 pt-2 pb-3 space-y-1">
+                  {navigationLinks.map((link) => (
+                    link.isRoute ? (
+                      <button
+                        key={link.href}
+                        onClick={() => {
+                          navigate(link.href);
+                        }}
+                        className="block w-full text-left px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                      >
+                        {link.label}
+                      </button>
+                    ) : (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                      >
+                        {link.label}
+                      </a>
+                    )
+                  ))}
+                  <div className="pt-4 pb-2">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="w-full justify-between">
+                          Get Started
+                          <ChevronDown className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-full p-2">
+                        <DropdownMenuItem 
+                          className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
+                          onClick={() => {
+                            navigate('/auth');
+                          }}
+                        >
+                          <User className="h-4 w-4 text-primary" />
+                          <div>
+                            <div className="font-medium">Login / Register</div>
+                            <div className="text-xs text-muted-foreground">Access your account</div>
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
+                          Quick Demo Access
+                        </div>
+                        {roles.map((role) => (
+                          <DropdownMenuItem 
+                            key={role.id} 
+                            className="flex items-center space-x-3 p-3"
+                            onClick={() => handleRoleSelect(role.id)}
+                          >
+                            <role.icon className="h-4 w-4 text-primary" />
+                            <div>
+                              <div className="font-medium">{role.label}</div>
+                              <div className="text-xs text-muted-foreground">{role.description}</div>
+                            </div>
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
 
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 border-t">
-              {navigationLinks.map((link) => (
-                link.isRoute ? (
-                  <button
-                    key={link.href}
-                    onClick={() => {
-                      navigate(link.href);
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="block w-full text-left px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
-                  >
-                    {link.label}
-                  </button>
-                ) : (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                )
-              ))}
-              <div className="pt-4 pb-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="w-full justify-between">
-                      Get Started
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-full p-2">
-                    <DropdownMenuItem 
-                      className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
-                      onClick={() => {
-                        navigate('/auth');
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      <User className="h-4 w-4 text-primary" />
-                      <div>
-                        <div className="font-medium">Login / Register</div>
-                        <div className="text-xs text-muted-foreground">Access your account</div>
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
-                      Quick Demo Access
-                    </div>
-                    {roles.map((role) => (
-                      <DropdownMenuItem 
-                        key={role.id} 
-                        className="flex items-center space-x-3 p-3"
-                        onClick={() => handleRoleSelect(role.id)}
-                      >
-                        <role.icon className="h-4 w-4 text-primary" />
-                        <div>
-                          <div className="font-medium">{role.label}</div>
-                          <div className="text-xs text-muted-foreground">{role.description}</div>
-                        </div>
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          </div>
-        )}
+
       </div>
     </nav>
   );

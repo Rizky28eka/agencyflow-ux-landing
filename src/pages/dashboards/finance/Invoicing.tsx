@@ -6,8 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { FileText, Plus, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useState } from 'react';
+import { GenerateInvoiceFromTime } from '@/components/invoicing/GenerateInvoiceFromTime';
+import { useNavigate } from 'react-router-dom';
 
 const FinanceInvoicing = () => {
+  const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
+  const navigate = useNavigate();
+
   const invoices = [
     { id: 'INV-0123', client: 'TechCorp', issueDate: '2024-01-15', dueDate: '2024-02-15', amount: 12500, status: 'Paid' },
     { id: 'INV-0124', client: 'StartupXYZ', issueDate: '2024-01-20', dueDate: '2024-02-20', amount: 8500, status: 'Pending' },
@@ -21,8 +27,14 @@ const FinanceInvoicing = () => {
       title="Invoicing"
       description="Create and manage client invoices."
       headerIcon={<FileText className="h-8 w-8 text-primary" />}
-      headerAction={<Button className="bg-gradient-primary"><Plus className="mr-2 h-4 w-4" /> Create Invoice</Button>}
+      headerAction={
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setIsGenerateModalOpen(true)}>Generate from Time</Button>
+          <Button className="bg-gradient-primary" onClick={() => navigate('/dashboard/finance/invoicing/new')}><Plus className="mr-2 h-4 w-4" /> Create Invoice</Button>
+        </div>
+      }
     >
+      <GenerateInvoiceFromTime isOpen={isGenerateModalOpen} onOpenChange={setIsGenerateModalOpen} />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card>
                 <CardHeader><CardTitle>Total Outstanding</CardTitle></CardHeader>

@@ -11,6 +11,8 @@ interface MockUser {
     last_name?: string;
     company?: string;
     avatar_url?: string;
+    job_title?: string;
+    skills?: string[];
   };
 }
 export const useAuth = () => {
@@ -33,6 +35,8 @@ export const useAuth = () => {
           first_name: getRoleDisplayName(storedRole).split(' ')[0],
           last_name: 'User',
           company: 'AgencyFlow Demo',
+          job_title: getRoleDisplayName(storedRole),
+          skills: ['React', 'TypeScript', 'Node.js'],
         }
       };
       
@@ -53,6 +57,7 @@ export const useAuth = () => {
         user_metadata: {
           ...user.user_metadata,
           first_name: getRoleDisplayName(role).split(' ')[0],
+          job_title: getRoleDisplayName(role),
         }
       });
     }

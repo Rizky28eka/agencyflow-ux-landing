@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { CreditCard, Plus, Trash2, Shield, Calendar } from 'lucide-react';
+import { CreditCard, Plus, Trash2, Shield, Calendar, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface PaymentMethod {
@@ -25,9 +25,11 @@ interface PaymentMethodsProps {
   onAdd: (method: Omit<PaymentMethod, 'id'>) => void;
   onRemove: (id: string) => void;
   onSetDefault: (id: string) => void;
+  isDialogOpen: boolean;
+  setIsDialogOpen: (isOpen: boolean) => void;
 }
 
-export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }: PaymentMethodsProps) => {
+export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault, isDialogOpen, setIsDialogOpen }: PaymentMethodsProps) => {
   const [newCard, setNewCard] = useState({
     holderName: '',
     cardNumber: '',
@@ -35,8 +37,26 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
     expiryYear: '',
     cvv: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Partial<typeof newCard>>({});
 
-  const handleAddCard = () => {
+  const validate = () => {
+    const newErrors: Partial<typeof newCard> = {};
+    if (!newCard.holderName) newErrors.holderName = "Cardholder name is required.";
+    if (!newCard.cardNumber || newCard.cardNumber.length < 16) newErrors.cardNumber = "A valid card number is required.";
+    if (!newCard.expiryMonth) newErrors.expiryMonth = "Required.";
+    if (!newCard.expiryYear) newErrors.expiryYear = "Required.";
+    if (!newCard.cvv || newCard.cvv.length < 3) newErrors.cvv = "A valid CVV is required.";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleAddCard = async () => {
+    if (!validate()) return;
+
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
+
     const method: Omit<PaymentMethod, 'id'> = {
       type: 'card',
       brand: 'Visa', // In real app, this would be detected from card number
@@ -49,6 +69,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
     
     onAdd(method);
     setNewCard({ holderName: '', cardNumber: '', expiryMonth: '', expiryYear: '', cvv: '' });
+    setLoading(false);
     toast.success('Payment method added successfully!');
   };
 
@@ -66,7 +87,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
               <CreditCard className="mr-2 h-5 w-5" />
               Payment Methods
             </CardTitle>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="bg-gradient-to-r from-primary to-primary-light">
                   <Plus className="mr-2 h-4 w-4" />
@@ -86,6 +107,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                       value={newCard.holderName}
                       onChange={(e) => setNewCard(prev => ({ ...prev, holderName: e.target.value }))}
                     />
+                    {errors.holderName && <p className="text-sm text-red-500">{errors.holderName}</p>}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="cardNumber">Card Number</Label>
@@ -95,8 +117,9 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                       value={newCard.cardNumber}
                       onChange={(e) => setNewCard(prev => ({ ...prev, cardNumber: e.target.value }))}
                     />
+                    {errors.cardNumber && <p className="text-sm text-red-500">{errors.cardNumber}</p>}
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="space-y-2">
                       <Label>Month</Label>
                       <Select value={newCard.expiryMonth} onValueChange={(value) => setNewCard(prev => ({ ...prev, expiryMonth: value }))}>
@@ -111,6 +134,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                           ))}
                         </SelectContent>
                       </Select>
+                      {errors.expiryMonth && <p className="text-sm text-red-500">{errors.expiryMonth}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label>Year</Label>
@@ -126,6 +150,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                           ))}
                         </SelectContent>
                       </Select>
+                      {errors.expiryYear && <p className="text-sm text-red-500">{errors.expiryYear}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="cvv">CVV</Label>
@@ -135,6 +160,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                         value={newCard.cvv}
                         onChange={(e) => setNewCard(prev => ({ ...prev, cvv: e.target.value }))}
                       />
+                      {errors.cvv && <p className="text-sm text-red-500">{errors.cvv}</p>}
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
@@ -144,11 +170,12 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                 </div>
                 <DialogFooter>
                   <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
+                    <Button variant="outline" disabled={loading}>Cancel</Button>
                   </DialogClose>
-                  <DialogClose asChild>
-                    <Button onClick={handleAddCard}>Add Payment Method</Button>
-                  </DialogClose>
+                  <Button onClick={handleAddCard} disabled={loading}>
+                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Add Payment Method
+                  </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
@@ -157,7 +184,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
         <CardContent>
           <div className="space-y-4">
             {paymentMethods.map((method) => (
-              <div key={method.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
+              <div key={method.id} className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
                     {getBrandIcon(method.brand)}
@@ -178,7 +205,7 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                     )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 mt-4 sm:mt-0">
                   {!method.isDefault && (
                     <Button 
                       variant="outline" 
@@ -199,7 +226,6 @@ export const PaymentMethods = ({ paymentMethods, onAdd, onRemove, onSetDefault }
                 </div>
               </div>
             ))}
-            
             {paymentMethods.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
                 <CreditCard className="h-12 w-12 mx-auto mb-4 opacity-50" />

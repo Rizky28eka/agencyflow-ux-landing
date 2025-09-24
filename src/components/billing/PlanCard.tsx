@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, Crown, Zap, Rocket, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 interface PlanCardProps {
   plan: {
@@ -17,11 +18,35 @@ interface PlanCardProps {
     icon: React.ReactNode;
     color: string;
   };
+  currentPlan: {
+    name: string;
+    price: number;
+  };
   onSelect: (planId: string) => void;
   loading?: boolean;
 }
 
-export const PlanCard = ({ plan, onSelect, loading }: PlanCardProps) => {
+export const PlanCard = ({ plan, currentPlan, onSelect, loading }: PlanCardProps) => {
+  const isUpgrade = plan.price > currentPlan.price;
+  const isDowngrade = plan.price < currentPlan.price;
+
+  // Prorated calculation logic (simplified for demo)
+  const remainingDays = 10; // Assuming 10 days left in a 30-day cycle
+  const dayRateCurrent = currentPlan.price / 30;
+  const dayRateNew = plan.price / 30;
+  const proratedCost = (dayRateNew - dayRateCurrent) * remainingDays;
+
+  const getDialogDescription = () => {
+    if (isUpgrade) {
+      return `You are about to upgrade to the ${plan.name} plan. A prorated charge of $${proratedCost.toFixed(2)} for the remaining period will be applied to your next invoice.`
+    }
+    if (isDowngrade) {
+      return `You are about to downgrade to the ${plan.name} plan. Changes will take effect at the start of your next billing cycle. No refund will be issued for the current period.`
+    }
+    return `You are about to change to the ${plan.name} plan.`
+  }
+
+  
   return (
     <Card className={cn(
       "relative overflow-hidden transition-all duration-300 hover:shadow-xl",
@@ -81,20 +106,35 @@ export const PlanCard = ({ plan, onSelect, loading }: PlanCardProps) => {
       </CardContent>
 
       <CardFooter className="pt-6">
-        <Button 
-          className={cn(
-            "w-full h-12 font-semibold",
-            plan.isCurrent 
-              ? "bg-muted text-muted-foreground cursor-not-allowed" 
-              : plan.isPopular 
-                ? "bg-gradient-to-r from-accent to-accent-light hover:from-accent-light hover:to-accent shadow-lg" 
-                : "bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary"
-          )}
-          onClick={() => onSelect(plan.id)}
-          disabled={plan.isCurrent || loading}
-        >
-          {plan.isCurrent ? 'Current Plan' : plan.price === 0 ? 'Get Started' : 'Upgrade Now'}
-        </Button>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button 
+              className={cn(
+                "w-full h-12 font-semibold",
+                plan.isCurrent 
+                  ? "bg-muted text-muted-foreground cursor-not-allowed" 
+                  : plan.isPopular 
+                    ? "bg-gradient-to-r from-accent to-accent-light hover:from-accent-light hover:to-accent shadow-lg" 
+                    : "bg-gradient-to-r from-primary to-primary-light hover:from-primary-light hover:to-primary"
+              )}
+              disabled={plan.isCurrent || loading}
+            >
+              {plan.isCurrent ? 'Current Plan' : plan.price === 0 ? 'Get Started' : 'Upgrade Now'}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm Plan Change</AlertDialogTitle>
+              <AlertDialogDescription>
+                {getDialogDescription()}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={() => onSelect(plan.id)}>Confirm & Upgrade</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardFooter>
     </Card>
   );

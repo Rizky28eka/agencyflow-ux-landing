@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Download, Receipt, Calendar, CreditCard } from 'lucide-react';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface Invoice {
   id: string;
@@ -20,6 +22,8 @@ interface BillingHistoryProps {
 }
 
 export const BillingHistory = ({ invoices }: BillingHistoryProps) => {
+  const navigate = useNavigate();
+
   const getStatusVariant = (status: string) => {
     switch (status) {
       case 'paid': return 'secondary';
@@ -95,40 +99,62 @@ export const BillingHistory = ({ invoices }: BillingHistoryProps) => {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Invoice</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Plan</TableHead>
-                <TableHead>Period</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {invoices.map((invoice) => (
-                <TableRow key={invoice.id} className="hover:bg-muted/50">
-                  <TableCell className="font-medium">{invoice.id}</TableCell>
-                  <TableCell>{format(new Date(invoice.date), 'MMM dd, yyyy')}</TableCell>
-                  <TableCell>{invoice.plan}</TableCell>
-                  <TableCell className="text-muted-foreground">{invoice.period}</TableCell>
-                  <TableCell>
-                    <Badge variant={getStatusVariant(invoice.status)} className={getStatusColor(invoice.status)}>
+          {/* Desktop Table */}
+          <div className="hidden sm:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Invoice</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Plan</TableHead>
+                  <TableHead>Period</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {invoices.map((invoice) => (
+                  <TableRow key={invoice.id} onClick={() => navigate(`/invoices/${invoice.id}`)} className="cursor-pointer hover:bg-muted/50">
+                    <TableCell className="font-medium">{invoice.id}</TableCell>
+                    <TableCell>{format(new Date(invoice.date), 'MMM dd, yyyy')}</TableCell>
+                    <TableCell>{invoice.plan}</TableCell>
+                    <TableCell className="text-muted-foreground">{invoice.period}</TableCell>
+                    <TableCell>
+                      <Badge variant={getStatusVariant(invoice.status)} className={getStatusColor(invoice.status)}>
+                        {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right font-semibold">${invoice.amount.toFixed(2)}</TableCell>
+                                      <TableCell className="text-right">
+                                        <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); toast.info(`Downloading invoice ${invoice.id}...`) }}>
+                                          <Download className="h-4 w-4" />
+                                        </Button>
+                                      </TableCell>                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          {/* Mobile Card List */}
+          <div className="sm:hidden space-y-4">
+            {invoices.map((invoice) => (
+              <Card key={invoice.id} onClick={() => navigate(`/invoices/${invoice.id}`)} className="cursor-pointer hover:bg-muted/50">
+                <CardContent className="p-4 flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold">{invoice.id}</p>
+                    <p className="text-sm text-muted-foreground">{format(new Date(invoice.date), 'MMM dd, yyyy')}</p>
+                    <Badge variant={getStatusVariant(invoice.status)} className={`mt-2 ${getStatusColor(invoice.status)}`}>
                       {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                     </Badge>
-                  </TableCell>
-                  <TableCell className="text-right font-semibold">${invoice.amount.toFixed(2)}</TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="sm">
-                      <Download className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold">${invoice.amount.toFixed(2)}</p>
+                    <p className="text-sm text-muted-foreground">{invoice.plan}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

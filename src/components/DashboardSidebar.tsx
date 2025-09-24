@@ -20,7 +20,10 @@ import {
   SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { NotificationList } from './NotificationList';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Role } from '@/lib/rolePermissions';
@@ -118,12 +121,20 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
       });
       
       navigate('/auth');
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error",
+          description: error.message,
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "An unknown error occurred.",
+          variant: "destructive"
+        });
+      }
     }
   };
   
@@ -182,12 +193,21 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton
-                  tooltip={state === 'collapsed' ? 'Notifications' : undefined}
-                >
-                  <Bell className="h-4 w-4" />
-                  <span>Notifications</span>
-                </SidebarMenuButton>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <SidebarMenuButton
+                      tooltip={state === 'collapsed' ? 'Notifications' : undefined}
+                      className="relative"
+                    >
+                      <Bell className="h-4 w-4" />
+                      <span>Notifications</span>
+                      <Badge className="absolute top-1 right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">2</Badge>
+                    </SidebarMenuButton>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0" side="right" align="start">
+                    <NotificationList />
+                  </PopoverContent>
+                </Popover>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>

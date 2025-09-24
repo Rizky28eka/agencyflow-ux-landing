@@ -24,7 +24,13 @@ const OwnerAnalytics = () => {
     { status: 'Overdue', value: 3, fill: '#ef4444' },
   ];
 
-  const handleChartClick = (data: any) => {
+  interface PieClickData {
+    status: string;
+    value: number;
+    fill: string;
+  }
+
+  const handleChartClick = (data: PieClickData) => {
     // In a real app, you would navigate to a pre-filtered list.
     // For this prototype, we'll navigate to the main projects page.
     console.log(`Navigating based on clicked slice: ${data.status}`);

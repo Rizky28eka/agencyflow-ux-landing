@@ -2,8 +2,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TrendingUp, CheckSquare, Clock, Star } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Line, LineChart, Legend } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from '@/components/ui/chart';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Line, LineChart, Legend, ResponsiveContainer } from 'recharts';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useNavigate } from 'react-router-dom';
 
 const TeamLeadPerformance = () => {
   const tasksCompletedData = [
@@ -19,6 +21,29 @@ const TeamLeadPerformance = () => {
     { week: 'Week 3', points: 42 },
     { week: 'Week 4', points: 50 },
   ];
+
+  const navigate = useNavigate();
+
+  const teamPerformanceData = [
+    { id: 1, member: 'Mike C.', tasksCompleted: 25, onTimeDelivery: '96%', avgRating: 4.8 },
+    { id: 2, member: 'Sarah J.', tasksCompleted: 30, onTimeDelivery: '98%', avgRating: 4.9 },
+    { id: 3, member: 'Alex R.', tasksCompleted: 22, onTimeDelivery: '92%', avgRating: 4.6 },
+    { id: 4, member: 'Emily D.', tasksCompleted: 28, onTimeDelivery: '95%', avgRating: 4.7 },
+  ];
+
+  const tasksChartConfig = {
+    tasks: {
+      label: "Tasks",
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig
+
+  const velocityChartConfig = {
+    points: {
+      label: "Points",
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig
 
   return (
     <DashboardLayout
@@ -37,17 +62,26 @@ const TeamLeadPerformance = () => {
             </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <Card>
                 <CardHeader><CardTitle>Tasks Completed per Member</CardTitle></CardHeader>
                 <CardContent>
-                    <ChartContainer config={{}} className="h-80 w-full">
-                        <BarChart data={tasksCompletedData}>
+                    <ChartContainer config={tasksChartConfig} className="min-h-[200px] w-full">
+                        <BarChart accessibilityLayer data={tasksCompletedData}>
                             <CartesianGrid vertical={false} />
-                            <XAxis dataKey="member" />
+                            <XAxis
+                              dataKey="member"
+                              tickLine={false}
+                              tickMargin={10}
+                              axisLine={false}
+                              tickFormatter={(value) => value.slice(0, 3)}
+                            />
                             <YAxis />
-                            <ChartTooltip content={<ChartTooltipContent />} />
-                            <Bar dataKey="tasks" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                            <ChartTooltip
+                              cursor={false}
+                              content={<ChartTooltipContent indicator="dot" />}
+                            />
+                            <Bar dataKey="tasks" fill="var(--color-tasks)" radius={4} />
                         </BarChart>
                     </ChartContainer>
                 </CardContent>
@@ -55,19 +89,50 @@ const TeamLeadPerformance = () => {
             <Card>
                 <CardHeader><CardTitle>Team Velocity (Story Points)</CardTitle></CardHeader>
                 <CardContent>
-                    <ChartContainer config={{}} className="h-80 w-full">
-                        <LineChart data={velocityData}>
+                    <ChartContainer config={velocityChartConfig} className="min-h-[200px] w-full">
+                        <LineChart accessibilityLayer data={velocityData}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="week" />
                             <YAxis />
-                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <ChartTooltip
+                              cursor={false}
+                              content={<ChartTooltipContent indicator="dot" />}
+                            />
                             <Legend />
-                            <Line type="monotone" dataKey="points" stroke="#8b5cf6" strokeWidth={2} name="Points Completed" />
+                            <Line type="monotone" dataKey="points" stroke="var(--color-points)" strokeWidth={2} name="Points Completed" />
                         </LineChart>
                     </ChartContainer>
                 </CardContent>
             </Card>
         </div>
+
+        <Card>
+            <CardHeader>
+                <CardTitle>Team Performance Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Member</TableHead>
+                            <TableHead>Tasks Completed</TableHead>
+                            <TableHead>On-Time Delivery</TableHead>
+                            <TableHead>Avg. Rating</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {teamPerformanceData.map((member, index) => (
+                            <TableRow key={index} onClick={() => navigate(`/dashboard/team-lead/performance/${member.id}`)} className="cursor-pointer">
+                                <TableCell>{member.member}</TableCell>
+                                <TableCell>{member.tasksCompleted}</TableCell>
+                                <TableCell>{member.onTimeDelivery}</TableCell>
+                                <TableCell>{member.avgRating}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </CardContent>
+        </Card>
     </DashboardLayout>
   );
 };

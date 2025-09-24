@@ -88,7 +88,7 @@ const OwnerTeam = () => {
                       <p className="text-sm text-muted-foreground">{member.role}</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 flex-wrap">
                     <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('Email clicked!'); }}>
                       <Mail className="h-4 w-4" />
                     </Button>

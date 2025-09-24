@@ -1,8 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { LineChart, CartesianGrid, XAxis, YAxis, Line, ResponsiveContainer } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, CreditCard, DollarSign, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
 import { format, addDays } from 'date-fns';
+
+const usageHistory = [
+  { month: 'Jan', projects: 10, members: 5, storage: 20 },
+  { month: 'Feb', projects: 12, members: 6, storage: 25 },
+  { month: 'Mar', projects: 15, members: 7, storage: 30 },
+  { month: 'Apr', projects: 14, members: 8, storage: 35 },
+  { month: 'May', projects: 16, members: 9, storage: 40 },
+  { month: 'Jun', projects: 18, members: 10, storage: 45 },
+];
 
 interface BillingOverviewProps {
   currentPlan: {
@@ -156,15 +167,17 @@ export const BillingOverview = ({ currentPlan, nextInvoice, paymentMethod }: Bil
         </CardHeader>
         <CardContent>
           <ChartContainer config={{}} className="h-64 w-full">
-            <LineChart data={usageHistory}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <Line type="monotone" dataKey="projects" stroke="#3b82f6" strokeWidth={2} name="Projects" />
-              <Line type="monotone" dataKey="members" stroke="#8b5cf6" strokeWidth={2} name="Team Members" />
-              <Line type="monotone" dataKey="storage" stroke="#10b981" strokeWidth={2} name="Storage (GB)" />
-            </LineChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={usageHistory}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Line type="monotone" dataKey="projects" stroke="#3b82f6" strokeWidth={2} name="Projects" />
+                <Line type="monotone" dataKey="members" stroke="#8b5cf6" strokeWidth={2} name="Team Members" />
+                <Line type="monotone" dataKey="storage" stroke="#10b981" strokeWidth={2} name="Storage (GB)" />
+              </LineChart>
+            </ResponsiveContainer>
           </ChartContainer>
         </CardContent>
       </Card>
