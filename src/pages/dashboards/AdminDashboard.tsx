@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Users, Settings, FileText, UserCheck, Lock, Database, Activity } from 'lucide-react';
+import { Shield, Users, Settings, FileText, UserCheck, Lock, Database, Activity, List } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const AdminDashboard = () => {
@@ -116,6 +117,12 @@ const AdminDashboard = () => {
                 <Settings className="mr-2 h-4 w-4" />
                 System Configuration
               </Button>
+              <Link to="/dashboard/admin/audit-log" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                    <List className="mr-2 h-4 w-4" />
+                    Audit Log
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

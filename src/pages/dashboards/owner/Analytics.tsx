@@ -1,9 +1,27 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart3, TrendingUp, DollarSign, Users, Calendar, Download } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart as RechartsPieChart, Cell, Legend } from 'recharts';
 
 const OwnerAnalytics = () => {
+  // Mock Data
+  const revenueTrendsData = [
+    { name: 'Q1', revenue: 65000 },
+    { name: 'Q2', revenue: 78000 },
+    { name: 'Q3', revenue: 92000 },
+    { name: 'Q4', revenue: 85000 },
+  ];
+
+  const projectPerformanceData = [
+    { status: 'Completed', value: 120, fill: '#10b981' },
+    { status: 'On Track', value: 45, fill: '#3b82f6' },
+    { status: 'At Risk', value: 8, fill: '#f97316' },
+    { status: 'Overdue', value: 3, fill: '#ef4444' },
+  ];
+
   return (
     <DashboardLayout
       role="owner"
@@ -68,12 +86,18 @@ const OwnerAnalytics = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <Card>
           <CardHeader>
-            <CardTitle>Revenue Trends</CardTitle>
+            <CardTitle>Revenue Trends (Quarterly)</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-64 bg-muted/20 rounded-lg flex items-center justify-center">
-              <p className="text-muted-foreground">Revenue Chart Placeholder</p>
-            </div>
+            <ChartContainer config={{}} className="h-64 w-full">
+              <BarChart data={revenueTrendsData} margin={{ top: 20, right: 20, left: -10, bottom: 0 }}>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                <XAxis dataKey="name" tickLine={false} axisLine={false} />
+                <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `$${value / 1000}k`} />
+                <ChartTooltip cursor={{ fill: 'hsl(var(--muted) / 0.5)' }} content={<ChartTooltipContent />} />
+                <Bar dataKey="revenue" fill="var(--color-primary)" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ChartContainer>
           </CardContent>
         </Card>
 
@@ -81,10 +105,18 @@ const OwnerAnalytics = () => {
           <CardHeader>
             <CardTitle>Project Performance</CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="h-64 bg-muted/20 rounded-lg flex items-center justify-center">
-              <p className="text-muted-foreground">Performance Chart Placeholder</p>
-            </div>
+          <CardContent className="flex items-center justify-center">
+            <ChartContainer config={{}} className="h-64 w-full">
+              <RechartsPieChart>
+                <ChartTooltip content={<ChartTooltipContent />} />
+                <Pie data={projectPerformanceData} dataKey="value" nameKey="status" innerRadius={50} strokeWidth={2}>
+                  {projectPerformanceData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Pie>
+                <Legend />
+              </RechartsPieChart>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>

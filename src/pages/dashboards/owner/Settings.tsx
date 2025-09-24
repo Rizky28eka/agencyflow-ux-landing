@@ -1,11 +1,19 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Settings, Building, Users, Shield, Bell, Save } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Settings, Building, Users, Shield, Bell, Save, CreditCard, Zap } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
 const OwnerSettings = () => {
+  const handleSaveChanges = () => {
+    toast.success('Settings saved successfully!');
+  };
+
   return (
     <DashboardLayout
       role="owner"
@@ -13,7 +21,7 @@ const OwnerSettings = () => {
       description="System configuration and preferences"
       headerIcon={<Settings className="h-8 w-8 text-primary" />}
       headerAction={
-        <Button className="bg-gradient-primary">
+        <Button className="bg-gradient-primary" onClick={handleSaveChanges}>
           <Save className="mr-2 h-4 w-4" />
           Save Changes
         </Button>
@@ -85,14 +93,18 @@ const OwnerSettings = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button className="w-full justify-start" variant="outline">
-              <Users className="mr-2 h-4 w-4" />
-              Manage User Roles
-            </Button>
-            <Button className="w-full justify-start" variant="outline">
-              <Shield className="mr-2 h-4 w-4" />
-              Security Settings
-            </Button>
+            <Link to="/dashboard/admin/roles" className="w-full">
+              <Button className="w-full justify-start" variant="outline">
+                <Users className="mr-2 h-4 w-4" />
+                Manage User Roles
+              </Button>
+            </Link>
+            <Link to="/dashboard/admin/settings" className="w-full">
+              <Button className="w-full justify-start" variant="outline">
+                <Shield className="mr-2 h-4 w-4" />
+                Security Settings
+              </Button>
+            </Link>
             <Button className="w-full justify-start" variant="outline">
               <Bell className="mr-2 h-4 w-4" />
               Notification Settings
@@ -109,23 +121,42 @@ const OwnerSettings = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="email-notifications">Email Notifications</Label>
-              <input type="checkbox" id="email-notifications" defaultChecked />
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <Label htmlFor="email-notifications" className="font-normal">Email Notifications</Label>
+              <Switch id="email-notifications" defaultChecked />
             </div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="project-updates">Project Updates</Label>
-              <input type="checkbox" id="project-updates" defaultChecked />
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <Label htmlFor="project-updates" className="font-normal">Project Updates</Label>
+              <Switch id="project-updates" defaultChecked />
             </div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="financial-alerts">Financial Alerts</Label>
-              <input type="checkbox" id="financial-alerts" defaultChecked />
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <Label htmlFor="financial-alerts" className="font-normal">Financial Alerts</Label>
+              <Switch id="financial-alerts" />
             </div>
-            <div className="flex items-center justify-between">
-              <Label htmlFor="team-notifications">Team Notifications</Label>
-              <input type="checkbox" id="team-notifications" defaultChecked />
+            <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+              <Label htmlFor="team-notifications" className="font-normal">Team Notifications</Label>
+              <Switch id="team-notifications" defaultChecked />
             </div>
           </CardContent>
+        </Card>
+
+        {/* Billing and Subscription */}
+        <Card>
+            <CardHeader>
+                <CardTitle className="flex items-center">
+                    <CreditCard className="mr-2 h-5 w-5" />
+                    Billing & Subscription
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <Link to="/dashboard/owner/billing">
+                    <Button className="w-full justify-start" variant="outline">
+                        <Zap className="mr-2 h-4 w-4" />
+                        Manage Plan & Billing
+                    </Button>
+                </Link>
+                <p className="text-xs text-muted-foreground mt-3">View your current plan, billing history, and upgrade options.</p>
+            </CardContent>
         </Card>
       </div>
     </DashboardLayout>

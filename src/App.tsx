@@ -20,12 +20,16 @@ import OwnerAnalytics from "./pages/dashboards/owner/Analytics";
 import OwnerTeam from "./pages/dashboards/owner/Team";
 import OwnerFinance from "./pages/dashboards/owner/Finance";
 import OwnerSettings from "./pages/dashboards/owner/Settings";
+import OwnerBilling from "./pages/dashboards/owner/Billing";
+import OwnerGoals from "./pages/dashboards/owner/Goals";
+import TeamMemberDetails from "./pages/dashboards/owner/TeamMemberDetails";
 
 // Admin Dashboard Pages
 import AdminUsers from "./pages/dashboards/admin/Users";
 import AdminRoles from "./pages/dashboards/admin/Roles";
 import AdminReports from "./pages/dashboards/admin/Reports";
 import AdminSystemSettings from "./pages/dashboards/admin/SystemSettings";
+import AdminAuditLog from "./pages/dashboards/admin/AuditLog";
 
 // Project Manager Dashboard Pages
 import ProjectManagerProjects from "./pages/dashboards/project-manager/Projects";
@@ -62,14 +66,18 @@ const App = () => (
           {/* Owner Dashboard Routes */}
           <Route path="/dashboard/owner/analytics" element={<OwnerAnalytics />} />
           <Route path="/dashboard/owner/team" element={<OwnerTeam />} />
+          <Route path="/dashboard/owner/team/:memberId" element={<TeamMemberDetails />} />
           <Route path="/dashboard/owner/finance" element={<OwnerFinance />} />
           <Route path="/dashboard/owner/settings" element={<OwnerSettings />} />
+          <Route path="/dashboard/owner/billing" element={<OwnerBilling />} />
+          <Route path="/dashboard/owner/goals" element={<OwnerGoals />} />
           
           {/* Admin Dashboard Routes */}
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
           <Route path="/dashboard/admin/roles" element={<AdminRoles />} />
           <Route path="/dashboard/admin/reports" element={<AdminReports />} />
           <Route path="/dashboard/admin/settings" element={<AdminSystemSettings />} />
+          <Route path="/dashboard/admin/audit-log" element={<AdminAuditLog />} />
           
           {/* Project Manager Dashboard Routes */}
           <Route path="/dashboard/project-manager/projects" element={<ProjectManagerProjects />} />

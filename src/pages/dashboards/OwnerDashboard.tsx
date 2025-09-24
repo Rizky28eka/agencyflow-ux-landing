@@ -1,9 +1,34 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap } from 'lucide-react';
+import { Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap, CheckCircle, UserPlus, Briefcase, Target } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const OwnerDashboard = () => {
+  const recentActivity = [
+    {
+      icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+      text: "Project 'Quantum Leap' was successfully completed.",
+      time: "2 hours ago"
+    },
+    {
+      icon: <UserPlus className="h-5 w-5 text-blue-500" />,
+      text: "A new team member, Alex Green, has joined the design team.",
+      time: "1 day ago"
+    },
+    {
+      icon: <DollarSign className="h-5 w-5 text-yellow-500" />,
+      text: "Invoice #INV-0078 for $12,500 was paid by Innovate Corp.",
+      time: "2 days ago"
+    },
+    {
+      icon: <Briefcase className="h-5 w-5 text-purple-500" />,
+      text: "New project 'Phoenix Rising' has been initiated with Tech Solutions Ltd.",
+      time: "3 days ago"
+    }
+  ];
+
   return (
     <DashboardLayout
       role="owner"
@@ -66,7 +91,7 @@ const OwnerDashboard = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           {/* Company Overview */}
           <Card>
             <CardHeader>
@@ -116,9 +141,38 @@ const OwnerDashboard = () => {
                 <Settings className="mr-2 h-4 w-4" />
                 System Configuration
               </Button>
+              <Link to="/dashboard/owner/goals" className="w-full">
+                <Button className="w-full justify-start" variant="outline">
+                    <Target className="mr-2 h-4 w-4" />
+                    Track Company Goals
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
+
+        {/* Recent Activity Feed */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Recent Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentActivity.map((activity, index) => (
+                <div key={index} className="flex items-start space-x-4 p-2 hover:bg-muted/50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                    {activity.icon}
+                  </div>
+                  <div className="flex-grow">
+                    <p className="text-sm font-medium">{activity.text}</p>
+                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
     </DashboardLayout>
   );
 };

@@ -3,12 +3,14 @@ import { Button } from '@/components/ui/button';
 import { Users, UserPlus, Mail, Phone, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
+import { Link } from 'react-router-dom';
+
 const OwnerTeam = () => {
   const teamMembers = [
-    { name: 'Sarah Johnson', role: 'Project Manager', email: 'sarah@agency.com', status: 'Active' },
-    { name: 'Mike Chen', role: 'Lead Designer', email: 'mike@agency.com', status: 'Active' },
-    { name: 'Emily Davis', role: 'Developer', email: 'emily@agency.com', status: 'Active' },
-    { name: 'Alex Rodriguez', role: 'Marketing Lead', email: 'alex@agency.com', status: 'Active' },
+    { id: 1, name: 'Sarah Johnson', role: 'Project Manager', email: 'sarah@agency.com', status: 'Active' },
+    { id: 2, name: 'Mike Chen', role: 'Lead Designer', email: 'mike@agency.com', status: 'Active' },
+    { id: 3, name: 'Emily Davis', role: 'Developer', email: 'emily@agency.com', status: 'Active' },
+    { id: 4, name: 'Alex Rodriguez', role: 'Marketing Lead', email: 'alex@agency.com', status: 'Active' },
   ];
 
   return (
@@ -75,28 +77,30 @@ const OwnerTeam = () => {
         <CardContent>
           <div className="space-y-4">
             {teamMembers.map((member, index) => (
-              <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold">
-                    {member.name.split(' ').map(n => n[0]).join('')}
+              <Link to={`/dashboard/owner/team/${member.id}`} key={index} className="block border rounded-lg hover:bg-muted/50 transition-colors">
+                <div className="flex items-center justify-between p-4">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold">
+                      {member.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{member.name}</h3>
+                      <p className="text-sm text-muted-foreground">{member.role}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold">{member.name}</h3>
-                    <p className="text-sm text-muted-foreground">{member.role}</p>
+                  <div className="flex items-center space-x-2">
+                    <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('Email clicked!'); }}>
+                      <Mail className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('Call clicked!'); }}>
+                      <Phone className="h-4 w-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('More options clicked!'); }}>
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm">
-                    <Mail className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <Phone className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="sm">
-                    <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </CardContent>
