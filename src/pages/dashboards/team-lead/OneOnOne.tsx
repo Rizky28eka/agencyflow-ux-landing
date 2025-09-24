@@ -1,4 +1,4 @@
-
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -8,9 +8,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
 
+const templates = {
+    'monthly-check-in': '1. How are you feeling about your workload?\n2. What was your biggest win this month?\n3. Any blockers or challenges I can help with?',
+    'performance-review': '1. Review of goals from last quarter.\n2. Discussion of strengths and areas for improvement.\n3. Set goals for next quarter.',
+    'goal-setting': '1. What are your career aspirations?\n2. How can the team help you achieve them?\n3. Let’s define 3 measurable goals for this quarter.'
+};
+
 const TeamLeadOneOnOne = () => {
+  const [talkingPoints, setTalkingPoints] = useState('');
+
   const teamMembers = [
     { id: 1, name: 'Mike Chen', role: 'Frontend Developer', lastMeeting: '2024-01-15', nextMeeting: '2024-02-15' },
     { id: 2, name: 'Sarah Johnson', role: 'UI/UX Designer', lastMeeting: '2024-01-18', nextMeeting: '2024-02-18' },
@@ -19,6 +28,11 @@ const TeamLeadOneOnOne = () => {
 
   const handleSchedule = () => {
     toast.success('1-on-1 meeting scheduled successfully!');
+    setTalkingPoints(''); // Reset after scheduling
+  };
+
+  const handleTemplateChange = (templateKey: keyof typeof templates) => {
+    setTalkingPoints(templates[templateKey]);
   };
 
   return (
@@ -37,7 +51,21 @@ const TeamLeadOneOnOne = () => {
                 <div className="grid gap-4 py-4">
                     <div className="space-y-2"><Label>Team Member</Label><Input defaultValue="Mike Chen" /></div>
                     <div className="space-y-2"><Label>Date & Time</Label><Input type="datetime-local" /></div>
-                    <div className="space-y-2"><Label>Talking Points</Label><Textarea placeholder="Key discussion topics..." /></div>
+                    <div className="space-y-2">
+                        <Label>Agenda Template</Label>
+                        <Select onValueChange={handleTemplateChange}>
+                            <SelectTrigger><SelectValue placeholder="Select a template..." /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="monthly-check-in">Monthly Check-in</SelectItem>
+                                <SelectItem value="performance-review">Performance Review</SelectItem>
+                                <SelectItem value="goal-setting">Goal Setting</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label>Talking Points</Label>
+                        <Textarea placeholder="Key discussion topics..." value={talkingPoints} onChange={(e) => setTalkingPoints(e.target.value)} />
+                    </div>
                 </div>
                 <DialogFooter>
                     <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>

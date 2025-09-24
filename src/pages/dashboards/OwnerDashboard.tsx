@@ -51,7 +51,9 @@ const OwnerDashboard = () => {
               <DollarSign className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">$284,500</div>
+              <Link to="/dashboard/owner/finance">
+                <div className="text-2xl font-bold text-foreground hover:underline">$284,500</div>
+              </Link>
               <p className="text-xs text-muted-foreground">+12.5% from last month</p>
             </CardContent>
           </Card>
@@ -62,7 +64,9 @@ const OwnerDashboard = () => {
               <BarChart3 className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">48</div>
+              <Link to="/dashboard/owner/analytics">
+                <div className="text-2xl font-bold text-foreground hover:underline">48</div>
+              </Link>
               <p className="text-xs text-muted-foreground">+3 new this week</p>
             </CardContent>
           </Card>
@@ -73,7 +77,9 @@ const OwnerDashboard = () => {
               <Users className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">24</div>
+              <Link to="/dashboard/owner/team">
+                <div className="text-2xl font-bold text-foreground hover:underline">24</div>
+              </Link>
               <p className="text-xs text-muted-foreground">Across 6 departments</p>
             </CardContent>
           </Card>

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { DollarSign, TrendingUp, CreditCard, Receipt, PieChart, Download, ArrowUp, ArrowDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart as RechartsPieChart, Cell, Legend } from 'recharts';
@@ -156,15 +157,17 @@ const OwnerFinance = () => {
             </TableHeader>
             <TableBody>
               {recentTransactions.map((trx) => (
-                <TableRow key={trx.id}>
-                  <TableCell className="font-medium">{trx.id}</TableCell>
-                  <TableCell>{trx.date}</TableCell>
-                  <TableCell>{trx.description}</TableCell>
+                <TableRow key={trx.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableCell className="font-medium"><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.id}</Link></TableCell>
+                  <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.date}</Link></TableCell>
+                  <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.description}</Link></TableCell>
                   <TableCell className={`text-right font-semibold ${trx.type === 'Income' ? 'text-green-600' : 'text-red-600'}`}>
-                    <div className="flex items-center justify-end">
-                      {trx.type === 'Income' ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
-                      ${Math.abs(trx.amount).toLocaleString()}
-                    </div>
+                    <Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">
+                        <div className="flex items-center justify-end">
+                        {trx.type === 'Income' ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
+                        ${Math.abs(trx.amount).toLocaleString()}
+                        </div>
+                    </Link>
                   </TableCell>
                 </TableRow>
               ))}

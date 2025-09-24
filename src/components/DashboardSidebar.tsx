@@ -29,6 +29,7 @@ const roleNavigation = {
     { title: 'Goal Tracking', url: '/dashboard/owner/goals', icon: Target },
     { title: 'Billing & Plan', url: '/dashboard/owner/billing', icon: CreditCard },
     { title: 'Settings', url: '/dashboard/owner/settings', icon: Settings },
+    { title: 'Advanced Reports', url: '/dashboard/owner/reports', icon: FileText },
   ],
   admin: [
     { title: 'Dashboard', url: '/dashboard/admin', icon: Home },
@@ -52,6 +53,7 @@ const roleNavigation = {
     { title: 'Dashboard', url: '/dashboard/member', icon: Home },
     { title: 'My Tasks', url: '/dashboard/member/tasks', icon: CheckSquare },
     { title: 'Time Tracking', url: '/dashboard/member/time', icon: Clock },
+    { title: 'My Profile', url: '/dashboard/member/settings', icon: User },
   ],
   'team-lead': [
     { title: 'Dashboard', url: '/dashboard/team-lead', icon: Home },
@@ -69,6 +71,7 @@ const roleNavigation = {
     { title: 'Payroll', url: '/dashboard/finance/payroll', icon: Banknote },
     { title: 'Revenue Tracking', url: '/dashboard/finance/revenue', icon: DollarSign },
     { title: 'Expense Management', url: '/dashboard/finance/expenses', icon: Receipt },
+    { title: 'Expense Claims', url: '/dashboard/finance/claims', icon: UserCheck },
     { title: 'Invoicing', url: '/dashboard/finance/invoicing', icon: FileText },
     { title: 'Financial Reports', url: '/dashboard/finance/reports', icon: PieChart },
     { title: 'Forecasting', url: '/dashboard/finance/forecasting', icon: BrainCircuit },

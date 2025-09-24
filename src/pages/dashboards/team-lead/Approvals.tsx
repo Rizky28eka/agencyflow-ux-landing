@@ -1,11 +1,12 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Check, X, Clock, UserCheck } from 'lucide-react';
+import { Check, X, UserCheck, CheckCheck } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Checkbox } from '@/components/ui/checkbox';
+import { toast } from 'sonner';
 
 const TeamLeadApprovals = () => {
   const requests = [
@@ -25,22 +26,27 @@ const TeamLeadApprovals = () => {
     }
   };
 
-  const renderRequestRow = (request: any) => (
+  const handleBulkApprove = () => {
+    toast.success('Selected requests have been approved.');
+  };
+
+  const renderRequestRow = (request: any, isPendingTab: boolean) => (
     <TableRow key={request.id}>
-      <TableCell className="font-medium">{request.id}</TableCell>
-      <TableCell>{request.member}</TableCell>
-      <TableCell><Badge variant="outline">{request.type}</Badge></TableCell>
-      <TableCell className="text-muted-foreground">{request.details}</TableCell>
-      <TableCell>{request.submitted}</TableCell>
-      <TableCell><Badge variant={getStatusVariant(request.status)}>{request.status}</Badge></TableCell>
-      <TableCell className="text-right">
-        {request.status === 'Pending' && (
-          <div className="space-x-2">
-            <Button variant="outline" size="sm"><Check className="h-4 w-4 mr-1" /> Approve</Button>
-            <Button variant="destructive" size="sm"><X className="h-4 w-4 mr-1" /> Reject</Button>
-          </div>
-        )}
-      </TableCell>
+        {isPendingTab && <TableCell><Checkbox /></TableCell>}
+        <TableCell className="font-medium">{request.id}</TableCell>
+        <TableCell>{request.member}</TableCell>
+        <TableCell><Badge variant="outline">{request.type}</Badge></TableCell>
+        <TableCell className="text-muted-foreground">{request.details}</TableCell>
+        <TableCell>{request.submitted}</TableCell>
+        <TableCell><Badge variant={getStatusVariant(request.status)}>{request.status}</Badge></TableCell>
+        <TableCell className="text-right">
+            {request.status === 'Pending' && (
+            <div className="space-x-2">
+                <Button variant="outline" size="sm"><Check className="h-4 w-4 mr-1" /> Approve</Button>
+                <Button variant="destructive" size="sm"><X className="h-4 w-4 mr-1" /> Reject</Button>
+            </div>
+            )}
+        </TableCell>
     </TableRow>
   );
 
@@ -58,11 +64,14 @@ const TeamLeadApprovals = () => {
         </TabsList>
         <TabsContent value="pending">
           <Card>
-            <CardHeader><CardTitle>Pending Requests</CardTitle></CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Pending Requests</CardTitle>
+                <Button variant="outline" onClick={handleBulkApprove}><CheckCheck className="mr-2 h-4 w-4"/>Approve Selected</Button>
+            </CardHeader>
             <CardContent>
               <Table>
-                <TableHeader><TableRow><TableHead>ID</TableHead><TableHead>Member</TableHead><TableHead>Type</TableHead><TableHead>Details</TableHead><TableHead>Date</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
-                <TableBody>{requests.filter(r => r.status === 'Pending').map(renderRequestRow)}</TableBody>
+                <TableHeader><TableRow><TableHead className="w-[50px]"><Checkbox /></TableHead><TableHead>ID</TableHead><TableHead>Member</TableHead><TableHead>Type</TableHead><TableHead>Details</TableHead><TableHead>Date</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
+                <TableBody>{requests.filter(r => r.status === 'Pending').map(req => renderRequestRow(req, true))}</TableBody>
               </Table>
             </CardContent>
           </Card>
@@ -73,7 +82,7 @@ const TeamLeadApprovals = () => {
             <CardContent>
               <Table>
                 <TableHeader><TableRow><TableHead>ID</TableHead><TableHead>Member</TableHead><TableHead>Type</TableHead><TableHead>Details</TableHead><TableHead>Date</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
-                <TableBody>{requests.map(renderRequestRow)}</TableBody>
+                <TableBody>{requests.map(req => renderRequestRow(req, false))}</TableBody>
               </Table>
             </CardContent>
           </Card>

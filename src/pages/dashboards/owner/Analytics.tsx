@@ -1,12 +1,14 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { BarChart3, TrendingUp, DollarSign, Users, Calendar, Download } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart as RechartsPieChart, Cell, Legend } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 const OwnerAnalytics = () => {
+  const navigate = useNavigate();
+
   // Mock Data
   const revenueTrendsData = [
     { name: 'Q1', revenue: 65000 },
@@ -21,6 +23,13 @@ const OwnerAnalytics = () => {
     { status: 'At Risk', value: 8, fill: '#f97316' },
     { status: 'Overdue', value: 3, fill: '#ef4444' },
   ];
+
+  const handleChartClick = (data: any) => {
+    // In a real app, you would navigate to a pre-filtered list.
+    // For this prototype, we'll navigate to the main projects page.
+    console.log(`Navigating based on clicked slice: ${data.status}`);
+    navigate('/dashboard/project-manager/projects');
+  };
 
   return (
     <DashboardLayout
@@ -109,7 +118,7 @@ const OwnerAnalytics = () => {
             <ChartContainer config={{}} className="h-64 w-full">
               <RechartsPieChart>
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Pie data={projectPerformanceData} dataKey="value" nameKey="status" innerRadius={50} strokeWidth={2}>
+                <Pie data={projectPerformanceData} dataKey="value" nameKey="status" innerRadius={50} strokeWidth={2} onClick={handleChartClick} className="cursor-pointer">
                   {projectPerformanceData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
                   ))}

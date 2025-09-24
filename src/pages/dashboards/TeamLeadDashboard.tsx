@@ -1,10 +1,16 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { UserCheck, Users, TrendingUp, Calendar, MessageSquare, CheckSquare, Clock, Star } from 'lucide-react';
+import { UserCheck, Users, TrendingUp, Calendar, MessageSquare, CheckSquare, Clock, Star, FileWarning } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const TeamLeadDashboard = () => {
+  const pendingApprovals = [
+    { id: 'REQ-001', member: 'Mike Chen', type: 'Leave', details: 'Vacation (5 days)' },
+    { id: 'REQ-004', member: 'Emily Davis', type: 'Expense', details: 'Online Course ($200)' },
+  ];
+
   return (
     <DashboardLayout
       role="team-lead"
@@ -56,20 +62,38 @@ const TeamLeadDashboard = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Avg. Rating</CardTitle>
-              <Star className="h-4 w-4 text-accent" />
+              <CardTitle className="text-sm font-medium text-muted-foreground">Pending Approvals</CardTitle>
+              <FileWarning className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">4.8</div>
-              <p className="text-xs text-muted-foreground">Team satisfaction</p>
+              <div className="text-2xl font-bold text-orange-500">{pendingApprovals.length}</div>
+              <p className="text-xs text-muted-foreground">items require action</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Pending Approvals */}
+          <Card className="lg:col-span-1">
+            <CardHeader>
+                <CardTitle className="flex items-center">
+                    <FileWarning className="mr-2 h-5 w-5" />
+                    Pending Approvals
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {pendingApprovals.map(item => (
+                    <Link to="/dashboard/team-lead/approvals" key={item.id} className="block p-3 bg-muted/50 rounded-lg hover:bg-muted">
+                        <p className="font-semibold">{item.member}</p>
+                        <p className="text-sm text-muted-foreground">{item.type}: {item.details}</p>
+                    </Link>
+                ))}
+            </CardContent>
+          </Card>
+
           {/* Team Performance */}
-          <Card>
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <TrendingUp className="mr-2 h-5 w-5" />
@@ -90,41 +114,6 @@ const TeamLeadDashboard = () => {
                 <span className="text-xl font-bold text-primary">4.7/5</span>
               </div>
             </CardContent>
-          </Card>
-
-          {/* Team Management */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Users className="mr-2 h-5 w-5" />
-                Team Management
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-                        <Link to="/dashboard/team-lead/one-on-ones" className="w-full">
-                          <Button className="w-full justify-start" variant="outline">
-                            <Calendar className="mr-2 h-4 w-4" />
-                            Schedule 1-on-1s
-                          </Button>
-                        </Link>
-            <Link to="/dashboard/team-lead/feedback" className="w-full">
-              <Button className="w-full justify-start" variant="outline">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                Team Feedback
-              </Button>
-            </Link>
-                        <Link to="/dashboard/team-lead/tasks" className="w-full">
-                          <Button className="w-full justify-start" variant="outline">
-                            <CheckSquare className="mr-2 h-4 w-4" />
-                            Assign Tasks
-                          </Button>
-                        </Link>
-                        <Link to="/dashboard/team-lead/time-management" className="w-full">
-                          <Button className="w-full justify-start" variant="outline">
-                            <Clock className="mr-2 h-4 w-4" />
-                            Time Management
-                          </Button>
-                        </Link>            </CardContent>
           </Card>
         </div>
     </DashboardLayout>

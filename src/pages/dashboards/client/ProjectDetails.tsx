@@ -1,9 +1,9 @@
-
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { CheckCircle, Clock, Download, File, Send, Briefcase } from 'lucide-react';
+import { CheckCircle, Clock, Download, File, Send, Briefcase, ThumbsUp, ThumbsDown, Eye } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { toast } from 'sonner';
 
 const ClientProjectDetails = () => {
   const timeline = [
@@ -17,6 +17,15 @@ const ClientProjectDetails = () => {
     { name: 'Homepage_Mockup_v2.fig', size: '5.8 MB', type: 'Figma File' },
     { name: 'Brand_Guidelines.pdf', size: '12.2 MB', type: 'PDF Document' },
   ];
+
+  const approvals = [
+      { name: 'Homepage Final Design', type: 'Design Mockup' },
+      { name: 'Project Timeline Adjustment', type: 'Schedule Change' },
+  ];
+
+  const handleApproval = (action: string) => {
+      toast.success(`Action [${action}] recorded successfully.`);
+  }
 
   return (
     <DashboardLayout
@@ -61,8 +70,23 @@ const ClientProjectDetails = () => {
           </Card>
         </div>
 
-        {/* Right Column: Deliverables */}
-        <div className="lg:col-span-1">
+        {/* Right Column: Approvals & Deliverables */}
+        <div className="lg:col-span-1 space-y-8">
+          <Card className="border-primary bg-primary/5">
+            <CardHeader><CardTitle>Awaiting Your Approval</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              {approvals.map((item, index) => (
+                <div key={index} className="p-3 border rounded-lg bg-background">
+                    <p className="font-semibold">{item.name}</p>
+                    <p className="text-sm text-muted-foreground">{item.type}</p>
+                    <div className="flex gap-2 mt-3">
+                        <Button size="sm" className="w-full" onClick={() => handleApproval('Approved')}><ThumbsUp className="mr-2 h-4 w-4"/>Approve</Button>
+                        <Button size="sm" variant="outline" className="w-full" onClick={() => handleApproval('Changes Requested')}><ThumbsDown className="mr-2 h-4 w-4"/>Request Changes</Button>
+                    </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
           <Card>
             <CardHeader><CardTitle>Deliverables</CardTitle></CardHeader>
             <CardContent className="space-y-4">

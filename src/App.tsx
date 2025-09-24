@@ -50,6 +50,7 @@ import FinanceInvoicing from "./pages/dashboards/finance/Invoicing";
 import FinanceReports from "./pages/dashboards/finance/Reports";
 import FinanceBudget from "./pages/dashboards/finance/Budget";
 import FinanceTax from "./pages/dashboards/finance/Tax";
+import TransactionDetails from "./pages/dashboards/finance/TransactionDetails";
 import TeamLeadOneOnOne from "./pages/dashboards/team-lead/OneOnOne";
 import TeamLeadFeedback from "./pages/dashboards/team-lead/Feedback";
 import TeamLeadTasks from "./pages/dashboards/team-lead/Tasks";
@@ -59,6 +60,7 @@ import TeamLeadMembers from "./pages/dashboards/team-lead/Members";
 import MemberSubmitReport from "./pages/dashboards/member/SubmitReport";
 import MemberTeamChat from "./pages/dashboards/member/TeamChat";
 import MemberSchedule from "./pages/dashboards/member/Schedule";
+import MemberSettings from "./pages/dashboards/member/Settings";
 
 // Member Dashboard Pages
 import MemberTasks from "./pages/dashboards/member/Tasks";
@@ -71,6 +73,8 @@ import ClientAccountSettings from "./pages/dashboards/client/AccountSettings";
 import ClientCustomReports from "./pages/dashboards/client/CustomReports";
 import ClientProjectDetails from "./pages/dashboards/client/ProjectDetails";
 import ClientMessages from "./pages/dashboards/client/Messages";
+import OwnerAdvancedReports from "./pages/dashboards/owner/AdvancedReports";
+import FinanceExpenseClaims from "./pages/dashboards/finance/ExpenseClaims";
 
 const queryClient = new QueryClient();
 
@@ -106,6 +110,7 @@ const App = () => (
           <Route path="/dashboard/finance/reports" element={<FinanceReports />} />
           <Route path="/dashboard/finance/budget" element={<FinanceBudget />} />
           <Route path="/dashboard/finance/tax" element={<FinanceTax />} />
+          <Route path="/dashboard/finance/transactions/:transactionId" element={<TransactionDetails />} />
           <Route path="/dashboard/client" element={<ClientDashboard />} />
           
           {/* Owner Dashboard Routes */}
@@ -116,6 +121,8 @@ const App = () => (
           <Route path="/dashboard/owner/settings" element={<OwnerSettings />} />
           <Route path="/dashboard/owner/billing" element={<OwnerBilling />} />
           <Route path="/dashboard/owner/goals" element={<OwnerGoals />} />
+          <Route path="/dashboard/owner/reports" element={<OwnerAdvancedReports />} />
+          <Route path="/dashboard/finance/claims" element={<FinanceExpenseClaims />} />
           
           {/* Admin Dashboard Routes */}
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
@@ -140,6 +147,7 @@ const App = () => (
           <Route path="/dashboard/member/submit-report" element={<MemberSubmitReport />} />
           <Route path="/dashboard/member/chat" element={<MemberTeamChat />} />
           <Route path="/dashboard/member/schedule" element={<MemberSchedule />} />
+          <Route path="/dashboard/member/settings" element={<MemberSettings />} />
           
           {/* Client Dashboard Routes */}
           <Route path="/dashboard/client/projects" element={<ClientProjects />} />
