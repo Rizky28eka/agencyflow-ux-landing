@@ -158,13 +158,6 @@ const FinanceDashboard = () => {
             </CardContent>
           </Card>
         </div>
-            </CardContent>
-          </Card>
-        </div>
-    </DashboardLayout>
-  );
-};
-
         {/* Finance Tools Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Link to="/dashboard/finance/invoicing">
@@ -172,6 +165,15 @@ const FinanceDashboard = () => {
               <CardHeader>
                 <CardTitle className="flex items-center text-lg">
                   <FileText className="mr-2 h-5 w-5" />
+                  Invoicing
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">Create and manage invoices</p>
+                <div className="mt-3 text-2xl font-bold text-primary">{financeMetrics.pendingInvoices}</div>
+              </CardContent>
+            </Card>
+          </Link>
           <Link to="/dashboard/finance/expenses">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>
@@ -186,7 +188,6 @@ const FinanceDashboard = () => {
               </CardContent>
             </Card>
           </Link>
-                  Invoicing
           <Link to="/dashboard/finance/payroll">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>
@@ -201,7 +202,6 @@ const FinanceDashboard = () => {
               </CardContent>
             </Card>
           </Link>
-                </CardTitle>
           <Link to="/dashboard/finance/reports">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>
@@ -214,11 +214,11 @@ const FinanceDashboard = () => {
                 <p className="text-sm text-muted-foreground">Financial analysis and insights</p>
                 <div className="mt-3 text-sm font-bold text-accent">P&L, Cash Flow</div>
               </CardContent>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">Create and manage invoices</p>
-                <div className="mt-3 text-2xl font-bold text-primary">{financeMetrics.pendingInvoices}</div>
-              </CardContent>
             </Card>
           </Link>
+        </div>
+    </DashboardLayout>
+  );
+};
+
 export default FinanceDashboard;

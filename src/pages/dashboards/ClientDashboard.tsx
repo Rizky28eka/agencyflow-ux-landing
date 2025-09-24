@@ -205,12 +205,6 @@ const ClientDashboard = () => {
             </CardContent>
           </Card>
         </div>
-            </CardContent>
-          </Card>
-        </div>
-    </DashboardLayout>
-  );
-};
 
         {/* Client Portal Tools */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -219,6 +213,15 @@ const ClientDashboard = () => {
               <CardHeader>
                 <CardTitle className="flex items-center text-lg">
                   <Briefcase className="mr-2 h-5 w-5" />
+                  Projects
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">View project details and timelines</p>
+                <div className="mt-3 text-2xl font-bold text-primary">{clientMetrics.activeProjects}</div>
+              </CardContent>
+            </Card>
+          </Link>
           <Link to="/dashboard/client/billing">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>
@@ -233,7 +236,6 @@ const ClientDashboard = () => {
               </CardContent>
             </Card>
           </Link>
-                  Projects
           <Link to="/dashboard/client/messages">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>
@@ -248,7 +250,6 @@ const ClientDashboard = () => {
               </CardContent>
             </Card>
           </Link>
-                </CardTitle>
           <Link to="/dashboard/client/reports">
             <Card className="hover:shadow-lg transition-shadow cursor-pointer">
               <CardHeader>
@@ -261,11 +262,11 @@ const ClientDashboard = () => {
                 <p className="text-sm text-muted-foreground">Generate custom project reports</p>
                 <div className="mt-3 text-sm font-bold text-accent">Download insights</div>
               </CardContent>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">View project details and timelines</p>
-                <div className="mt-3 text-2xl font-bold text-primary">{clientMetrics.activeProjects}</div>
-              </CardContent>
             </Card>
           </Link>
+        </div>
+    </DashboardLayout>
+  );
+};
+
 export default ClientDashboard;

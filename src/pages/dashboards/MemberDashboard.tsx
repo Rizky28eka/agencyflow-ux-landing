@@ -142,15 +142,14 @@ const MemberDashboard = () => {
               {todaysTasks.map(task => (
                 <div key={task.id} className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg">
                     <Checkbox id={`task-${task.id}`} />
-                    <div>
+                    <div className="flex-grow">
                         <label htmlFor={`task-${task.id}`} className="font-medium cursor-pointer">{task.title}</label>
                         <p className="text-xs text-muted-foreground">Project: {task.project}</p>
                     </div>
-                          <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'} className="text-xs">
-                            {task.priority}
-                          </Badge>
-                          <span className="text-xs text-muted-foreground">~{task.estimatedHours}h</span>
-                        </div>
+                    <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'} className="text-xs">
+                      {task.priority}
+                    </Badge>
+                    <span className="text-xs text-muted-foreground">~{task.estimatedHours}h</span>
                 </div>
               ))}
               <Link to="/dashboard/member/tasks">

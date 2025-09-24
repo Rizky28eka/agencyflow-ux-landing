@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getRoleDisplayName } from '@/lib/rolePermissions';
+import { getRoleDisplayName, hasPermission } from '@/lib/rolePermissions';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { DashboardSidebar } from './DashboardSidebar';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -27,24 +27,7 @@ export function DashboardLayout({
 }: DashboardLayoutProps) {
   const { user } = useAuth();
 
-  // Check if user has required permission
-  if (requiresPermission && user) {
-    const { hasPermission } = require('@/lib/rolePermissions');
-    if (!hasPermission(user.role, requiresPermission.resource, requiresPermission.action)) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-background">
-          <div className="max-w-md mx-auto text-center space-y-6">
-            <Alert variant="destructive">
-              <Shield className="h-4 w-4" />
-              <AlertDescription>
-                You don't have permission to {requiresPermission.action} {requiresPermission.resource}.
-              </AlertDescription>
-            </Alert>
-          </div>
-        </div>
-      );
-    }
-  }
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
