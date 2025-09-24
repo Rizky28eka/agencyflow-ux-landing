@@ -1,25 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { DollarSign, TrendingUp, CreditCard, PieChart, FileText, Calculator, BarChart3, AlertCircle } from 'lucide-react';
+import { DollarSign, TrendingUp, PieChart, CreditCard, Receipt, Calculator, FileText, Target, BarChart3 } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const FinanceDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <DollarSign className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Finance Dashboard</h1>
-              <p className="text-muted-foreground">Financial management and reporting</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <FileText className="mr-2 h-4 w-4" />
-            Generate Report
-          </Button>
-        </div>
+    <DashboardLayout
+      role="finance"
+      title="Finance Dashboard"
+      description="Financial overview and expense management"
+      headerIcon={<DollarSign className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <FileText className="mr-2 h-4 w-4" />
+          Generate Report
+        </Button>
+      }
+    >
 
         {/* Financial Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -59,7 +56,7 @@ const FinanceDashboard = () => {
           <Card className="border-orange-200 bg-orange-50/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Overdue Payments</CardTitle>
-              <AlertCircle className="h-4 w-4 text-orange-500" />
+              <Target className="h-4 w-4 text-orange-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">$8,400</div>
@@ -112,7 +109,7 @@ const FinanceDashboard = () => {
                 Budget Planning
               </Button>
               <Button className="w-full justify-start" variant="outline">
-                <BarChart3 className="mr-2 h-4 w-4" />
+                <TrendingUp className="mr-2 h-4 w-4" />
                 Financial Reports
               </Button>
               <Button className="w-full justify-start" variant="outline">
@@ -122,8 +119,7 @@ const FinanceDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

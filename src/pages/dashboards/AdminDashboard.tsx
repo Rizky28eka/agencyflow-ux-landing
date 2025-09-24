@@ -1,25 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Users, Settings, Database, Lock, AlertTriangle, UserCheck, Activity } from 'lucide-react';
+import { Shield, Users, Settings, FileText, UserCheck, Lock, Database, Activity } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const AdminDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <Shield className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
-              <p className="text-muted-foreground">System administration and user management</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <Settings className="mr-2 h-4 w-4" />
-            System Settings
-          </Button>
-        </div>
+    <DashboardLayout
+      role="admin"
+      title="Admin Dashboard"
+      description="System administration and user management"
+      headerIcon={<Shield className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <Settings className="mr-2 h-4 w-4" />
+          System Settings
+        </Button>
+      }
+    >
 
         {/* System Status */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -59,7 +56,7 @@ const AdminDashboard = () => {
           <Card className="border-red-200 bg-red-50/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Security Alerts</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-500" />
+              <Activity className="h-4 w-4 text-red-500" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">2</div>
@@ -122,8 +119,7 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

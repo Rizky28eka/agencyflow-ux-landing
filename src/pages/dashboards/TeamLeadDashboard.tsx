@@ -1,25 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { UserCheck, Users, TrendingUp, Calendar, MessageSquare, CheckSquare, Clock, Star } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const TeamLeadDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <UserCheck className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Team Lead Dashboard</h1>
-              <p className="text-muted-foreground">Team management and performance tracking</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <Calendar className="mr-2 h-4 w-4" />
-            Team Meeting
-          </Button>
-        </div>
+    <DashboardLayout
+      role="team-lead"
+      title="Team Lead Dashboard"
+      description="Team management and performance tracking"
+      headerIcon={<UserCheck className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <Calendar className="mr-2 h-4 w-4" />
+          Team Meeting
+        </Button>
+      }
+    >
 
         {/* Team Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -122,8 +119,7 @@ const TeamLeadDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

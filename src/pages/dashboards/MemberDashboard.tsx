@@ -1,25 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, CheckSquare, Clock, Calendar, FileText, MessageSquare, Target, TrendingUp } from 'lucide-react';
+import { User, CheckSquare, Clock, Target, TrendingUp, Calendar, FileText, Award } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const MemberDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <User className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Member Dashboard</h1>
-              <p className="text-muted-foreground">Your tasks and team collaboration</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <CheckSquare className="mr-2 h-4 w-4" />
-            View All Tasks
-          </Button>
-        </div>
+    <DashboardLayout
+      role="member"
+      title="Member Dashboard"
+      description="Your tasks, projects, and performance"
+      headerIcon={<User className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <Clock className="mr-2 h-4 w-4" />
+          Log Time
+        </Button>
+      }
+    >
 
         {/* Personal Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -112,7 +109,7 @@ const MemberDashboard = () => {
                 Submit Report
               </Button>
               <Button className="w-full justify-start" variant="outline">
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <Calendar className="mr-2 h-4 w-4" />
                 Team Chat
               </Button>
               <Button className="w-full justify-start" variant="outline">
@@ -122,8 +119,7 @@ const MemberDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

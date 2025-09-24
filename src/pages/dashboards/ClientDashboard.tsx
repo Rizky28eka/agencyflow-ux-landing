@@ -1,32 +1,29 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Handshake, Eye, Calendar, MessageSquare, FileText, Clock, CheckSquare, Star } from 'lucide-react';
+import { Briefcase, CreditCard, FileText, Users, MessageSquare, Calendar, CheckSquare, Star, Clock } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const ClientDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <Handshake className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Client Dashboard</h1>
-              <p className="text-muted-foreground">Project visibility and communication</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <MessageSquare className="mr-2 h-4 w-4" />
-            Contact Team
-          </Button>
-        </div>
+    <DashboardLayout
+      role="client"
+      title="Client Dashboard"
+      description="Project status and communication hub"
+      headerIcon={<Briefcase className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <MessageSquare className="mr-2 h-4 w-4" />
+          Contact Support
+        </Button>
+      }
+    >
 
         {/* Project Status */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Active Projects</CardTitle>
-              <Eye className="h-4 w-4 text-primary" />
+              <Briefcase className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-foreground">3</div>
@@ -74,7 +71,7 @@ const ClientDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Eye className="mr-2 h-5 w-5" />
+                <Briefcase className="mr-2 h-5 w-5" />
                 Project Status
               </CardTitle>
             </CardHeader>
@@ -116,14 +113,13 @@ const ClientDashboard = () => {
                 Send Feedback
               </Button>
               <Button className="w-full justify-start" variant="outline">
-                <Clock className="mr-2 h-4 w-4" />
-                Time Reports
+                <CreditCard className="mr-2 h-4 w-4" />
+                Billing & Invoices
               </Button>
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

@@ -1,25 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, Calendar, CheckSquare, Clock, TrendingUp, Plus, FileText, Target } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const ProjectManagerDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <Users className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Project Manager Dashboard</h1>
-              <p className="text-muted-foreground">Project oversight and team coordination</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <Plus className="mr-2 h-4 w-4" />
-            New Project
-          </Button>
-        </div>
+    <DashboardLayout
+      role="project-manager"
+      title="Project Manager Dashboard"
+      description="Project oversight and team coordination"
+      headerIcon={<Users className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <Plus className="mr-2 h-4 w-4" />
+          New Project
+        </Button>
+      }
+    >
 
         {/* Project Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -122,8 +119,7 @@ const ProjectManagerDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 

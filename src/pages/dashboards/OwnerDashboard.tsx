@@ -1,25 +1,22 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap } from 'lucide-react';
+import { DashboardLayout } from '@/components/DashboardLayout';
 
 const OwnerDashboard = () => {
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="container mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-3">
-            <Crown className="h-8 w-8 text-primary" />
-            <div>
-              <h1 className="text-3xl font-bold text-foreground">Owner Dashboard</h1>
-              <p className="text-muted-foreground">Complete overview and control</p>
-            </div>
-          </div>
-          <Button className="bg-gradient-elegant">
-            <Settings className="mr-2 h-4 w-4" />
-            Company Settings
-          </Button>
-        </div>
+    <DashboardLayout
+      role="owner"
+      title="Owner Dashboard"
+      description="Complete overview and control"
+      headerIcon={<Crown className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button className="bg-gradient-primary">
+          <Settings className="mr-2 h-4 w-4" />
+          Company Settings
+        </Button>
+      }
+    >
 
         {/* Key Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -122,8 +119,7 @@ const OwnerDashboard = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
