@@ -1,30 +1,52 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap, CheckCircle, UserPlus, Briefcase, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const OwnerDashboard = () => {
+  const companyMetrics = {
+    totalRevenue: 1284500,
+    monthlyGrowth: 18.2,
+    activeProjects: 48,
+    teamMembers: 24,
+    clientSatisfaction: 4.8,
+    profitMargin: 28.4
+  };
+
+  const departmentPerformance = [
+    { name: 'Design', performance: 92, projects: 12, revenue: 450000 },
+    { name: 'Development', performance: 88, projects: 18, revenue: 680000 },
+    { name: 'Marketing', performance: 95, projects: 8, revenue: 320000 },
+    { name: 'Finance', performance: 90, projects: 4, revenue: 150000 },
+  ];
+
+  const upcomingMilestones = [
+    { project: 'TechCorp Website', milestone: 'Final Delivery', date: '2024-02-15', status: 'On Track' },
+    { project: 'StartupXYZ App', milestone: 'Beta Release', date: '2024-02-20', status: 'At Risk' },
+    { project: 'RetailCo Rebrand', milestone: 'Brand Guidelines', date: '2024-02-10', status: 'Completed' },
+  ];
+
   const recentActivity = [
     {
       icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-      text: "Project 'Quantum Leap' was successfully completed.",
+      text: "Project 'TechCorp Website' milestone completed ahead of schedule.",
       time: "2 hours ago"
     },
     {
       icon: <UserPlus className="h-5 w-5 text-blue-500" />,
-      text: "A new team member, Alex Green, has joined the design team.",
+      text: "New senior developer Alex Green joined the development team.",
       time: "1 day ago"
     },
     {
       icon: <DollarSign className="h-5 w-5 text-yellow-500" />,
-      text: "Invoice #INV-0078 for $12,500 was paid by Innovate Corp.",
+      text: "Q4 revenue target exceeded by 12.5% - $1.28M total.",
       time: "2 days ago"
     },
     {
       icon: <Briefcase className="h-5 w-5 text-purple-500" />,
-      text: "New project 'Phoenix Rising' has been initiated with Tech Solutions Ltd.",
+      text: "3 new enterprise clients signed this month.",
       time: "3 days ago"
     }
   ];
@@ -41,6 +63,7 @@ const OwnerDashboard = () => {
           Company Settings
         </Button>
       }
+      requiresPermission={{ resource: 'company', action: 'read' }}
     >
 
         {/* Key Metrics */}
@@ -52,9 +75,9 @@ const OwnerDashboard = () => {
             </CardHeader>
             <CardContent>
               <Link to="/dashboard/owner/finance">
-                <div className="text-2xl font-bold text-foreground hover:underline">$284,500</div>
+                <div className="text-2xl font-bold text-foreground hover:underline">${companyMetrics.totalRevenue.toLocaleString()}</div>
               </Link>
-              <p className="text-xs text-muted-foreground">+12.5% from last month</p>
+              <p className="text-xs text-muted-foreground">+{companyMetrics.monthlyGrowth}% from last month</p>
             </CardContent>
           </Card>
 
@@ -65,7 +88,7 @@ const OwnerDashboard = () => {
             </CardHeader>
             <CardContent>
               <Link to="/dashboard/owner/analytics">
-                <div className="text-2xl font-bold text-foreground hover:underline">48</div>
+                <div className="text-2xl font-bold text-foreground hover:underline">{companyMetrics.activeProjects}</div>
               </Link>
               <p className="text-xs text-muted-foreground">+3 new this week</p>
             </CardContent>
@@ -78,7 +101,7 @@ const OwnerDashboard = () => {
             </CardHeader>
             <CardContent>
               <Link to="/dashboard/owner/team">
-                <div className="text-2xl font-bold text-foreground hover:underline">24</div>
+                <div className="text-2xl font-bold text-foreground hover:underline">{companyMetrics.teamMembers}</div>
               </Link>
               <p className="text-xs text-muted-foreground">Across 6 departments</p>
             </CardContent>
@@ -86,81 +109,128 @@ const OwnerDashboard = () => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Growth Rate</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Client Satisfaction</CardTitle>
               <TrendingUp className="h-4 w-4 text-accent" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-foreground">+18.2%</div>
-              <p className="text-xs text-muted-foreground">Year over year</p>
+              <div className="text-2xl font-bold text-foreground">{companyMetrics.clientSatisfaction}/5.0</div>
+              <p className="text-xs text-muted-foreground">Average rating</p>
             </CardContent>
           </Card>
         </div>
 
+        {/* Department Performance */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Building className="mr-2 h-5 w-5" />
+              Department Performance
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {departmentPerformance.map((dept, index) => (
+                <div key={index} className="p-4 bg-muted/50 rounded-lg space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">{dept.name}</h3>
+                    <Badge variant={dept.performance >= 90 ? 'default' : 'secondary'}>
+                      {dept.performance}%
+                    </Badge>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Projects:</span>
+                      <span className="font-medium">{dept.projects}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Revenue:</span>
+                      <span className="font-medium">${(dept.revenue / 1000).toFixed(0)}k</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Company Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          {/* Upcoming Milestones */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
-                <Building className="mr-2 h-5 w-5" />
-                Company Overview
+                <Target className="mr-2 h-5 w-5" />
+                Upcoming Milestones
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                <span className="font-medium">Total Clients</span>
-                <span className="text-xl font-bold text-primary">86</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                <span className="font-medium">Departments</span>
-                <span className="text-xl font-bold text-accent">6</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                <span className="font-medium">Monthly Recurring Revenue</span>
-                <span className="text-xl font-bold text-primary">$95,200</span>
-              </div>
+            <CardContent className="space-y-3">
+              {upcomingMilestones.map((milestone, index) => (
+                <div key={index} className="p-3 bg-muted/50 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium text-sm">{milestone.project}</h4>
+                    <Badge variant={
+                      milestone.status === 'Completed' ? 'secondary' :
+                      milestone.status === 'At Risk' ? 'destructive' : 'default'
+                    }>
+                      {milestone.status}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{milestone.milestone}</p>
+                  <p className="text-xs text-muted-foreground">Due: {milestone.date}</p>
+                </div>
+              ))}
             </CardContent>
           </Card>
 
           {/* Quick Actions */}
-          <Card>
+          <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Zap className="mr-2 h-5 w-5" />
-                Quick Actions
+                Executive Actions
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <Link to="/dashboard/owner/team" className="w-full">
-                <Button className="w-full justify-start" variant="outline">
-                  <Users className="mr-2 h-4 w-4" />
-                  Manage Team Members
-                </Button>
-              </Link>
-              <Link to="/dashboard/owner/finance" className="w-full">
-                <Button className="w-full justify-start" variant="outline">
-                  <DollarSign className="mr-2 h-4 w-4" />
-                  Financial Reports
-                </Button>
-              </Link>
-              <Link to="/dashboard/owner/analytics" className="w-full">
-                <Button className="w-full justify-start" variant="outline">
-                  <BarChart3 className="mr-2 h-4 w-4" />
-                  Performance Analytics
-                </Button>
-              </Link>
-              <Link to="/dashboard/owner/settings" className="w-full">
-                <Button className="w-full justify-start" variant="outline">
-                  <Settings className="mr-2 h-4 w-4" />
-                  System Configuration
-                </Button>
-              </Link>
-              <Link to="/dashboard/owner/goals" className="w-full">
-                <Button className="w-full justify-start" variant="outline">
+            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <Link to="/dashboard/owner/team" className="w-full">
+                  <Button className="w-full justify-start" variant="outline">
+                    <Users className="mr-2 h-4 w-4" />
+                    Manage Team ({companyMetrics.teamMembers})
+                  </Button>
+                </Link>
+                <Link to="/dashboard/owner/finance" className="w-full">
+                  <Button className="w-full justify-start" variant="outline">
+                    <DollarSign className="mr-2 h-4 w-4" />
+                    Financial Overview
+                  </Button>
+                </Link>
+                <Link to="/dashboard/owner/analytics" className="w-full">
+                  <Button className="w-full justify-start" variant="outline">
+                    <BarChart3 className="mr-2 h-4 w-4" />
+                    Business Analytics
+                  </Button>
+                </Link>
+              </div>
+              <div className="space-y-3">
+                <Link to="/dashboard/owner/goals" className="w-full">
+                  <Button className="w-full justify-start" variant="outline">
                     <Target className="mr-2 h-4 w-4" />
-                    Track Company Goals
-                </Button>
-              </Link>
+                    Company Goals
+                  </Button>
+                </Link>
+                <Link to="/dashboard/owner/billing" className="w-full">
+                  <Button className="w-full justify-start" variant="outline">
+                    <Zap className="mr-2 h-4 w-4" />
+                    Billing & Plan
+                  </Button>
+                </Link>
+                <Link to="/dashboard/owner/settings" className="w-full">
+                  <Button className="w-full justify-start" variant="outline">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Company Settings
+                  </Button>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -168,7 +238,7 @@ const OwnerDashboard = () => {
         {/* Recent Activity Feed */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Executive Activity Feed</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

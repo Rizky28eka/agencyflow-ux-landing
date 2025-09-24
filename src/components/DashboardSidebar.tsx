@@ -1,4 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
+import { hasPermission, getRoleDisplayName } from '@/lib/rolePermissions';
 import { 
   Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap,
   Shield, UserCheck, Calendar, CheckSquare, Clock, Star, Target, Plus,
@@ -21,6 +23,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { Role } from '@/lib/rolePermissions';
 
 const roleNavigation = {
   owner: [
@@ -96,6 +99,7 @@ interface DashboardSidebarProps {
 
 export function DashboardSidebar({ role }: DashboardSidebarProps) {
   const { state } = useSidebar();
+  const { user } = useAuth();
   const location = useLocation();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -133,7 +137,7 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
           {state === 'expanded' && (
             <div>
               <p className="text-sm font-semibold">AgencyFlow</p>
-              <p className="text-xs text-muted-foreground capitalize">{role.replace('-', ' ')}</p>
+              <p className="text-xs text-muted-foreground">{user ? getRoleDisplayName(user.role) : role.replace('-', ' ')}</p>
             </div>
           )}
         </div>
@@ -146,6 +150,8 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
             <SidebarMenu>
               {navigation.map((item) => (
                 <SidebarMenuItem key={item.url}>
+                  {/* Only show navigation items the user has permission for */}
+                  {user && !hasPermission(user.role, getResourceFromUrl(item.url), 'read') ? null : (
                   <SidebarMenuButton
                     asChild
                     isActive={isActive(item.url)}
@@ -156,6 +162,7 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
                       <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -203,3 +210,25 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
     </Sidebar>
   );
 }
+
+// Helper function to extract resource from URL
+const getResourceFromUrl = (url: string): string => {
+  if (url.includes('/analytics')) return 'analytics';
+  if (url.includes('/team')) return 'team';
+  if (url.includes('/finance')) return 'finance';
+  if (url.includes('/settings')) return 'settings';
+  if (url.includes('/billing')) return 'billing';
+  if (url.includes('/goals')) return 'goals';
+  if (url.includes('/users')) return 'users';
+  if (url.includes('/roles')) return 'roles';
+  if (url.includes('/audit')) return 'audit';
+  if (url.includes('/projects')) return 'projects';
+  if (url.includes('/tasks')) return 'tasks';
+  if (url.includes('/approvals')) return 'approvals';
+  if (url.includes('/performance')) return 'performance';
+  if (url.includes('/time')) return 'time';
+  if (url.includes('/reports')) return 'reports';
+  if (url.includes('/messages')) return 'messages';
+  
+  return 'dashboard'; // Default resource
+};

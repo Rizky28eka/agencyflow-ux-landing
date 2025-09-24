@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { 
   DropdownMenu, 
@@ -20,12 +21,17 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import { Role } from '@/lib/rolePermissions';
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { setUserRole } = useAuth();
 
   const handleRoleSelect = (roleId: string) => {
+    const role = roleId as Role;
+    setUserRole(role);
+    
     const roleRoutes = {
       'OWNER': '/dashboard/owner',
       'ADMIN': '/dashboard/admin',
@@ -35,7 +41,7 @@ const Navbar = () => {
       'FINANCE': '/dashboard/finance',
       'CLIENT': '/dashboard/client',
     };
-    navigate(roleRoutes[roleId as keyof typeof roleRoutes]);
+    navigate(roleRoutes[role]);
     setIsMobileMenuOpen(false);
   };
 
