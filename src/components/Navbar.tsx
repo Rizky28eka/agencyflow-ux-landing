@@ -52,7 +52,7 @@ const Navbar = () => {
   const navigationLinks = [
     { href: '#features', label: 'Features' },
     { href: '#testimonials', label: 'Testimonials' },
-    { href: '#pricing', label: 'Pricing' },
+    { href: '/pricing', label: 'Pricing', isRoute: true },
     { href: '#faq', label: 'FAQ' },
   ];
 
@@ -72,13 +72,23 @@ const Navbar = () => {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               {navigationLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="text-muted-foreground hover:text-foreground transition-premium px-3 py-2 text-sm font-medium"
-                >
-                  {link.label}
-                </a>
+                link.isRoute ? (
+                  <button
+                    key={link.href}
+                    onClick={() => navigate(link.href)}
+                    className="text-muted-foreground hover:text-foreground transition-premium px-3 py-2 text-sm font-medium"
+                  >
+                    {link.label}
+                  </button>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="text-muted-foreground hover:text-foreground transition-premium px-3 py-2 text-sm font-medium"
+                  >
+                    {link.label}
+                  </a>
+                )
               ))}
             </div>
           </div>
@@ -88,15 +98,25 @@ const Navbar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="bg-background hover:bg-muted">
-                  Login
+                  Get Started
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64 p-2" align="end">
-                <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
-                  Select your role
-                </div>
+                <DropdownMenuItem 
+                  className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
+                  onClick={() => navigate('/auth')}
+                >
+                  <User className="h-4 w-4 text-primary" />
+                  <div>
+                    <div className="font-medium">Login / Register</div>
+                    <div className="text-xs text-muted-foreground">Access your account</div>
+                  </div>
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
+                  Quick Demo Access
+                </div>
                 {roles.map((role) => (
                   <DropdownMenuItem 
                     key={role.id} 
@@ -135,28 +155,54 @@ const Navbar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 border-t">
               {navigationLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </a>
+                link.isRoute ? (
+                  <button
+                    key={link.href}
+                    onClick={() => {
+                      navigate(link.href);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                  >
+                    {link.label}
+                  </button>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </a>
+                )
               ))}
               <div className="pt-4 pb-2">
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" className="w-full justify-between">
-                      Login
+                      Get Started
                       <ChevronDown className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-full p-2">
-                    <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
-                      Select your role
-                    </div>
+                    <DropdownMenuItem 
+                      className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
+                      onClick={() => {
+                        navigate('/auth');
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      <User className="h-4 w-4 text-primary" />
+                      <div>
+                        <div className="font-medium">Login / Register</div>
+                        <div className="text-xs text-muted-foreground">Access your account</div>
+                      </div>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
+                    <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
+                      Quick Demo Access
+                    </div>
                     {roles.map((role) => (
                       <DropdownMenuItem 
                         key={role.id} 
