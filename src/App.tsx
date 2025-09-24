@@ -81,6 +81,9 @@ import ClientCustomReports from "./pages/dashboards/client/CustomReports";
 import ClientProjectDetails from "./pages/dashboards/client/ProjectDetails";
 import ClientMessages from "./pages/dashboards/client/Messages";
 
+// Billing Management
+import BillingManagement from "./pages/BillingManagement";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -167,6 +170,9 @@ const App = () => (
           <Route path="/dashboard/client/settings" element={<ClientAccountSettings />} />
           <Route path="/dashboard/client/reports" element={<ClientCustomReports />} />
           <Route path="/dashboard/client/messages" element={<ClientMessages />} />
+
+          {/* Billing Management */}
+          <Route path="/billing" element={<BillingManagement />} />
 
           {/* Catch-all */}
           <Route path="*" element={<NotFound />} />

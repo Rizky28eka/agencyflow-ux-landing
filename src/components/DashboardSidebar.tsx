@@ -32,7 +32,7 @@ const roleNavigation = {
     { title: 'Team', url: '/dashboard/owner/team', icon: Users },
     { title: 'Finance', url: '/dashboard/owner/finance', icon: DollarSign },
     { title: 'Goal Tracking', url: '/dashboard/owner/goals', icon: Target },
-    { title: 'Billing & Plan', url: '/dashboard/owner/billing', icon: CreditCard },
+    { title: 'Billing & Plan', url: '/billing', icon: CreditCard },
     { title: 'Settings', url: '/dashboard/owner/settings', icon: Settings },
     { title: 'Advanced Reports', url: '/dashboard/owner/reports', icon: FileText },
   ],
