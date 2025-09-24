@@ -70,10 +70,10 @@ const Auth = () => {
           <Button
             variant="ghost"
             onClick={() => navigate('/')}
-            className="text-muted-foreground hover:text-foreground"
+            className="text-muted-foreground hover:text-foreground text-sm"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
+            <span className="hidden sm:inline">Back to Home</span>
           </Button>
         </div>
 
@@ -91,10 +91,10 @@ const Auth = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                  <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-muted flex items-center justify-center">
                     {feature.icon}
                   </div>
                   <div>
@@ -106,7 +106,7 @@ const Auth = () => {
             </div>
 
             {/* Social Proof */}
-            <div className="flex items-center space-x-6 text-sm text-muted-foreground pt-4">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 text-sm text-muted-foreground pt-4">
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (

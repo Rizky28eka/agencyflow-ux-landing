@@ -1,26 +1,24 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
-  DropdownMenuSeparator 
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { 
-  Crown, 
-  Shield, 
-  Users, 
-  UserCheck, 
-  User, 
-  DollarSign, 
+import {
+  Crown,
+  Shield,
+  Users,
+  UserCheck,
+  User,
+  DollarSign,
   Handshake,
   ChevronDown,
   Menu,
-  X
 } from 'lucide-react';
 import { Role } from '@/lib/rolePermissions';
 
@@ -31,16 +29,17 @@ const Navbar = () => {
   const handleRoleSelect = (roleId: string) => {
     const role = roleId as Role;
     setUserRole(role);
-    
-    const roleRoutes = {
-      'OWNER': '/dashboard/owner',
-      'ADMIN': '/dashboard/admin',
-      'PROJECT_MANAGER': '/dashboard/project-manager',
-      'TEAM_LEAD': '/dashboard/team-lead',
-      'MEMBER': '/dashboard/member',
-      'FINANCE': '/dashboard/finance',
-      'CLIENT': '/dashboard/client',
+
+    const roleRoutes: Record<Role, string> = {
+      OWNER: '/dashboard/owner',
+      ADMIN: '/dashboard/admin',
+      PROJECT_MANAGER: '/dashboard/project-manager',
+      TEAM_LEAD: '/dashboard/team-lead',
+      MEMBER: '/dashboard/member',
+      FINANCE: '/dashboard/finance',
+      CLIENT: '/dashboard/client',
     };
+
     navigate(roleRoutes[role]);
   };
 
@@ -68,15 +67,17 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent"></div>
-              <span className="text-xl font-bold text-foreground">AgencyFlow</span>
+              <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-gradient-to-br from-primary to-accent"></div>
+              <span className="text-lg sm:text-xl font-bold truncate max-w-[120px]">
+                AgencyFlow
+              </span>
             </div>
           </div>
 
-          {/* Desktop Navigation & Login */}
-          <div className="hidden md:flex items-center space-x-8">
-            <div className="flex items-baseline space-x-8">
-              {navigationLinks.map((link) => (
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <div className="flex items-baseline space-x-4 lg:space-x-8">
+              {navigationLinks.map((link) =>
                 link.isRoute ? (
                   <button
                     key={link.href}
@@ -94,25 +95,30 @@ const Navbar = () => {
                     {link.label}
                   </a>
                 )
-              ))}
+              )}
             </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="bg-background hover:bg-muted">
+                <Button
+                  variant="outline"
+                  className="bg-background hover:bg-muted min-w-[140px] sm:min-w-[160px]"
+                >
                   Get Started
                   <ChevronDown className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64 p-2" align="end">
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
                   onClick={() => navigate('/auth')}
                 >
                   <User className="h-4 w-4 text-primary" />
                   <div>
                     <div className="font-medium">Login / Register</div>
-                    <div className="text-xs text-muted-foreground">Access your account</div>
+                    <div className="text-xs text-muted-foreground">
+                      Access your account
+                    </div>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -120,15 +126,17 @@ const Navbar = () => {
                   Quick Demo Access
                 </div>
                 {roles.map((role) => (
-                  <DropdownMenuItem 
-                    key={role.id} 
+                  <DropdownMenuItem
+                    key={role.id}
                     className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
                     onClick={() => handleRoleSelect(role.id)}
                   >
                     <role.icon className="h-4 w-4 text-primary" />
                     <div>
                       <div className="font-medium">{role.label}</div>
-                      <div className="text-xs text-muted-foreground">{role.description}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {role.description}
+                      </div>
                     </div>
                   </DropdownMenuItem>
                 ))}
@@ -136,24 +144,29 @@ const Navbar = () => {
             </DropdownMenu>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile menu */}
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Open menu"
+                >
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left">
-                <div className="px-2 pt-2 pb-3 space-y-1">
-                  {navigationLinks.map((link) => (
+              <SheetContent
+                side="left"
+                className="w-[80%] max-w-xs overflow-y-auto px-2 pt-4 pb-8"
+              >
+                <div className="space-y-2">
+                  {navigationLinks.map((link) =>
                     link.isRoute ? (
                       <button
                         key={link.href}
-                        onClick={() => {
-                          navigate(link.href);
-                        }}
-                        className="block w-full text-left px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                        onClick={() => navigate(link.href)}
+                        className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted"
                       >
                         {link.label}
                       </button>
@@ -161,31 +174,34 @@ const Navbar = () => {
                       <a
                         key={link.href}
                         href={link.href}
-                        className="block px-3 py-2 text-base font-medium text-muted-foreground hover:text-foreground"
+                        className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:text-foreground hover:bg-muted"
                       >
                         {link.label}
                       </a>
                     )
-                  ))}
+                  )}
                   <div className="pt-4 pb-2">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="w-full justify-between">
+                        <Button
+                          variant="outline"
+                          className="w-full justify-between"
+                        >
                           Get Started
                           <ChevronDown className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-full p-2">
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
-                          onClick={() => {
-                            navigate('/auth');
-                          }}
+                          onClick={() => navigate('/auth')}
                         >
                           <User className="h-4 w-4 text-primary" />
                           <div>
                             <div className="font-medium">Login / Register</div>
-                            <div className="text-xs text-muted-foreground">Access your account</div>
+                            <div className="text-xs text-muted-foreground">
+                              Access your account
+                            </div>
                           </div>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -193,15 +209,17 @@ const Navbar = () => {
                           Quick Demo Access
                         </div>
                         {roles.map((role) => (
-                          <DropdownMenuItem 
-                            key={role.id} 
-                            className="flex items-center space-x-3 p-3"
+                          <DropdownMenuItem
+                            key={role.id}
+                            className="flex items-center space-x-3 p-3 hover:bg-muted cursor-pointer"
                             onClick={() => handleRoleSelect(role.id)}
                           >
                             <role.icon className="h-4 w-4 text-primary" />
                             <div>
                               <div className="font-medium">{role.label}</div>
-                              <div className="text-xs text-muted-foreground">{role.description}</div>
+                              <div className="text-xs text-muted-foreground">
+                                {role.description}
+                              </div>
                             </div>
                           </DropdownMenuItem>
                         ))}
@@ -213,8 +231,6 @@ const Navbar = () => {
             </Sheet>
           </div>
         </div>
-
-
       </div>
     </nav>
   );

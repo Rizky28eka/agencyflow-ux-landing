@@ -100,7 +100,7 @@ const Pricing = () => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan) => (
             <Card 
               key={plan.name} 
@@ -159,7 +159,7 @@ const Pricing = () => {
         {/* FAQ Section */}
         <div className="mt-24">
           <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="space-y-6">
               <div>
                 <h3 className="font-semibold mb-2">Can I change plans anytime?</h3>

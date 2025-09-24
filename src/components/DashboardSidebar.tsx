@@ -101,7 +101,7 @@ interface DashboardSidebarProps {
 }
 
 export function DashboardSidebar({ role }: DashboardSidebarProps) {
-  const { state } = useSidebar();
+  const { state, isMobile, toggleSidebar } = useSidebar();
   const { user } = useAuth();
   const location = useLocation();
   const { toast } = useToast();

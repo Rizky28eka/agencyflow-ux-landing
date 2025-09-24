@@ -38,7 +38,7 @@ export function DashboardLayout({
           <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
             <div className="container flex h-16 items-center justify-between">
               <div className="flex items-center gap-4">
-                <SidebarTrigger className="h-7 w-7" />
+                <SidebarTrigger className="h-7 w-7 md:hidden" />
                 <div className="flex items-center space-x-3">
                   {headerIcon}
                   <div>
@@ -47,7 +47,7 @@ export function DashboardLayout({
                   </div>
                 </div>
               </div>
-              <div className="hidden sm:flex items-center gap-4">
+              <div className="flex items-center gap-4">
                 {user && (
                   <div className="text-right hidden md:block">
                     <p className="text-sm font-medium">{user.user_metadata.first_name} {user.user_metadata.last_name}</p>
@@ -60,7 +60,7 @@ export function DashboardLayout({
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-4 sm:p-6 md:p-8">
             <div className="container mx-auto">
               {children}
             </div>

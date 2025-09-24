@@ -32,7 +32,7 @@ const HeroSection = () => {
             </div>
 
             {/* Feature List */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
               {features.map((feature, index) => (
                 <div key={feature} className="flex items-center space-x-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
@@ -62,7 +62,7 @@ const HeroSection = () => {
             </div>
 
             {/* Social Proof */}
-            <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4].map((i) => (
@@ -94,7 +94,7 @@ const HeroSection = () => {
                   </div>
 
                   {/* Stats Cards */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="bg-muted/50 rounded-lg p-4">
                       <div className="text-2xl font-bold text-primary">12</div>
                       <div className="text-sm text-muted-foreground">Active Projects</div>

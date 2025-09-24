@@ -16,7 +16,7 @@ const SocialProof = () => {
             Trusted by 500+ creative agencies worldwide
           </p>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
             {agencies.map((agency, index) => (
               <div 
                 key={agency.name}
