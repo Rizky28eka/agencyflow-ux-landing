@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthGuard } from "@/components/AuthGuard";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
@@ -85,13 +86,13 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/dashboard/owner" element={<OwnerDashboard />} />
-          <Route path="/dashboard/admin" element={<AdminDashboard />} />
-          <Route path="/dashboard/project-manager" element={<ProjectManagerDashboard />} />
-          <Route path="/dashboard/team-lead" element={<TeamLeadDashboard />} />
+          <Route path="/" element={<AuthGuard requireAuth={false}><Index /></AuthGuard>} />
+          <Route path="/auth" element={<AuthGuard requireAuth={false}><Auth /></AuthGuard>} />
+          <Route path="/pricing" element={<AuthGuard requireAuth={false}><Pricing /></AuthGuard>} />
+          <Route path="/dashboard/owner" element={<AuthGuard><OwnerDashboard /></AuthGuard>} />
+          <Route path="/dashboard/admin" element={<AuthGuard><AdminDashboard /></AuthGuard>} />
+          <Route path="/dashboard/project-manager" element={<AuthGuard><ProjectManagerDashboard /></AuthGuard>} />
+          <Route path="/dashboard/team-lead" element={<AuthGuard><TeamLeadDashboard /></AuthGuard>} />
           <Route path="/dashboard/team-lead/approvals" element={<TeamLeadApprovals />} />
           <Route path="/dashboard/team-lead/development" element={<TeamDevelopment />} />
           <Route path="/dashboard/team-lead/one-on-ones" element={<TeamLeadOneOnOne />} />
@@ -100,8 +101,8 @@ const App = () => (
           <Route path="/dashboard/team-lead/time-management" element={<TeamLeadTimeManagement />} />
           <Route path="/dashboard/team-lead/performance" element={<TeamLeadPerformance />} />
           <Route path="/dashboard/team-lead/members" element={<TeamLeadMembers />} />
-          <Route path="/dashboard/member" element={<MemberDashboard />} />
-          <Route path="/dashboard/finance" element={<FinanceDashboard />} />
+          <Route path="/dashboard/member" element={<AuthGuard><MemberDashboard /></AuthGuard>} />
+          <Route path="/dashboard/finance" element={<AuthGuard><FinanceDashboard /></AuthGuard>} />
           <Route path="/dashboard/finance/payroll" element={<FinancePayroll />} />
           <Route path="/dashboard/finance/forecasting" element={<FinanceForecasting />} />
           <Route path="/dashboard/finance/expenses" element={<FinanceExpenseManagement />} />
@@ -111,51 +112,51 @@ const App = () => (
           <Route path="/dashboard/finance/budget" element={<FinanceBudget />} />
           <Route path="/dashboard/finance/tax" element={<FinanceTax />} />
           <Route path="/dashboard/finance/transactions/:transactionId" element={<TransactionDetails />} />
-          <Route path="/dashboard/client" element={<ClientDashboard />} />
+          <Route path="/dashboard/client" element={<AuthGuard><ClientDashboard /></AuthGuard>} />
           
           {/* Owner Dashboard Routes */}
-          <Route path="/dashboard/owner/analytics" element={<OwnerAnalytics />} />
-          <Route path="/dashboard/owner/team" element={<OwnerTeam />} />
-          <Route path="/dashboard/owner/team/:memberId" element={<TeamMemberDetails />} />
-          <Route path="/dashboard/owner/finance" element={<OwnerFinance />} />
-          <Route path="/dashboard/owner/settings" element={<OwnerSettings />} />
-          <Route path="/dashboard/owner/billing" element={<OwnerBilling />} />
-          <Route path="/dashboard/owner/goals" element={<OwnerGoals />} />
-          <Route path="/dashboard/owner/reports" element={<OwnerAdvancedReports />} />
-          <Route path="/dashboard/finance/claims" element={<FinanceExpenseClaims />} />
+          <Route path="/dashboard/owner/analytics" element={<AuthGuard><OwnerAnalytics /></AuthGuard>} />
+          <Route path="/dashboard/owner/team" element={<AuthGuard><OwnerTeam /></AuthGuard>} />
+          <Route path="/dashboard/owner/team/:memberId" element={<AuthGuard><TeamMemberDetails /></AuthGuard>} />
+          <Route path="/dashboard/owner/finance" element={<AuthGuard><OwnerFinance /></AuthGuard>} />
+          <Route path="/dashboard/owner/settings" element={<AuthGuard><OwnerSettings /></AuthGuard>} />
+          <Route path="/dashboard/owner/billing" element={<AuthGuard><OwnerBilling /></AuthGuard>} />
+          <Route path="/dashboard/owner/goals" element={<AuthGuard><OwnerGoals /></AuthGuard>} />
+          <Route path="/dashboard/owner/reports" element={<AuthGuard><OwnerAdvancedReports /></AuthGuard>} />
+          <Route path="/dashboard/finance/claims" element={<AuthGuard><FinanceExpenseClaims /></AuthGuard>} />
           
           {/* Admin Dashboard Routes */}
-          <Route path="/dashboard/admin/users" element={<AdminUsers />} />
-          <Route path="/dashboard/admin/roles" element={<AdminRoles />} />
-          <Route path="/dashboard/admin/reports" element={<AdminReports />} />
-          <Route path="/dashboard/admin/settings" element={<AdminSystemSettings />} />
-          <Route path="/dashboard/admin/audit-log" element={<AdminAuditLog />} />
-          <Route path="/dashboard/admin/integrations" element={<AdminIntegrations />} />
+          <Route path="/dashboard/admin/users" element={<AuthGuard><AdminUsers /></AuthGuard>} />
+          <Route path="/dashboard/admin/roles" element={<AuthGuard><AdminRoles /></AuthGuard>} />
+          <Route path="/dashboard/admin/reports" element={<AuthGuard><AdminReports /></AuthGuard>} />
+          <Route path="/dashboard/admin/settings" element={<AuthGuard><AdminSystemSettings /></AuthGuard>} />
+          <Route path="/dashboard/admin/audit-log" element={<AuthGuard><AdminAuditLog /></AuthGuard>} />
+          <Route path="/dashboard/admin/integrations" element={<AuthGuard><AdminIntegrations /></AuthGuard>} />
           
           {/* Project Manager Dashboard Routes */}
-          <Route path="/dashboard/project-manager/projects" element={<ProjectManagerProjects />} />
-          <Route path="/dashboard/project-manager/projects/:projectId" element={<ProjectDetails />} />
-          <Route path="/dashboard/project-manager/team" element={<ProjectManagerTeamCoordination />} />
-          <Route path="/dashboard/project-manager/resource-management" element={<ResourceManagement />} />
-          <Route path="/dashboard/project-manager/risk-management" element={<RiskManagement />} />
-          <Route path="/dashboard/project-manager/tasks" element={<AllTasks />} />
-          <Route path="/dashboard/project-manager/time-report" element={<TimeTrackingReport />} />
+          <Route path="/dashboard/project-manager/projects" element={<AuthGuard><ProjectManagerProjects /></AuthGuard>} />
+          <Route path="/dashboard/project-manager/projects/:projectId" element={<AuthGuard><ProjectDetails /></AuthGuard>} />
+          <Route path="/dashboard/project-manager/team" element={<AuthGuard><ProjectManagerTeamCoordination /></AuthGuard>} />
+          <Route path="/dashboard/project-manager/resource-management" element={<AuthGuard><ResourceManagement /></AuthGuard>} />
+          <Route path="/dashboard/project-manager/risk-management" element={<AuthGuard><RiskManagement /></AuthGuard>} />
+          <Route path="/dashboard/project-manager/tasks" element={<AuthGuard><AllTasks /></AuthGuard>} />
+          <Route path="/dashboard/project-manager/time-report" element={<AuthGuard><TimeTrackingReport /></AuthGuard>} />
           
           {/* Member Dashboard Routes */}
-          <Route path="/dashboard/member/tasks" element={<MemberTasks />} />
-          <Route path="/dashboard/member/time" element={<MemberTimeTracking />} />
-          <Route path="/dashboard/member/submit-report" element={<MemberSubmitReport />} />
-          <Route path="/dashboard/member/chat" element={<MemberTeamChat />} />
-          <Route path="/dashboard/member/schedule" element={<MemberSchedule />} />
-          <Route path="/dashboard/member/settings" element={<MemberSettings />} />
+          <Route path="/dashboard/member/tasks" element={<AuthGuard><MemberTasks /></AuthGuard>} />
+          <Route path="/dashboard/member/time" element={<AuthGuard><MemberTimeTracking /></AuthGuard>} />
+          <Route path="/dashboard/member/submit-report" element={<AuthGuard><MemberSubmitReport /></AuthGuard>} />
+          <Route path="/dashboard/member/chat" element={<AuthGuard><MemberTeamChat /></AuthGuard>} />
+          <Route path="/dashboard/member/schedule" element={<AuthGuard><MemberSchedule /></AuthGuard>} />
+          <Route path="/dashboard/member/settings" element={<AuthGuard><MemberSettings /></AuthGuard>} />
           
           {/* Client Dashboard Routes */}
-          <Route path="/dashboard/client/projects" element={<ClientProjects />} />
-          <Route path="/dashboard/client/projects/:projectId" element={<ClientProjectDetails />} />
-          <Route path="/dashboard/client/billing" element={<ClientBilling />} />
-          <Route path="/dashboard/client/settings" element={<ClientAccountSettings />} />
-          <Route path="/dashboard/client/reports" element={<ClientCustomReports />} />
-          <Route path="/dashboard/client/messages" element={<ClientMessages />} />
+          <Route path="/dashboard/client/projects" element={<AuthGuard><ClientProjects /></AuthGuard>} />
+          <Route path="/dashboard/client/projects/:projectId" element={<AuthGuard><ClientProjectDetails /></AuthGuard>} />
+          <Route path="/dashboard/client/billing" element={<AuthGuard><ClientBilling /></AuthGuard>} />
+          <Route path="/dashboard/client/settings" element={<AuthGuard><ClientAccountSettings /></AuthGuard>} />
+          <Route path="/dashboard/client/reports" element={<AuthGuard><ClientCustomReports /></AuthGuard>} />
+          <Route path="/dashboard/client/messages" element={<AuthGuard><ClientMessages /></AuthGuard>} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

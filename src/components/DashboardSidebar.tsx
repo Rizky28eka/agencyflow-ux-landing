@@ -19,6 +19,8 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 const roleNavigation = {
   owner: [
@@ -95,9 +97,28 @@ interface DashboardSidebarProps {
 export function DashboardSidebar({ role }: DashboardSidebarProps) {
   const { state } = useSidebar();
   const location = useLocation();
+  const { toast } = useToast();
   const navigation = roleNavigation[role as keyof typeof roleNavigation] || [];
   
   const isActive = (path: string) => location.pathname === path;
+  
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast({
+        title: "Signed out",
+        description: "You've been successfully logged out.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  };
   
   return (
     <Sidebar className="border-r">
@@ -167,6 +188,7 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
+              onClick={handleLogout}
               tooltip={state === 'collapsed' ? 'Logout' : undefined}
             >
               <LogOut className="h-4 w-4" />

@@ -1,22 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { AuthForm } from '@/components/AuthForm';
+import { SocialAuth } from '@/components/SocialAuth';
+import { ArrowLeft, Building2, Shield, Users, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 const Auth = () => {
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [searchParams] = useSearchParams();
+  const initialMode = searchParams.get('mode') as 'signin' | 'signup' | 'forgot' || 'signin';
+  const [mode, setMode] = useState<'signin' | 'signup' | 'forgot'>(initialMode);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -25,7 +20,7 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate('/dashboard/owner'); // Default redirect
+        navigate('/dashboard/owner');
       }
     };
     checkUser();
@@ -33,213 +28,149 @@ const Auth = () => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
-        toast({
-          title: "Welcome!",
-          description: "You've been successfully logged in.",
-        });
         navigate('/dashboard/owner');
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate, toast]);
+  }, [navigate]);
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      setLoading(false);
-      return;
-    }
-
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`
-        }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Check your email",
-        description: "We've sent you a confirmation link to complete your registration.",
-      });
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+  const getTitle = () => {
+    switch (mode) {
+      case 'signin': return 'Welcome Back';
+      case 'signup': return 'Create Your Account';
+      case 'forgot': return 'Reset Password';
+      default: return 'Welcome';
     }
   };
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
+  const getDescription = () => {
+    switch (mode) {
+      case 'signin': return 'Sign in to your AgencyFlow account';
+      case 'signup': return 'Join thousands of agencies using AgencyFlow';
+      case 'forgot': return 'Enter your email to reset your password';
+      default: return '';
     }
   };
+
+  const features = [
+    {
+      icon: <Building2 className="h-5 w-5 text-primary" />,
+      title: 'Project Management',
+      description: 'Streamline workflows with intuitive project boards'
+    },
+    {
+      icon: <Users className="h-5 w-5 text-accent" />,
+      title: 'Team Collaboration',
+      description: 'Keep everyone connected and productive'
+    },
+    {
+      icon: <Shield className="h-5 w-5 text-primary" />,
+      title: 'Client Portal',
+      description: 'Give clients transparency and control'
+    },
+    {
+      icon: <Zap className="h-5 w-5 text-accent" />,
+      title: 'Financial Hub',
+      description: 'Track budgets and monitor profitability'
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto h-12 w-12 rounded-lg bg-gradient-to-br from-primary to-accent mb-4"></div>
-          <CardTitle className="text-2xl">Welcome to AgencyFlow</CardTitle>
-          <CardDescription>
-            Sign in to your account or create a new one
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="signin" className="space-y-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="signin">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email">Email</Label>
-                  <Input
-                    id="signin-email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signin-password">Password</Label>
-                  <div className="relative">
-                    <Input
-                      id="signin-password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-                
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-                
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Sign In
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email">Email</Label>
-                  <Input
-                    id="signup-email"
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
-                  <div className="relative">
-                    <Input
-                      id="signup-password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Create a password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="absolute right-0 top-0 h-full px-3"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
-                  <Input
-                    id="confirm-password"
-                    type="password"
-                    placeholder="Confirm your password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                
-                {error && (
-                  <Alert variant="destructive">
-                    <AlertDescription>{error}</AlertDescription>
-                  </Alert>
-                )}
-                
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Create Account
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-          
-          <div className="mt-6 text-center">
-            <Button
-              variant="ghost"
-              onClick={() => navigate('/')}
-              className="text-sm text-muted-foreground hover:text-foreground"
-            >
-              ← Back to Home
-            </Button>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-2">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-accent"></div>
+            <span className="text-xl font-bold">AgencyFlow</span>
           </div>
-        </CardContent>
-      </Card>
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Home
+          </Button>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+          {/* Left Column - Features */}
+          <div className="space-y-8 order-2 lg:order-1">
+            <div className="space-y-4">
+              <h1 className="text-3xl lg:text-4xl font-bold">
+                The All-in-One Platform for
+                <span className="text-gradient block">Creative Agencies</span>
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Manage projects, clients, teams, and finances in one powerful platform 
+                built specifically for creative professionals.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {features.map((feature, index) => (
+                <div key={index} className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
+                    {feature.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-sm">{feature.title}</h3>
+                    <p className="text-xs text-muted-foreground">{feature.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Social Proof */}
+            <div className="flex items-center space-x-6 text-sm text-muted-foreground pt-4">
+              <div className="flex items-center space-x-2">
+                <div className="flex -space-x-2">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent border-2 border-background"></div>
+                  ))}
+                </div>
+                <span>500+ agencies trust us</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <span className="text-yellow-500">★★★★★</span>
+                <span>4.9/5 rating</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column - Auth Form */}
+          <div className="order-1 lg:order-2">
+            <Card className="w-full max-w-md mx-auto shadow-premium">
+              <CardHeader className="text-center space-y-2">
+                <CardTitle className="text-2xl">{getTitle()}</CardTitle>
+                <CardDescription className="text-base">
+                  {getDescription()}
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent className="space-y-6">
+                <AuthForm 
+                  mode={mode} 
+                  onModeChange={setMode}
+                  onSuccess={() => navigate('/dashboard/owner')}
+                />
+                
+                {mode !== 'forgot' && <SocialAuth />}
+              </CardContent>
+            </Card>
+
+            {/* Security Notice */}
+            <div className="mt-6 text-center">
+              <p className="text-xs text-muted-foreground max-w-md mx-auto">
+                By creating an account, you agree to our Terms of Service and Privacy Policy. 
+                Your data is protected with enterprise-grade security.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
