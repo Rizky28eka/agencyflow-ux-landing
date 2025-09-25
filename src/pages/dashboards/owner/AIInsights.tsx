@@ -4,11 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { BrainCircuit, Bot, Zap, ShieldAlert, FileText, Lock } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { useState } from 'react';
 
 const AIInsights = () => {
   // Mock current plan
   const currentPlan = 'professional'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
   const canUseAI = currentPlan === 'business' || currentPlan === 'enterprise';
+
+  const [risks, setRisks] = useState([]);
+
+  const handleAnalyzeRisks = () => {
+    setRisks([
+      { description: 'Key developer on Project X has a high workload.', severity: 'High', mitigation: 'Assign a secondary developer to the project.' },
+      { description: 'Client Y has a history of late payments.', severity: 'Medium', mitigation: 'Request upfront payment for the next milestone.' },
+    ]);
+  };
 
   return (
     <DashboardLayout
@@ -43,7 +53,18 @@ const AIInsights = () => {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">Our AI will analyze your projects to identify potential risks and suggest mitigation strategies.</p>
-              <Button disabled={!canUseAI}>Analyze Risks</Button>
+              <Button disabled={!canUseAI} onClick={handleAnalyzeRisks}>Analyze Risks</Button>
+              {risks.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  {risks.map((risk, index) => (
+                    <div key={index} className="p-2 bg-muted/50 rounded-lg">
+                      <p className="font-semibold">{risk.description}</p>
+                      <p className="text-sm text-muted-foreground">Severity: {risk.severity}</p>
+                      <p className="text-sm text-muted-foreground">Suggestion: {risk.mitigation}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
 

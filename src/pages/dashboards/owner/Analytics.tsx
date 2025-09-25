@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BarChart3, TrendingUp, DollarSign, Users, Calendar, Download } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { BarChart3, TrendingUp, DollarSign, Users, Calendar, Download, Filter } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart as RechartsPieChart, Cell, Legend } from 'recharts';
@@ -50,6 +51,18 @@ const OwnerAnalytics = () => {
         </Button>
       }
     >
+      {/* Advanced Filters */}
+      <Card className="mb-8">
+        <CardHeader><CardTitle className="flex items-center"><Filter className="mr-2 h-5 w-5"/> Advanced Filters</CardTitle></CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-4">
+            <Select defaultValue="this-quarter"><SelectTrigger className="w-full md:w-[180px]"><SelectValue placeholder="Date Range" /></SelectTrigger><SelectContent><SelectItem value="this-quarter">This Quarter</SelectItem></SelectContent></Select>
+            <Select defaultValue="all-clients"><SelectTrigger className="w-full md:w-[180px]"><SelectValue placeholder="Client" /></SelectTrigger><SelectContent><SelectItem value="all-clients">All Clients</SelectItem></SelectContent></Select>
+            <Select defaultValue="all-teams"><SelectTrigger className="w-full md:w-[180px]"><SelectValue placeholder="Team" /></SelectTrigger><SelectContent><SelectItem value="all-teams">All Teams</SelectItem></SelectContent></Select>
+            <Select defaultValue="all-projects"><SelectTrigger className="w-full md:w-[180px]"><SelectValue placeholder="Project" /></SelectTrigger><SelectContent><SelectItem value="all-projects">All Projects</SelectItem></SelectContent></Select>
+            <Button>Apply Filters</Button>
+        </CardContent>
+      </Card>
+
       {/* Analytics Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card className="bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">

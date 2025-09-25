@@ -3,11 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { DollarSign, TrendingUp, CreditCard, Receipt, PieChart, Download, ArrowUp, ArrowDown, BarChart3 } from 'lucide-react';
+import { DollarSign, TrendingUp, CreditCard, Receipt, PieChart, Download, ArrowUp, ArrowDown, BarChart3, BrainCircuit } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart as RechartsPieChart, Cell, Legend } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Pie, PieChart as RechartsPieChart, Cell, Legend, Line, LineChart } from 'recharts';
 
 const OwnerFinance = () => {
   // Mock data
@@ -25,6 +25,15 @@ const OwnerFinance = () => {
     { month: 'Apr', profit: 30000 },
     { month: 'May', profit: 35000 },
     { month: 'Jun', profit: 42000 },
+  ];
+
+  const projectionData = [
+      { month: 'Jul', revenue: 125000 },
+      { month: 'Aug', revenue: 130000 },
+      { month: 'Sep', revenue: 138000 },
+      { month: 'Oct', revenue: 145000 },
+      { month: 'Nov', revenue: 155000 },
+      { month: 'Dec', revenue: 170000 },
   ];
 
   const recentTransactions = [
@@ -139,6 +148,23 @@ const OwnerFinance = () => {
           </CardContent>
         </Card>
       </div>
+
+        {/* Financial Projections */}
+        <Card className="mb-8">
+            <CardHeader><CardTitle className="flex items-center"><BrainCircuit className="mr-2 h-5 w-5"/> Financial Projections (Next 6 Months)</CardTitle></CardHeader>
+            <CardContent>
+                <ChartContainer config={{}} className="h-80 w-full">
+                    <LineChart data={projectionData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis tickFormatter={(val) => `$${val/1000}k`} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Legend />
+                        <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} name="Projected Revenue" />
+                    </LineChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
 
       {/* Recent Transactions Table */}
       <Card>

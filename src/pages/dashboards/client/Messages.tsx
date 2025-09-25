@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Send, MessageSquare } from 'lucide-react';
+import { Send, MessageSquare, Paperclip } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const ClientMessages = () => {
@@ -69,14 +69,16 @@ const ClientMessages = () => {
           <div className="relative">
             <Input
               placeholder="Type a message to the project team..."
-              className="pr-12"
+              className="pr-24"
             />
-            <Button
-              size="icon"
-              className="absolute top-1/2 right-1 -translate-y-1/2 h-8 w-8"
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+            <div className="absolute top-1/2 right-1 -translate-y-1/2 flex items-center">
+              <Button size="icon" variant="ghost" className="h-8 w-8">
+                <Paperclip className="h-4 w-4" />
+              </Button>
+              <Button size="icon" className="h-8 w-8">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         </div>
       </Card>

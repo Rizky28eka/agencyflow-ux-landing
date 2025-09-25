@@ -119,9 +119,17 @@ const ClientBilling = () => {
                     }`}>
                       {invoice.status}
                     </div>
-                    <Button variant="ghost" size="sm" className="mt-1">
-                      <Download className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center mt-1">
+                      <Button variant="ghost" size="sm">
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      {invoice.status === 'Pending' && (
+                        <Button size="sm" className="ml-2">
+                          <DollarSign className="mr-2 h-4 w-4" />
+                          Pay Now
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}

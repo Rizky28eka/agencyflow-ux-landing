@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Settings, Database, Shield, Bell, Server, Save, Palette, Image as ImageIcon, Globe } from 'lucide-react';
+import { Settings, Database, Shield, Bell, Server, Save, Palette, Image as ImageIcon, Globe, DollarSign, HelpCircle } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const AdminSystemSettings = () => {
   return (
@@ -21,13 +22,33 @@ const AdminSystemSettings = () => {
         </Button>
       }
     >
+    <TooltipProvider>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* General Settings */}
+        <Card>
+            <CardHeader><CardTitle className="flex items-center"><Globe className="mr-2 h-5 w-5"/> General</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="timezone">Time Zone</Label>
+                    <Input id="timezone" defaultValue="UTC" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="language">Language</Label>
+                    <Input id="language" defaultValue="English" />
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="currency">Currency Format</Label>
+                    <Input id="currency" defaultValue="USD" />
+                </div>
+            </CardContent>
+        </Card>
+
         {/* Branding Card */}
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-1">
             <CardHeader>
                 <CardTitle className="flex items-center"><Palette className="mr-2 h-5 w-5" /> Branding (White-Label)</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <CardContent className="grid grid-cols-1 gap-8">
                 <div className="space-y-4">
                     <div className="space-y-2">
                         <Label>Company Logo</Label>
@@ -55,27 +76,6 @@ const AdminSystemSettings = () => {
                     <Button>Configure Domain</Button>
                 </div>
             </CardContent>
-        </Card>
-
-        {/* Security Settings */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center"><Shield className="mr-2 h-5 w-5" /> Security Configuration</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-                <Label htmlFor="2fa" className="font-normal">Require Two-Factor Authentication (2FA)</Label>
-                <Switch id="2fa" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="session-timeout">Session Timeout (minutes)</Label>
-              <Input id="session-timeout" defaultValue="60" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password-policy">Password Policy</Label>
-              <Input id="password-policy" defaultValue="8+ chars, mixed case, numbers" />
-            </div>
-          </CardContent>
         </Card>
 
         {/* Notification Settings */}
@@ -106,7 +106,10 @@ const AdminSystemSettings = () => {
               <Input id="db-host" defaultValue="localhost:5432" readOnly/>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="backup-frequency">Backup Frequency</Label>
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="backup-frequency">Backup Frequency</Label>
+                    <Tooltip><TooltipTrigger><HelpCircle className="h-4 w-4 text-muted-foreground"/></TooltipTrigger><TooltipContent>How often automated backups are performed.</TooltipContent></Tooltip>
+                </div>
               <Input id="backup-frequency" defaultValue="Daily at 2:00 AM" />
             </div>
           </CardContent>
@@ -130,6 +133,7 @@ const AdminSystemSettings = () => {
         </Card>
 
       </div>
+    </TooltipProvider>
     </DashboardLayout>
   );
 };

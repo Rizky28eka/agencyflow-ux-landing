@@ -1,10 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Plus, Edit, Users, Settings } from 'lucide-react';
+import { Shield, Plus, Edit, Users, Settings, Trash2 } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { useState } from 'react';
 import { RoleForm } from '@/components/admin/RoleForm';
 import { Lock } from 'lucide-react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 interface Role {
   name: string;
@@ -71,6 +72,10 @@ const AdminRoles = () => {
   const handleEditRole = (role: Role) => {
     setSelectedRole(role);
     setIsFormOpen(true);
+  };
+
+  const handleDeleteRole = (roleName: string) => {
+    setRoles(roles.filter(r => r.name !== roleName));
   };
 
   const handleSaveRole = (roleData: Omit<Role, 'users' | 'color'>) => {
@@ -172,9 +177,19 @@ const AdminRoles = () => {
                       <p className="text-sm text-muted-foreground">{role.users} users</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={() => handleEditRole(role)}>
-                    <Edit className="h-4 w-4" />
-                  </Button>
+                  <div className="flex items-center">
+                    <Button variant="ghost" size="icon" onClick={() => handleEditRole(role)}><Edit className="h-4 w-4" /></Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild><Button variant="ghost" size="icon"><Trash2 className="h-4 w-4 text-red-500" /></Button></AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader><AlertDialogTitle>Are you sure?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone. This will permanently delete the role.</AlertDialogDescription></AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDeleteRole(role.name)}>Delete</AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>

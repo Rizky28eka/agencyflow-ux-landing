@@ -1,16 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Users, UserPlus, Mail, Phone, MoreHorizontal } from 'lucide-react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Progress } from '@/components/ui/progress';
+import { Users, UserPlus, Mail, Phone, MoreHorizontal, TrendingUp, CheckSquare, PieChart } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Pie, PieChart as RechartsPieChart, Cell, Legend } from 'recharts';
 
 import { Link } from 'react-router-dom';
 
 const OwnerTeam = () => {
   const teamMembers = [
-    { id: 1, name: 'Sarah Johnson', role: 'Project Manager', email: 'sarah@agency.com', status: 'Active' },
-    { id: 2, name: 'Mike Chen', role: 'Lead Designer', email: 'mike@agency.com', status: 'Active' },
-    { id: 3, name: 'Emily Davis', role: 'Developer', email: 'emily@agency.com', status: 'Active' },
-    { id: 4, name: 'Alex Rodriguez', role: 'Marketing Lead', email: 'alex@agency.com', status: 'Active' },
+    { id: 1, name: 'Sarah Johnson', role: 'Project Manager', onTimeRate: 98, completedTasks: 120, workload: 80 },
+    { id: 2, name: 'Mike Chen', role: 'Lead Designer', onTimeRate: 95, completedTasks: 85, workload: 95 },
+    { id: 3, name: 'Emily Davis', role: 'Developer', onTimeRate: 92, completedTasks: 250, workload: 70 },
+    { id: 4, name: 'Alex Rodriguez', role: 'Marketing Lead', onTimeRate: 99, completedTasks: 50, workload: 60 },
+  ];
+
+  const allocationData = [
+      { department: 'Development', count: 10, fill: '#3b82f6' },
+      { department: 'Design', count: 5, fill: '#8b5cf6' },
+      { department: 'Marketing', count: 4, fill: '#10b981' },
+      { department: 'Finance', count: 3, fill: '#f97316' },
+      { department: 'Management', count: 2, fill: '#ef4444' },
   ];
 
   return (
@@ -50,18 +62,18 @@ const OwnerTeam = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Active Projects</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Avg. Utilization</CardTitle>
             <Users className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-foreground">48</div>
+            <div className="text-2xl font-bold text-foreground">85%</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Avg Performance</CardTitle>
-            <Users className="h-4 w-4 text-accent" />
+            <TrendingUp className="h-4 w-4 text-accent" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-foreground">4.7</div>
@@ -69,42 +81,76 @@ const OwnerTeam = () => {
         </Card>
       </div>
 
-      {/* Team Members List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Team Members</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {teamMembers.map((member, index) => (
-              <Link to={`/dashboard/owner/team/${member.id}`} key={index} className="block border rounded-lg hover:bg-muted/50 transition-colors">
-                <div className="flex items-center justify-between p-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold">
-                      {member.name.split(' ').map(n => n[0]).join('')}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold">{member.name}</h3>
-                      <p className="text-sm text-muted-foreground">{member.role}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2 flex-wrap">
-                    <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('Email clicked!'); }}>
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('Call clicked!'); }}>
-                      <Phone className="h-4 w-4" />
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={(e) => { e.preventDefault(); alert('More options clicked!'); }}>
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+            {/* Team Members Table */}
+            <div className="lg:col-span-2">
+                <Card>
+                    <CardHeader>
+                    <CardTitle>All Team Members</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                    <Table>
+                        <TableHeader>
+                        <TableRow>
+                            <TableHead>Member</TableHead>
+                            <TableHead>Role</TableHead>
+                            <TableHead>On-Time Rate</TableHead>
+                            <TableHead>Completed Tasks</TableHead>
+                            <TableHead>Workload</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                        {teamMembers.map((member) => (
+                            <TableRow key={member.id}>
+                            <TableCell>
+                                <div className="font-medium">{member.name}</div>
+                            </TableCell>
+                            <TableCell>{member.role}</TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                <Progress value={member.onTimeRate} className="w-24 h-2" />
+                                <span>{member.onTimeRate}%</span>
+                                </div>
+                            </TableCell>
+                            <TableCell>{member.completedTasks}</TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                <Progress value={member.workload} className="w-24 h-2" />
+                                <span>{member.workload}%</span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <Link to={`/dashboard/owner/team/${member.id}`}>View Details</Link>
+                            </TableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    </CardContent>
+                </Card>
+            </div>
+
+            {/* Resource Allocation Chart */}
+            <div className="lg:col-span-1">
+                <Card>
+                    <CardHeader><CardTitle className="flex items-center"><PieChart className="mr-2 h-5 w-5"/> Resource Allocation</CardTitle></CardHeader>
+                    <CardContent>
+                        <ChartContainer config={{}} className="h-64 w-full">
+                            <RechartsPieChart>
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Pie data={allocationData} dataKey="count" nameKey="department" innerRadius={50} strokeWidth={2}>
+                                    {allocationData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    ))}
+                                </Pie>
+                                <Legend />
+                            </RechartsPieChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+            </div>
+        </div>
     </DashboardLayout>
   );
 };

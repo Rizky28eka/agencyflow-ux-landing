@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar, Users, SlidersHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Pie, PieChart as RechartsPieChart, Cell } from 'recharts';
 
@@ -75,10 +78,55 @@ const ResourceManagement = () => {
             This Month
           </Button>
         </div>
-        <Button>
-          <SlidersHorizontal className="mr-2 h-4 w-4" />
-          Adjust Allocation
-        </Button>
+        <div className="flex items-center gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <Calendar className="mr-2 h-4 w-4" />
+                Sync with Calendar
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Sync Calendars</DialogTitle></DialogHeader>
+              <div className="py-4">
+                <p className="text-muted-foreground">Choose a calendar to sync task deadlines with:</p>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <Button variant="outline">Google Calendar</Button>
+                  <Button variant="outline">Outlook Calendar</Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                Adjust Allocation
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader><DialogTitle>Adjust Team Member Allocation</DialogTitle></DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="space-y-2">
+                  <Label>Team Member</Label>
+                  <Select><SelectTrigger><SelectValue placeholder="Select a member..." /></SelectTrigger><SelectContent><SelectItem value="sarah">Sarah Johnson</SelectItem></SelectContent></Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Project</Label>
+                  <Select><SelectTrigger><SelectValue placeholder="Select a project..." /></SelectTrigger><SelectContent><SelectItem value="project-a">Project A</SelectItem></SelectContent></Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="allocation">New Allocation (%)</Label>
+                  <Input id="allocation" type="number" placeholder="e.g., 50" />
+                </div>
+              </div>
+              <DialogFooter>
+                <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                <DialogClose asChild><Button type="button">Update Allocation</Button></DialogClose>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

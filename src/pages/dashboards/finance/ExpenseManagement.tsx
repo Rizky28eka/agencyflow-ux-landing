@@ -1,9 +1,11 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Receipt, Plus, Filter } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Receipt, Plus, Filter, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const FinanceExpenseManagement = () => {
@@ -42,7 +44,10 @@ const FinanceExpenseManagement = () => {
             <CardHeader>
                 <div className="flex justify-between items-center">
                     <CardTitle>All Expenses</CardTitle>
-                    <Button variant="outline"><Filter className="mr-2 h-4 w-4" /> Filter</Button>
+                    <div className="flex items-center gap-2">
+                        <Input placeholder="Search by description or category..." className="w-64" />
+                        <Button variant="outline"><Filter className="mr-2 h-4 w-4" /> Filter</Button>
+                    </div>
                 </div>
             </CardHeader>
             <CardContent>
@@ -54,6 +59,7 @@ const FinanceExpenseManagement = () => {
                             <TableHead>Description</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead className="text-right">Amount</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -64,6 +70,22 @@ const FinanceExpenseManagement = () => {
                                 <TableCell className="font-medium">{exp.description}</TableCell>
                                 <TableCell><Badge variant={exp.status === 'Paid' || exp.status === 'Reimbursed' ? 'secondary' : 'default'}>{exp.status}</Badge></TableCell>
                                 <TableCell className="text-right font-bold">${exp.amount.toLocaleString()}</TableCell>
+                                <TableCell className="text-right">
+                                    {exp.status === 'Pending' ? (
+                                        <div className="flex gap-2 justify-end">
+                                            <Button size="sm" variant="outline">Reject</Button>
+                                            <Button size="sm">Approve</Button>
+                                        </div>
+                                    ) : (
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                                            <DropdownMenuContent>
+                                                <DropdownMenuItem>View Details</DropdownMenuItem>
+                                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    )}
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

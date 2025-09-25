@@ -45,24 +45,28 @@ const ProjectManagerDashboard = () => {
       description="Project oversight and team coordination"
       headerIcon={<Users className="h-8 w-8 text-primary" />}
       headerAction={
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button className="bg-gradient-primary"><Plus className="mr-2 h-4 w-4" /> New Project</Button>
-            </DialogTrigger>
-            <DialogContent>
-                <DialogHeader><DialogTitle>Create New Project</DialogTitle></DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="space-y-2"><Label>Project Name</Label><Input placeholder="e.g., Q3 Marketing Campaign" /></div>
-                    <div className="space-y-2"><Label>Client</Label><Input placeholder="e.g., TechCorp" /></div>
-                    <div className="space-y-2"><Label>Start Date</Label><Input type="date" /></div>
-                    <div className="space-y-2"><Label>End Date</Label><Input type="date" /></div>
-                </div>
-                <DialogFooter>
-                    <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
-                    <DialogClose asChild><Button type="button" onClick={() => handleAction('Project Creation')}>Create Project</Button></DialogClose>
-                </DialogFooter>
-            </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-2">
+          <Button variant="outline"><FileText className="mr-2 h-4 w-4" /> Create Report</Button>
+          <Button variant="outline"><CheckSquare className="mr-2 h-4 w-4" /> Add Task</Button>
+          <Dialog>
+              <DialogTrigger asChild>
+                  <Button className="bg-gradient-primary"><Plus className="mr-2 h-4 w-4" /> New Project</Button>
+              </DialogTrigger>
+              <DialogContent>
+                  <DialogHeader><DialogTitle>Create New Project</DialogTitle></DialogHeader>
+                  <div className="grid gap-4 py-4">
+                      <div className="space-y-2"><Label>Project Name</Label><Input placeholder="e.g., Q3 Marketing Campaign" /></div>
+                      <div className="space-y-2"><Label>Client</Label><Input placeholder="e.g., TechCorp" /></div>
+                      <div className="space-y-2"><Label>Start Date</Label><Input type="date" /></div>
+                      <div className="space-y-2"><Label>End Date</Label><Input type="date" /></div>
+                  </div>
+                  <DialogFooter>
+                      <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                      <DialogClose asChild><Button type="button" onClick={() => handleAction('Project Creation')}>Create Project</Button></DialogClose>
+                  </DialogFooter>
+              </DialogContent>
+          </Dialog>
+        </div>
       }
       requiresPermission={{ resource: 'projects', action: 'read' }}
     >

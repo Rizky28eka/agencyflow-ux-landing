@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { User, CheckSquare, Clock, Target, TrendingUp, Calendar, FileText, MessageSquare } from 'lucide-react';
+import { User, CheckSquare, Clock, Target, TrendingUp, Calendar, FileText, MessageSquare, CalendarPlus, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -36,6 +36,11 @@ const MemberDashboard = () => {
     { user: 'Client', text: 'provided feedback on your latest deliverable', time: '2 days ago', type: 'feedback' },
   ];
 
+  const kudos = [
+      { from: 'Sarah J.', message: 'Great job on the homepage mockups!' },
+      { from: 'Mike C.', message: 'Thanks for helping me with that bug.' },
+  ];
+
   return (
     <DashboardLayout
       role="member"
@@ -43,9 +48,12 @@ const MemberDashboard = () => {
       description="Focus on what you need to do today."
       headerIcon={<User className="h-8 w-8 text-primary" />}
       headerAction={
-        <Link to="/dashboard/member/time">
-            <Button className="bg-gradient-primary"><Clock className="mr-2 h-4 w-4" /> Log Time</Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Button variant="outline"><CalendarPlus className="mr-2 h-4 w-4" /> Request Leave</Button>
+          <Link to="/dashboard/member/time">
+              <Button className="bg-gradient-primary"><Clock className="mr-2 h-4 w-4" /> Log Time</Button>
+          </Link>
+        </div>
       }
       requiresPermission={{ resource: 'tasks', action: 'read' }}
     >
@@ -92,6 +100,21 @@ const MemberDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Kudos Card */}
+        <Card className="mb-8">
+            <CardHeader className="flex items-center justify-between">
+                <CardTitle className="flex items-center"><Heart className="mr-2 h-5 w-5 text-red-500"/> Kudos</CardTitle>
+                <Button>Give Kudos</Button>
+            </CardHeader>
+            <CardContent className="space-y-2">
+                {kudos.map((kudo, index) => (
+                    <div key={index} className="p-2 bg-muted/50 rounded-lg">
+                        <p><span className="font-semibold">{kudo.from}:</span> {kudo.message}</p>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
 
         {/* Weekly Progress */}
         <Card className="mb-8">

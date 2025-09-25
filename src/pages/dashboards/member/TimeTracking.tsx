@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Clock, Play, Pause, Square, Calendar, BarChart3 } from 'lucide-react';
+import { Clock, Play, Pause, Square, Calendar, BarChart3, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const MemberTimeTracking = () => {
   const timeEntries = [
@@ -18,10 +19,13 @@ const MemberTimeTracking = () => {
       description="Log and manage your work hours"
       headerIcon={<Clock className="h-8 w-8 text-primary" />}
       headerAction={
-        <Button className="bg-gradient-primary">
-          <Play className="mr-2 h-4 w-4" />
-          Start Timer
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline">Manual Entry</Button>
+          <Button className="bg-gradient-primary">
+            <Play className="mr-2 h-4 w-4" />
+            Start Timer
+          </Button>
+        </div>
       }
     >
       {/* Time Stats */}
@@ -120,6 +124,15 @@ const MemberTimeTracking = () => {
                     }`}>
                       {entry.status}
                     </div>
+                  </div>
+                  <div className="ml-4">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
               ))}

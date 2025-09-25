@@ -84,7 +84,7 @@ const FAQSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a 
               href="mailto:support@agencyflow.com"
-              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary-light transition-premium shadow-soft hover:shadow-premium"
+              className="inline-flex items-center justify-center px-6 py-3 gradient-primary text-primary-foreground rounded-lg font-medium transition-premium shadow-soft hover-lift"
             >
               Contact Support
             </a>

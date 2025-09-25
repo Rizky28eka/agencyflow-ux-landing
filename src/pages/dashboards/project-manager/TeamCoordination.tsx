@@ -6,9 +6,11 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
 
 const ProjectManagerTeamCoordination = () => {
   const teamMembers = [
@@ -168,18 +170,60 @@ const ProjectManagerTeamCoordination = () => {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
-            <Button className="w-full justify-start" variant="outline">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Send Team Update
-            </Button>
-            <Button className="w-full justify-start" variant="outline">
-              <Users className="mr-2 h-4 w-4" />
-              Assign Team Members
-            </Button>
-            <Button className="w-full justify-start" variant="outline">
-              <Clock className="mr-2 h-4 w-4" />
-              Review Workload
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="w-full justify-start" variant="outline">
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  Send Team Update
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader><DialogTitle>Send a Team-wide Update</DialogTitle></DialogHeader>
+                <Textarea placeholder="Type your update here..." />
+                <DialogFooter>
+                    <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                    <DialogClose asChild><Button type="button">Send Update</Button></DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button className="w-full justify-start" variant="outline">
+                        <Users className="mr-2 h-4 w-4" />
+                        Assign Team Members
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader><DialogTitle>Assign Members to Project</DialogTitle></DialogHeader>
+                    <div className="space-y-4">
+                        <div>
+                            <Label>Select Project</Label>
+                            <Select><SelectTrigger><SelectValue placeholder="Select a project..." /></SelectTrigger><SelectContent><SelectItem value="project-alpha">Project Alpha</SelectItem></SelectContent></Select>
+                        </div>
+                        <div>
+                            <Label>Select Members</Label>
+                            <div className="space-y-2 rounded-md border p-4 max-h-48 overflow-y-auto">
+                                {teamMembers.map(member => (
+                                    <div key={member.id} className="flex items-center space-x-2">
+                                        <Checkbox id={`assign-member-${member.id}`} />
+                                        <Label htmlFor={`assign-member-${member.id}`} className="font-normal">{member.name}</Label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose asChild><Button type="button" variant="secondary">Cancel</Button></DialogClose>
+                        <DialogClose asChild><Button type="button">Assign</Button></DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+            <Link to="/dashboard/project-manager/resource-management">
+              <Button className="w-full justify-start" variant="outline">
+                <Clock className="mr-2 h-4 w-4" />
+                Review Workload
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </div>

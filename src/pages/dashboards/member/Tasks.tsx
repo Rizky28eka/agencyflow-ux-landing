@@ -68,6 +68,9 @@ const MemberTasks = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Add Comment</DropdownMenuItem>
+                            <DropdownMenuItem>Attach File</DropdownMenuItem>
                             <DropdownMenuItem>Move to To Do</DropdownMenuItem>
                             <DropdownMenuItem>Move to In Progress</DropdownMenuItem>
                             <DropdownMenuItem>Move to Done</DropdownMenuItem>

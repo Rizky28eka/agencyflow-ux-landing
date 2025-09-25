@@ -3,7 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Download, Upload, DollarSign, Banknote } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Download, Upload, DollarSign, Banknote, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const FinancePayroll = () => {
@@ -44,7 +47,24 @@ const FinancePayroll = () => {
         </div>
 
         <Card>
-            <CardHeader><CardTitle>January 2024 Payroll</CardTitle></CardHeader>
+            <CardHeader>
+                <div className="flex items-center justify-between">
+                    <CardTitle>January 2024 Payroll</CardTitle>
+                    <div className="flex items-center gap-2">
+                        <Input placeholder="Search by employee name..." className="w-64" />
+                        <Select>
+                            <SelectTrigger className="w-48">
+                                <SelectValue placeholder="Filter by status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All</SelectItem>
+                                <SelectItem value="paid">Paid</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+            </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
@@ -54,6 +74,7 @@ const FinancePayroll = () => {
                             <TableHead>Salary</TableHead>
                             <TableHead>Status</TableHead>
                             <TableHead>Pay Date</TableHead>
+                            <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -64,10 +85,28 @@ const FinancePayroll = () => {
                                 <TableCell>${p.salary.toLocaleString()}</TableCell>
                                 <TableCell><Badge variant={p.status === 'Paid' ? 'secondary' : 'default'}>{p.status}</Badge></TableCell>
                                 <TableCell>{p.payDate}</TableCell>
+                                <TableCell className="text-right">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem>Edit Employee</DropdownMenuItem>
+                                            <DropdownMenuItem>View Payslip</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
+            </CardContent>
+        </Card>
+
+        <Card>
+            <CardHeader><CardTitle>Accounting Integration</CardTitle></CardHeader>
+            <CardContent className="flex items-center gap-4">
+                <p className="text-muted-foreground">Connect your accounting software to sync payroll data automatically.</p>
+                <Button variant="outline">Connect to Xero</Button>
+                <Button variant="outline">Connect to QuickBooks</Button>
             </CardContent>
         </Card>
     </DashboardLayout>

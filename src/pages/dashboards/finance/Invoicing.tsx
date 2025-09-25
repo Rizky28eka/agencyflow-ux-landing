@@ -3,7 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { FileText, Plus, MoreHorizontal } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FileText, Plus, MoreHorizontal, Repeat } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
@@ -30,6 +32,7 @@ const FinanceInvoicing = () => {
       headerAction={
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => setIsGenerateModalOpen(true)}>Generate from Time</Button>
+          <Button variant="outline"><Repeat className="mr-2 h-4 w-4" /> Recurring Invoices</Button>
           <Button className="bg-gradient-primary" onClick={() => navigate('/dashboard/finance/invoicing/new')}><Plus className="mr-2 h-4 w-4" /> Create Invoice</Button>
         </div>
       }
@@ -51,8 +54,28 @@ const FinanceInvoicing = () => {
         </div>
 
         <Card>
-            <CardHeader><CardTitle>All Invoices</CardTitle></CardHeader>
+            <CardHeader>
+                <CardTitle>All Invoices</CardTitle>
+            </CardHeader>
             <CardContent>
+                <div className="flex items-center justify-between mb-4">
+                    <div className="w-1/3">
+                        <Input placeholder="Search by client or ID..." />
+                    </div>
+                    <div className="w-1/4">
+                        <Select>
+                            <SelectTrigger>
+                                <SelectValue placeholder="Filter by status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All Statuses</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="paid">Paid</SelectItem>
+                                <SelectItem value="overdue">Overdue</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
                 <Table>
                     <TableHeader><TableRow><TableHead>Invoice ID</TableHead><TableHead>Client</TableHead><TableHead>Issue Date</TableHead><TableHead>Due Date</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Amount</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
                     <TableBody>
@@ -69,7 +92,10 @@ const FinanceInvoicing = () => {
                                         <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                         <DropdownMenuContent>
                                             <DropdownMenuItem>View Details</DropdownMenuItem>
+                                            <DropdownMenuItem>Edit</DropdownMenuItem>
+                                            <DropdownMenuItem>Duplicate</DropdownMenuItem>
                                             <DropdownMenuItem>Send Reminder</DropdownMenuItem>
+                                            <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

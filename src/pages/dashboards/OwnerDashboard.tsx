@@ -1,9 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap, CheckCircle, UserPlus, Briefcase, Target } from 'lucide-react';
+import { Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap, CheckCircle, UserPlus, Briefcase, Target, TrendingDown, Heart, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Line, LineChart, CartesianGrid, XAxis, YAxis, Legend } from 'recharts';
 
 const OwnerDashboard = () => {
   const companyMetrics = {
@@ -12,8 +14,21 @@ const OwnerDashboard = () => {
     activeProjects: 48,
     teamMembers: 24,
     clientSatisfaction: 4.8,
-    profitMargin: 28.4
+    profitMargin: 28.4,
+    mrr: 120000,
+    churn: 2.1,
+    cac: 5000,
+    ltv: 25000,
   };
+
+  const financialTrends = [
+      { month: 'Jan', revenue: 80000, profit: 20000 },
+      { month: 'Feb', revenue: 85000, profit: 22000 },
+      { month: 'Mar', revenue: 95000, profit: 28000 },
+      { month: 'Apr', revenue: 92000, profit: 25000 },
+      { month: 'May', revenue: 110000, profit: 35000 },
+      { month: 'Jun', revenue: 120000, profit: 40000 },
+  ];
 
   const departmentPerformance = [
     { name: 'Design', performance: 92, projects: 12, revenue: 450000 },
@@ -58,10 +73,13 @@ const OwnerDashboard = () => {
       description="Complete overview and control"
       headerIcon={<Crown className="h-8 w-8 text-primary" />}
       headerAction={
-        <Button className="bg-gradient-primary">
-          <Settings className="mr-2 h-4 w-4" />
-          Company Settings
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline"><Mail className="mr-2 h-4 w-4" /> Schedule Reports</Button>
+          <Button className="bg-gradient-primary">
+            <Settings className="mr-2 h-4 w-4" />
+            Company Settings
+          </Button>
+        </div>
       }
       requiresPermission={{ resource: 'company', action: 'read' }}
     >
@@ -118,6 +136,32 @@ const OwnerDashboard = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Strategic KPIs */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <Card><CardHeader><CardTitle>MRR</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">${companyMetrics.mrr.toLocaleString()}</p></CardContent></Card>
+            <Card><CardHeader><CardTitle>Churn Rate</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">{companyMetrics.churn}%</p></CardContent></Card>
+            <Card><CardHeader><CardTitle>CAC</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">${companyMetrics.cac.toLocaleString()}</p></CardContent></Card>
+            <Card><CardHeader><CardTitle>LTV</CardTitle></CardHeader><CardContent><p className="text-3xl font-bold">${companyMetrics.ltv.toLocaleString()}</p></CardContent></Card>
+        </div>
+
+        {/* Financial Trends */}
+        <Card className="mb-8">
+            <CardHeader><CardTitle>Financial Trends (YTD)</CardTitle></CardHeader>
+            <CardContent>
+                <ChartContainer config={{}} className="h-80 w-full">
+                    <LineChart data={financialTrends}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis tickFormatter={(val) => `$${val/1000}k`} />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Legend />
+                        <Line type="monotone" dataKey="revenue" stroke="#3b82f6" strokeWidth={2} name="Revenue" />
+                        <Line type="monotone" dataKey="profit" stroke="#10b981" strokeWidth={2} name="Profit" />
+                    </LineChart>
+                </ChartContainer>
+            </CardContent>
+        </Card>
 
         {/* Department Performance */}
         <Card className="mb-8">

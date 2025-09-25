@@ -45,7 +45,7 @@ const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button 
                 size="lg" 
-                className="bg-primary hover:bg-primary-light text-primary-foreground shadow-premium hover-lift"
+                className="gradient-primary text-primary-foreground shadow-premium hover-lift"
               >
                 Start Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />

@@ -5,7 +5,9 @@ import {
   Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap,
   Shield, UserCheck, Calendar, CheckSquare, Clock, Star, Target, Plus,
   FileText, PieChart, CreditCard, Receipt, Calculator, Briefcase,
-  Home, LogOut, User, Bell, List, Share2, AlertTriangle, Banknote, MessageSquare, BrainCircuit
+  Home, LogOut, User, Bell, List, Share2, AlertTriangle, Banknote, MessageSquare, BrainCircuit,
+  Trophy,
+  Award
 } from 'lucide-react';
 import {
   Sidebar,
@@ -27,6 +29,7 @@ import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Role } from '@/lib/rolePermissions';
+import { usePlan } from '@/hooks/use-plan';
 
 const roleNavigation = {
   owner: [
@@ -38,6 +41,8 @@ const roleNavigation = {
     { title: 'Billing & Plan', url: '/billing', icon: CreditCard },
     { title: 'Settings', url: '/dashboard/owner/settings', icon: Settings },
     { title: 'Advanced Reports', url: '/dashboard/owner/reports', icon: FileText },
+    { title: 'AI Insights', url: '/dashboard/owner/ai-insights', icon: BrainCircuit },
+    { title: 'Leaderboard', url: '/dashboard/owner/leaderboard', icon: Trophy },
   ],
   admin: [
     { title: 'Dashboard', url: '/dashboard/admin', icon: Home },
@@ -61,7 +66,11 @@ const roleNavigation = {
     { title: 'Dashboard', url: '/dashboard/member', icon: Home },
     { title: 'My Tasks', url: '/dashboard/member/tasks', icon: CheckSquare },
     { title: 'Time Tracking', url: '/dashboard/member/time', icon: Clock },
-    { title: 'My Profile', url: '/dashboard/member/settings', icon: User },
+    { title: 'Schedule', url: '/dashboard/member/schedule', icon: Calendar },
+    { title: 'Submit Report', url: '/dashboard/member/submit-report', icon: FileText },
+    { title: 'Team Chat', url: '/dashboard/member/chat', icon: MessageSquare },
+    { title: 'Achievements', url: '/dashboard/member/achievements', icon: Award },
+    { title: 'Settings', url: '/dashboard/member/settings', icon: Settings },
   ],
   'team-lead': [
     { title: 'Dashboard', url: '/dashboard/team-lead', icon: Home },
@@ -103,6 +112,7 @@ interface DashboardSidebarProps {
 export function DashboardSidebar({ role }: DashboardSidebarProps) {
   const { state, isMobile, toggleSidebar } = useSidebar();
   const { user } = useAuth();
+  const { plan } = usePlan();
   const location = useLocation();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -159,10 +169,15 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigation.map((item) => (
+              {navigation.map((item) => {
+                if (item.url.includes('ai-insights') && !['business', 'enterprise'].includes(plan)) {
+                    return null;
+                }
+
+                return (
                 <SidebarMenuItem key={item.url}>
                   {/* Only show navigation items the user has permission for */}
-                  {user && !hasPermission(user.role, getResourceFromUrl(item.url), 'read') ? null : (
+                  {user && hasPermission(user.role, getResourceFromUrl(item.url), 'read') ? (
                   <SidebarMenuButton
                     asChild
                     isActive={isActive(item.url)}
@@ -173,9 +188,9 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
                       <span>{item.title}</span>
                     </NavLink>
                   </SidebarMenuButton>
-                  )}
+                  ) : null}
                 </SidebarMenuItem>
-              ))}
+              )})}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -249,6 +264,10 @@ const getResourceFromUrl = (url: string): string => {
   if (url.includes('/time')) return 'time';
   if (url.includes('/reports')) return 'reports';
   if (url.includes('/messages')) return 'messages';
+  if (url.includes('/schedule')) return 'schedule';
+  if (url.includes('/submit-report')) return 'reports';
+  if (url.includes('/chat')) return 'chat';
+  if (url.includes('/ai-insights')) return 'ai-insights';
   
   return 'dashboard'; // Default resource
 };

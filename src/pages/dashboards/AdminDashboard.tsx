@@ -1,10 +1,16 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Shield, Users, Settings, FileText, UserCheck, Lock, Database, Activity, List, Share2 } from 'lucide-react';
+import { Shield, Users, Settings, FileText, UserCheck, Lock, Database, Activity, List, Share2, UserPlus, UserCog } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DashboardLayout } from '@/components/DashboardLayout';
 
 const AdminDashboard = () => {
+  const recentActivity = [
+    { user: 'John Doe', action: 'updated their profile', time: '2 hours ago' },
+    { user: 'Jane Smith', action: 'was assigned a new role: Admin', time: '1 day ago' },
+    { user: 'Peter Jones', action: 'reset their password', time: '2 days ago' },
+  ];
+
   return (
     <DashboardLayout
       role="admin"
@@ -12,10 +18,10 @@ const AdminDashboard = () => {
       description="System administration and user management"
       headerIcon={<Shield className="h-8 w-8 text-primary" />}
       headerAction={
-        <Button className="bg-gradient-primary">
-          <Settings className="mr-2 h-4 w-4" />
-          System Settings
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline"><UserPlus className="mr-2 h-4 w-4" /> Add User</Button>
+          <Button><UserCog className="mr-2 h-4 w-4" /> Manage Roles</Button>
+        </div>
       }
     >
 
@@ -68,27 +74,19 @@ const AdminDashboard = () => {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* User Management */}
+          {/* Recent Activity */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Users className="mr-2 h-5 w-5" />
-                User Management
-              </CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle>Recent Activity</CardTitle></CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                <span className="font-medium">Total Users</span>
-                <span className="text-xl font-bold text-primary">124</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                <span className="font-medium">Active Sessions</span>
-                <span className="text-xl font-bold text-accent">89</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
-                <span className="font-medium">Role Assignments</span>
-                <span className="text-xl font-bold text-primary">7</span>
-              </div>
+              {recentActivity.map((activity, i) => (
+                <div key={i} className="flex items-start space-x-3">
+                  <div className="w-2 h-2 rounded-full mt-2 bg-blue-500"></div>
+                  <div>
+                    <p className="text-sm"><span className="font-semibold">{activity.user}</span> {activity.action}</p>
+                    <p className="text-xs text-muted-foreground">{activity.time}</p>
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
 

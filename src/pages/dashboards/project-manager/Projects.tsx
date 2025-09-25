@@ -159,6 +159,7 @@ const ProjectManagerProjects = () => {
       <Tabs defaultValue="projects">
         <TabsList>
           <TabsTrigger value="projects">Projects</TabsTrigger>
+          <TabsTrigger value="kanban">Kanban</TabsTrigger>
           <TabsTrigger value="gantt">Gantt Chart</TabsTrigger>
         </TabsList>
         <TabsContent value="projects">
@@ -227,6 +228,31 @@ const ProjectManagerProjects = () => {
               </Card>
             ))}
           </div>
+        </TabsContent>
+        <TabsContent value="kanban">
+            <div className="flex space-x-6 overflow-x-auto p-1 mt-4">
+                {['Planning', 'In Progress', 'Review', 'Completed'].map(status => (
+                    <div key={status} className="flex-shrink-0 w-80">
+                        <Card className="bg-muted/50 h-full flex flex-col">
+                            <CardHeader><CardTitle>{status}</CardTitle></CardHeader>
+                            <CardContent className="space-y-4">
+                                {projects.filter(p => p.status === status).map(project => (
+                                    <Card key={project.id} className="bg-background">
+                                        <CardContent className="p-4 space-y-2">
+                                            <h4 className="font-semibold">{project.name}</h4>
+                                            <p className="text-sm text-muted-foreground">{project.client}</p>
+                                            <div className="flex justify-between text-xs">
+                                                <span>Progress: {project.progress}%</span>
+                                                <span>Due: {project.deadline}</span>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </div>
+                ))}
+            </div>
         </TabsContent>
         <TabsContent value="gantt">
           <GanttChart tasks={tasks} />

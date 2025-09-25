@@ -31,6 +31,7 @@ type SidebarContext = {
 
 const SidebarContext = React.createContext<SidebarContext | null>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 function useSidebar() {
   const context = React.useContext(SidebarContext);
   if (!context) {
@@ -609,6 +610,7 @@ const SidebarMenuSubButton = React.forwardRef<
 });
 SidebarMenuSubButton.displayName = "SidebarMenuSubButton";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export {
   Sidebar,
   SidebarContent,
