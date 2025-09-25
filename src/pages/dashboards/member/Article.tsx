@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { useParams } from 'react-router-dom';
+import { FileText } from 'lucide-react';
 
 const Article = () => {
   const { articleId } = useParams();
@@ -31,6 +32,7 @@ const Article = () => {
       role="member"
       title={article.title}
       description={`Published by ${article.author} on ${article.date}`}
+      headerIcon={<FileText className="h-6 w-6 text-primary" />}
     >
       <Card>
         <CardContent className="p-8">

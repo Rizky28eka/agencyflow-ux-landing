@@ -9,8 +9,8 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 
 const AdminAuditLog = () => {
   // Mock current plan
-  const currentPlan = 'professional'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
-  const canUseAuditLog = currentPlan === 'enterprise';
+  const currentPlan = 'professional'; // 'free', 'professional', 'enterprise'
+  const isPremium = currentPlan === 'professional' || currentPlan === 'enterprise';
 
   const auditLog = [
     { event: 'User Login', actor: 'john@agency.com', target: 'Session', ip: '192.168.1.10', timestamp: '2025-09-24 10:00:00' },
@@ -36,7 +36,7 @@ const AdminAuditLog = () => {
       headerIcon={<List className="h-8 w-8 text-primary" />}
     >
       <div className="relative">
-        {!canUseAuditLog && (
+        {!isPremium && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
                 <Lock className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-2xl font-bold mb-2">Upgrade to Unlock Audit Log</h3>

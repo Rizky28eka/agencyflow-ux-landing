@@ -5,16 +5,21 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { DashboardLayout } from '@/components/DashboardLayout';
-import { Save } from 'lucide-react';
+import { Save, Edit } from 'lucide-react';
 
 const EditArticle = () => {
+  const handleSave = () => {
+    console.log('Saving article...');
+  };
+
   return (
     <DashboardLayout
       role="member"
       title="Edit Article"
       description="Create or edit a knowledge base article."
+      headerIcon={<Edit className="h-6 w-6 text-primary" />}
       headerAction={
-        <Button>
+        <Button onClick={handleSave}>
           <Save className="mr-2 h-4 w-4" />
           Save Article
         </Button>

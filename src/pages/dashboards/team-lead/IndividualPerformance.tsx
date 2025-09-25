@@ -5,6 +5,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { useParams } from 'react-router-dom';
+import { TrendingUp } from 'lucide-react';
 
 const IndividualPerformance = () => {
   const { memberId } = useParams();
@@ -23,6 +24,7 @@ const IndividualPerformance = () => {
       role="team-lead"
       title={member.name}
       description={`Performance details for ${member.name}`}
+      headerIcon={<TrendingUp className="h-6 w-6 text-primary" />}
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">

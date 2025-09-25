@@ -8,8 +8,8 @@ import { useState } from 'react';
 
 const AIInsights = () => {
   // Mock current plan
-  const currentPlan = 'professional'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
-  const canUseAI = currentPlan === 'business' || currentPlan === 'enterprise';
+  const currentPlan = 'professional'; // 'free', 'professional', 'enterprise'
+  const hasAccess = currentPlan === 'professional' || currentPlan === 'enterprise';
 
   const [risks, setRisks] = useState([]);
 
@@ -28,7 +28,7 @@ const AIInsights = () => {
       headerIcon={<BrainCircuit className="h-8 w-8 text-primary" />}
     >
       <div className="relative">
-        {!canUseAI && (
+        {!hasAccess && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
                 <Lock className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-2xl font-bold mb-2">Upgrade to Unlock AI Insights</h3>
@@ -43,7 +43,7 @@ const AIInsights = () => {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">Let AI suggest an optimal project schedule based on your team's availability and historical data.</p>
-              <Button disabled={!canUseAI}>Generate Schedule</Button>
+              <Button disabled={!hasAccess}>Generate Schedule</Button>
             </CardContent>
           </Card>
 
@@ -53,7 +53,7 @@ const AIInsights = () => {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">Our AI will analyze your projects to identify potential risks and suggest mitigation strategies.</p>
-              <Button disabled={!canUseAI} onClick={handleAnalyzeRisks}>Analyze Risks</Button>
+              <Button disabled={!hasAccess} onClick={handleAnalyzeRisks}>Analyze Risks</Button>
               {risks.length > 0 && (
                 <div className="mt-4 space-y-2">
                   {risks.map((risk, index) => (
@@ -75,8 +75,8 @@ const AIInsights = () => {
             <CardContent>
               <p className="text-muted-foreground mb-4">Automatically generate a summary of any project's progress, status, and team performance.</p>
               <div className="flex gap-4">
-                <Input placeholder="Enter project name..." className="flex-1" disabled={!canUseAI} />
-                <Button disabled={!canUseAI}>Generate Summary</Button>
+                <Input placeholder="Enter project name..." className="flex-1" disabled={!hasAccess} />
+                <Button disabled={!hasAccess}>Generate Summary</Button>
               </div>
             </CardContent>
           </Card>

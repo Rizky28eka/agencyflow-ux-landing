@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 const OwnerAdvancedReports = () => {
   // Mock current plan
-  const currentPlan = 'business'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
+  const currentPlan: string = 'professional'; // 'free', 'professional', 'enterprise'
   const canUseCustomBranding = currentPlan === 'enterprise';
 
   return (

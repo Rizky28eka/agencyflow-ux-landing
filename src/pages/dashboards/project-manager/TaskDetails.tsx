@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { CheckSquare } from 'lucide-react';
 
 const TaskDetails = () => {
   return (
@@ -7,6 +8,7 @@ const TaskDetails = () => {
       role="project-manager"
       title="Task Details"
       description="Detailed view of a task."
+      headerIcon={<CheckSquare className="h-6 w-6 text-primary" />}
     >
       <Card>
         <CardHeader><CardTitle>Task Details</CardTitle></CardHeader>

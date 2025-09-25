@@ -9,8 +9,8 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 
 const AdminSecurity = () => {
   // Mock current plan
-  const currentPlan = 'business'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
-  const canUseSSO = currentPlan === 'enterprise';
+  const currentPlan = 'professional'; // 'free', 'professional', 'enterprise'
+  const isPremium = currentPlan === 'professional' || currentPlan === 'enterprise';
 
   return (
     <DashboardLayout
@@ -35,7 +35,7 @@ const AdminSecurity = () => {
         </Card>
 
         <div className="relative">
-          {!canUseSSO && (
+          {!isPremium && (
               <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
                   <Lock className="h-12 w-12 text-muted-foreground mb-4" />
                   <h3 className="text-2xl font-bold mb-2">Upgrade to Unlock SSO</h3>
@@ -54,27 +54,27 @@ const AdminSecurity = () => {
                       <Label htmlFor="enable-sso" className="font-medium">Enable SSO</Label>
                       <p className="text-sm text-muted-foreground">Allow users to sign in with SSO.</p>
                   </div>
-                  <Switch id="enable-sso" disabled={!canUseSSO} />
+                  <Switch id="enable-sso" disabled={!isPremium} />
               </div>
 
               <div className="space-y-4">
                   <h4 className="font-semibold">SAML Configuration</h4>
                   <div className="space-y-2">
                       <Label htmlFor="idp-url">Identity Provider URL</Label>
-                      <Input id="idp-url" placeholder="https://idp.example.com/sso/saml" disabled={!canUseSSO} />
+                      <Input id="idp-url" placeholder="https://idp.example.com/sso/saml" disabled={!isPremium} />
                   </div>
                   <div className="space-y-2">
                       <Label htmlFor="issuer-url">Issuer URL</Label>
-                      <Input id="issuer-url" placeholder="http://www.okta.com/exk..." disabled={!canUseSSO} />
+                      <Input id="issuer-url" placeholder="http://www.okta.com/exk..." disabled={!isPremium} />
                   </div>
                   <div className="space-y-2">
                       <Label htmlFor="x509-cert">X.509 Certificate</Label>
-                      <Input id="x509-cert" type="file" disabled={!canUseSSO} />
+                      <Input id="x509-cert" type="file" disabled={!isPremium} />
                   </div>
               </div>
 
               <div className="flex justify-end">
-                  <Button disabled={!canUseSSO}>Save SSO Settings</Button>
+                  <Button disabled={!isPremium}>Save SSO Settings</Button>
               </div>
             </CardContent>
           </Card>

@@ -88,8 +88,8 @@ const AdminRoles = () => {
     }
   };
   // Mock current plan
-  const currentPlan = 'basic'; // 'starter', 'basic', 'professional', 'business', 'enterprise'
-  const canCreateCustomRoles = currentPlan === 'professional' || currentPlan === 'business' || currentPlan === 'enterprise';
+  const currentPlan = 'free'; // 'free', 'professional', 'enterprise'
+  const isLocked = currentPlan === 'free';
 
   return (
     <DashboardLayout
@@ -111,7 +111,7 @@ const AdminRoles = () => {
         role={selectedRole} 
       />
       <div className="relative">
-        {!canCreateCustomRoles && (
+        {isLocked && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex flex-col items-center justify-center z-10 rounded-lg">
                 <Lock className="h-12 w-12 text-muted-foreground mb-4" />
                 <h3 className="text-2xl font-bold mb-2">Upgrade to Unlock Custom Roles</h3>
@@ -120,7 +120,7 @@ const AdminRoles = () => {
             </div>
         )}
         {/* Role Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">Total Roles</CardTitle>
@@ -163,7 +163,7 @@ const AdminRoles = () => {
         </div>
 
         {/* Roles Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6">
           {roles.map((role, index) => (
             <Card key={index} className="hover:shadow-lg transition-shadow">
               <CardHeader>
