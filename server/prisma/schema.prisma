@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  name      String   @db.VarChar(255)
+  email     String   @unique(map: "users_email_unique") @db.VarChar(255)
+  role      String   @db.VarChar(255)
+  status    String   @db.VarChar(255)
+  lastLogin String?  @map("lastLogin") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  password  String   @db.VarChar(255)
+  tasks     Task[]
+
+  @@map("users")
+}
+
+model Project {
+  id       Int       @id @default(autoincrement()) @db.UnsignedInt
+  name     String    @db.VarChar(255)
+  client   String?   @db.VarChar(255)
+  status   String?   @db.VarChar(255)
+  progress Int?
+  team     Int?
+  deadline DateTime? @db.Date
+  priority String?   @db.VarChar(255)
+  tasks    Task[]
+
+  @@map("projects")
+}
+
+model Task {
+  id         Int       @id @default(autoincrement()) @db.UnsignedInt
+  name       String    @db.VarChar(255)
+  status     String?   @default("Not Started") @db.VarChar(255)
+  dueDate    DateTime? @map("dueDate") @db.Date
+  priority   String?   @db.VarChar(255)
+  projectId  Int?      @map("project_id") @db.UnsignedInt
+  assigneeId String?   @map("assignee_id") @db.VarChar(255)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+  assignee   User?     @relation(fields: [assigneeId], references: [id], onUpdate: Restrict, map: "tasks_assignee_id_foreign")
+  project    Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "tasks_project_id_foreign")
+
+  @@index([assigneeId], map: "tasks_assignee_id_foreign")
+  @@index([projectId], map: "tasks_project_id_foreign")
+  @@map("tasks")
+}
+
+model Client {
+  id            Int      @id @default(autoincrement()) @db.UnsignedInt
+  name          String   @db.VarChar(255)
+  contactPerson String?  @map("contact_person") @db.VarChar(255)
+  email         String?  @unique(map: "clients_email_unique") @db.VarChar(255)
+  status        String?  @default("Active") @db.VarChar(255)
+  contractValue Decimal? @map("contract_value") @db.Decimal(15, 2)
+  health        String?  @db.VarChar(255)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("clients")
+}
+
+model knex_migrations {
+  id             Int      @id @default(autoincrement()) @db.UnsignedInt
+  name           String?  @db.VarChar(255)
+  batch          Int?
+  migration_time DateTime @default(now()) @db.Timestamp(0)
+}
+
+model knex_migrations_lock {
+  index     Int  @id @default(autoincrement()) @db.UnsignedInt
+  is_locked Int?
+}
+
+model user {
+  id       Int    @id @default(autoincrement())
+  username String @unique(map: "IDX_78a916df40e02a9deb1c4b75ed") @db.VarChar(255)
+  email    String @db.VarChar(255)
+  isActive Int    @default(1) @db.TinyInt
+}

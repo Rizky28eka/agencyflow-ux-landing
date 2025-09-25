@@ -2,26 +2,26 @@ import { ReactNode } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
 
-interface Column {
-  key: string;
+interface Column<TData extends Record<string, unknown>> {
+  key: keyof TData;
   label: string;
-  render?: (value: any, row: any) => ReactNode;
+  render?: (value: TData[keyof TData], row: TData) => ReactNode;
   className?: string;
 }
 
-interface ResponsiveTableProps {
-  columns: Column[];
-  data: any[];
-  onRowClick?: (row: any) => void;
-  mobileCardRender?: (row: any, index: number) => ReactNode;
+interface ResponsiveTableProps<TData extends Record<string, unknown>> {
+  columns: Column<TData>[];
+  data: TData[];
+  onRowClick?: (row: TData) => void;
+  mobileCardRender?: (row: TData, index: number) => ReactNode;
 }
 
-export const ResponsiveTable = ({ 
-  columns, 
-  data, 
-  onRowClick, 
-  mobileCardRender 
-}: ResponsiveTableProps) => {
+export const ResponsiveTable = <TData extends Record<string, unknown>>({
+  columns,
+  data,
+  onRowClick,
+  mobileCardRender
+}: ResponsiveTableProps<TData>) => {
   return (
     <>
       {/* Desktop Table */}

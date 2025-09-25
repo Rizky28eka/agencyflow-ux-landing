@@ -102,7 +102,6 @@ const TeamLeadDashboard = () => {
 
   return (
     <DashboardLayout
-      role="team-lead"
       title="Team Lead Dashboard"
       description="Team management and performance tracking"
       headerIcon={<UserCheck className="h-8 w-8 text-primary" />}

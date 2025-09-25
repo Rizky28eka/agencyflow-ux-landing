@@ -18,7 +18,6 @@ export const BreadcrumbNav = () => {
       'client': 'Client',
       'analytics': 'Analytics',
       'team': 'Team',
-      'finance': 'Finance',
       'settings': 'Settings',
       'billing': 'Billing',
       'goals': 'Goals',

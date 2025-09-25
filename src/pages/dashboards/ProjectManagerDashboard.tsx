@@ -40,7 +40,6 @@ const ProjectManagerDashboard = () => {
 
   return (
     <DashboardLayout
-      role="project-manager"
       title="Project Manager Dashboard"
       description="Project oversight and team coordination"
       headerIcon={<Users className="h-8 w-8 text-primary" />}

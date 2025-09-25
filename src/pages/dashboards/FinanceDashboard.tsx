@@ -35,7 +35,6 @@ const FinanceDashboard = () => {
   ];
   return (
     <DashboardLayout
-      role="finance"
       title="Finance Dashboard"
       description="Financial overview and expense management"
       headerIcon={<DollarSign className="h-8 w-8 text-primary" />}

@@ -43,7 +43,6 @@ const MemberDashboard = () => {
 
   return (
     <DashboardLayout
-      role="member"
       title="My Dashboard"
       description="Focus on what you need to do today."
       headerIcon={<User className="h-8 w-8 text-primary" />}

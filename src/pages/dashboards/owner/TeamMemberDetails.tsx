@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Mail, Phone, Edit, Trash2, Award, Briefcase, Users } from 'lucide-react';
+import { Mail, Phone, Edit, Trash2, Award, Briefcase, Users, ArrowLeft } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -89,7 +89,6 @@ const TeamMemberDetails = () => {
 
   return (
     <DashboardLayout
-      role="owner"
       title={`Team Member: ${member.name}`}
       description={`Profile for ${member.name}`}
       headerIcon={<Users className="h-8 w-8 text-primary" />}

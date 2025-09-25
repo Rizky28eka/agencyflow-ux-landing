@@ -27,7 +27,6 @@ const OwnerTeam = () => {
 
   return (
     <DashboardLayout
-      role="owner"
       title="Team Management"
       description="Manage all team members and departments"
       headerIcon={<Users className="h-8 w-8 text-primary" />}

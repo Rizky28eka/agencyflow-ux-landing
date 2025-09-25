@@ -24,23 +24,32 @@ import { Role } from '@/lib/rolePermissions';
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { setUserRole } = useAuth();
+  const { login } = useAuth();
 
-  const handleRoleSelect = (roleId: string) => {
+  const handleRoleSelect = async (roleId: string) => {
     const role = roleId as Role;
-    setUserRole(role);
 
-    const roleRoutes: Record<Role, string> = {
-      OWNER: '/dashboard/owner',
-      ADMIN: '/dashboard/admin',
-      PROJECT_MANAGER: '/dashboard/project-manager',
-      TEAM_LEAD: '/dashboard/team-lead',
-      MEMBER: '/dashboard/member',
-      FINANCE: '/dashboard/finance',
-      CLIENT: '/dashboard/client',
+    const demoUsers: Record<Role, {email: string, password: string}> = {
+      OWNER: { email: 'john@agency.com', password: 'password123' },
+      ADMIN: { email: 'admin@agency.com', password: 'password123' },
+      PROJECT_MANAGER: { email: 'sarah@agency.com', password: 'password123' },
+      TEAM_LEAD: { email: 'jessica@agency.com', password: 'password123' },
+      MEMBER: { email: 'mike@agency.com', password: 'password123' },
+      FINANCE: { email: 'nancy@agency.com', password: 'password123' },
+      CLIENT: { email: 'client1@example.com', password: 'password123' },
     };
 
-    navigate(roleRoutes[role]);
+    const demoUser = demoUsers[role];
+
+    if (demoUser) {
+      try {
+        await login(demoUser);
+        // The login function in useAuth already handles navigation
+      } catch (error) {
+        console.error("Demo login failed", error);
+        // TODO: Consider adding a toast notification here for user feedback
+      }
+    }
   };
 
   const roles = [

@@ -8,6 +8,7 @@ import {
   Home, LogOut, User, Bell, List, Share2, AlertTriangle, Banknote, MessageSquare, BrainCircuit,
   Trophy, Award, Book, Handshake
 } from 'lucide-react';
+import { useSidebar } from '@/hooks/useSidebar';
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +20,6 @@ import {
   SidebarMenuItem,
   SidebarHeader,
   SidebarFooter,
-  useSidebar,
 } from '@/components/ui/sidebar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { NotificationList } from './NotificationList';
@@ -204,10 +204,14 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton
+                  asChild
+                  isActive={isActive('/profile')}
                   tooltip={state === 'collapsed' ? 'Profile' : undefined}
                 >
-                  <User className="h-4 w-4" />
-                  <span>Profile</span>
+                  <NavLink to="/profile">
+                    <User className="h-4 w-4" />
+                    <span>Profile</span>
+                  </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>

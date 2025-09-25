@@ -13,7 +13,6 @@ const AdminDashboard = () => {
 
   return (
     <DashboardLayout
-      role="admin"
       title="Admin Dashboard"
       description="System administration and user management"
       headerIcon={<Shield className="h-8 w-8 text-primary" />}

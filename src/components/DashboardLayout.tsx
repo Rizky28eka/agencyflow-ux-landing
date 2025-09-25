@@ -1,38 +1,38 @@
 import { ReactNode } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { getRoleDisplayName, hasPermission } from '@/lib/rolePermissions';
+import { getRoleDisplayName } from '@/lib/rolePermissions';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { DashboardSidebar } from './DashboardSidebar';
 import { BreadcrumbNav } from './layout/BreadcrumbNav';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Shield } from 'lucide-react';
+import { LoadingSpinner } from './layout/LoadingSpinner';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  role: string;
   title: string;
   description: string;
   headerIcon: ReactNode;
   headerAction?: ReactNode;
-  requiresPermission?: { resource: string; action: string };
 }
 
 export function DashboardLayout({ 
   children, 
-  role, 
   title, 
   description, 
   headerIcon, 
   headerAction,
-  requiresPermission
 }: DashboardLayoutProps) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
+  if (loading || !user) {
+    return <LoadingSpinner fullScreen />;
+  }
+
+  const userRole = user.role.toLowerCase().replace('_', '-');
 
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
-        <DashboardSidebar role={user?.role.toLowerCase().replace('_', '-') || role} />
+        <DashboardSidebar role={userRole} />
         
         <div className="flex-1 flex flex-col min-w-0">
           {/* Header */}
@@ -51,7 +51,7 @@ export function DashboardLayout({
               <div className="flex items-center gap-2 md:gap-4 shrink-0">
                 {user && (
                   <div className="text-right hidden md:block">
-                    <p className="text-sm font-medium truncate max-w-40">{user.user_metadata.first_name} {user.user_metadata.last_name}</p>
+                    <p className="text-sm font-medium truncate max-w-40">{user.name}</p>
                     <p className="text-xs text-muted-foreground truncate">{getRoleDisplayName(user.role)}</p>
                   </div>
                 )}

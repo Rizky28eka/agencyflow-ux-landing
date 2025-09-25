@@ -1,343 +1,139 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { InputPassword } from '@/components/ui/input-password';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, ArrowLeft } from 'lucide-react';
-import { PasswordStrengthIndicator } from '@/components/PasswordStrengthIndicator';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { InputPassword } from "@/components/ui/input-password";
+import { Label } from "@/components/ui/label";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Loader2, ArrowLeft } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import type { AuthContextType } from "@/contexts/AuthContext";
+
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+type FormData = z.infer<typeof signInSchema> | z.infer<typeof signUpSchema>;
+
+const signInSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(1, "Password is required"),
+});
+
+const signUpSchema = z.object({
+  name: z.string().min(2, "Name is required"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
 
 interface AuthFormProps {
-  mode: 'signin' | 'signup' | 'forgot';
-  onModeChange: (mode: 'signin' | 'signup' | 'forgot') => void;
-  onSuccess?: () => void;
+  mode: "signin" | "signup";
+  onModeChange: (mode: "signin" | "signup") => void;
 }
 
-export const AuthForm = ({ mode, onModeChange, onSuccess }: AuthFormProps) => {
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    firstName: '',
-    lastName: '',
-    company: ''
+export const AuthForm = ({ mode, onModeChange }: AuthFormProps) => {
+  const { login, register, error, isLoading } = useAuth() as AuthContextType;
+
+  const isSigningIn = mode === "signin";
+  const form = useForm<FormData>({
+    resolver: zodResolver(isSigningIn ? signInSchema : signUpSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+    },
   });
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const { toast } = useToast();
-  const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setError('');
-  };
-
-  const validateForm = () => {
-    if (!formData.email) {
-      setError('Email is required');
-      return false;
-    }
-
-    if (!formData.email.includes('@')) {
-      setError('Please enter a valid email address');
-      return false;
-    }
-
-    if (mode === 'signup') {
-      if (!formData.firstName || !formData.lastName) {
-        setError('First and last name are required');
-        return false;
-      }
-
-      if (formData.password.length < 8) {
-        setError('Password must be at least 8 characters');
-        return false;
-      }
-
-      if (formData.password !== formData.confirmPassword) {
-        setError('Passwords do not match');
-        return false;
-      }
-    }
-
-    if (mode === 'signin' && !formData.password) {
-      setError('Password is required');
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-
-    setLoading(true);
-    setError('');
-    setSuccess('');
-
+  const onSubmit = async (data: FormData) => {
     try {
-      if (mode === 'signin') {
-        // Mock authentication - in production this would use real auth
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-        toast({
-          title: "Welcome back!",
-          description: "You've been successfully logged in.",
-        });
-        onSuccess?.();
-
-      } else if (mode === 'signup') {
-        // Mock registration - in production this would use real auth
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-        setSuccess('Account created successfully! You can now sign in.');
-        toast({
-          title: "Account created!",
-          description: "You can now sign in with your credentials.",
-        });
-
-      } else if (mode === 'forgot') {
-        // Mock password reset - in production this would use real auth
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-
-        setSuccess('Password reset email sent! Please check your inbox.');
-        toast({
-          title: "Reset email sent",
-          description: "Please check your email for password reset instructions.",
-        });
-      }
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
+      if (isSigningIn) {
+        await login(data);
       } else {
-        setError("An unknown error occurred.");
+        if ("name" in data) {
+          await register(data);
+        }
       }
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error(err);
     }
   };
-
-  const renderSignInForm = () => (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email Address</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          autoComplete="email"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <InputPassword
-          id="password"
-          name="password"
-          placeholder="Enter your password"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-          autoComplete="current-password"
-        />
-      </div>
-
-      <div className="flex justify-end">
-        <Button
-          type="button"
-          variant="link"
-          className="px-0 text-sm"
-          onClick={() => onModeChange('forgot')}
-        >
-          Forgot your password?
-        </Button>
-      </div>
-      
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Sign In
-      </Button>
-
-      <div className="text-center text-sm text-muted-foreground">
-        Don't have an account?{' '}
-        <Button
-          type="button"
-          variant="link"
-          className="px-0"
-          onClick={() => onModeChange('signup')}
-        >
-          Sign up
-        </Button>
-      </div>
-    </form>
-  );
-
-  const renderSignUpForm = () => (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            name="firstName"
-            placeholder="John"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            required
-            autoComplete="given-name"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            name="lastName"
-            placeholder="Doe"
-            value={formData.lastName}
-            onChange={handleInputChange}
-            required
-            autoComplete="family-name"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="company">Company (Optional)</Label>
-        <Input
-          id="company"
-          name="company"
-          placeholder="Your Company Name"
-          value={formData.company}
-          onChange={handleInputChange}
-          autoComplete="organization"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="email">Email Address</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="john@company.com"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          autoComplete="email"
-        />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <InputPassword
-          id="password"
-          name="password"
-          placeholder="Create a strong password"
-          value={formData.password}
-          onChange={handleInputChange}
-          required
-          autoComplete="new-password"
-        />
-        <PasswordStrengthIndicator password={formData.password} />
-      </div>
-      
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
-        <InputPassword
-          id="confirmPassword"
-          name="confirmPassword"
-          placeholder="Confirm your password"
-          value={formData.confirmPassword}
-          onChange={handleInputChange}
-          required
-          autoComplete="new-password"
-        />
-      </div>
-      
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Create Account
-      </Button>
-
-      <div className="text-center text-sm text-muted-foreground">
-        Already have an account?{' '}
-        <Button
-          type="button"
-          variant="link"
-          className="px-0"
-          onClick={() => onModeChange('signin')}
-        >
-          Sign in
-        </Button>
-      </div>
-    </form>
-  );
-
-  const renderForgotPasswordForm = () => (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="email">Email Address</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={handleInputChange}
-          required
-          autoComplete="email"
-        />
-        <p className="text-sm text-muted-foreground">
-          We'll send you a link to reset your password.
-        </p>
-      </div>
-      
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Send Reset Link
-      </Button>
-
-      <div className="text-center">
-        <Button
-          type="button"
-          variant="link"
-          className="px-0 text-sm"
-          onClick={() => onModeChange('signin')}
-        >
-          <ArrowLeft className="mr-1 h-3 w-3" />
-          Back to Sign In
-        </Button>
-      </div>
-    </form>
-  );
 
   return (
-    <div className="space-y-4">
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error.message}</AlertDescription>
+          </Alert>
+        )}
 
-      {success && (
-        <Alert>
-          <AlertDescription>{success}</AlertDescription>
-        </Alert>
-      )}
+        {!isSigningIn && (
+          <FormField
+            name="name"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
 
-      {mode === 'signin' && renderSignInForm()}
-      {mode === 'signup' && renderSignUpForm()}
-      {mode === 'forgot' && renderForgotPasswordForm()}
-    </div>
+        <FormField
+          name="email"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email Address</FormLabel>
+              <FormControl>
+                <Input placeholder="john@company.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          name="password"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <InputPassword placeholder="Your password" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          {isSigningIn ? "Sign In" : "Create Account"}
+        </Button>
+
+        <div className="text-center text-sm text-muted-foreground">
+          {isSigningIn ? "Don't have an account?" : "Already have an account?"}{" "}
+          <Button
+            type="button"
+            variant="link"
+            className="px-0"
+            onClick={() => onModeChange(isSigningIn ? "signup" : "signin")}
+          >
+            {isSigningIn ? "Sign up" : "Sign in"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 };

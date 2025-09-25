@@ -1,12 +1,39 @@
+// src/components/billing/ChangeCycleDialog.tsx
+"use client";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { useState } from 'react';
 
-export const ChangeCycleDialog = ({ isOpen, onOpenChange, currentPlan, onCycleChange }) => {
-  const [selectedCycle, setSelectedCycle] = useState(currentPlan.period);
+interface ChangeCycleDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  currentPlan: {
+    name: string;
+    price: number;
+    period: "month" | "year";
+  };
+  onCycleChange: (cycle: "month" | "year") => void;
+}
+
+export const ChangeCycleDialog = ({
+  isOpen,
+  onOpenChange,
+  currentPlan,
+  onCycleChange,
+}: ChangeCycleDialogProps) => {
+  const [selectedCycle, setSelectedCycle] = useState<"month" | "year">(
+    currentPlan.period
+  );
 
   const annualPrice = currentPlan.price * 12 * 0.9; // 10% discount for annual
 
@@ -17,34 +44,66 @@ export const ChangeCycleDialog = ({ isOpen, onOpenChange, currentPlan, onCycleCh
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="max-w-lg w-[95%] sm:w-full">
         <DialogHeader>
           <DialogTitle>Change Billing Cycle</DialogTitle>
           <DialogDescription>
-            Switch between monthly and annual billing for your {currentPlan.name} plan.
+            Choose between <span className="font-medium">monthly</span> or{" "}
+            <span className="font-medium">annual</span> billing for your{" "}
+            <span className="font-semibold">{currentPlan.name}</span> plan.
           </DialogDescription>
         </DialogHeader>
+
         <div className="py-4">
-          <RadioGroup value={selectedCycle} onValueChange={setSelectedCycle}>
-            <div className="flex items-center space-x-2 p-4 border rounded-lg">
+          <RadioGroup
+            value={selectedCycle}
+            onValueChange={(val: "month" | "year") => setSelectedCycle(val)}
+            className="grid gap-4 sm:grid-cols-2"
+          >
+            {/* Monthly Option */}
+            <div
+              className={`flex items-start space-x-3 p-4 rounded-xl border transition hover:border-primary cursor-pointer ${
+                selectedCycle === "month" ? "border-primary bg-primary/5" : ""
+              }`}
+            >
               <RadioGroupItem value="month" id="month" />
-              <Label htmlFor="month" className="flex-1">
-                <p className="font-bold">Monthly Billing</p>
-                <p className="text-sm text-muted-foreground">${currentPlan.price}/month</p>
+              <Label htmlFor="month" className="flex-1 cursor-pointer">
+                <p className="font-semibold">Monthly Billing</p>
+                <p className="text-sm text-muted-foreground">
+                  ${currentPlan.price}/month
+                </p>
               </Label>
             </div>
-            <div className="flex items-center space-x-2 p-4 border rounded-lg">
+
+            {/* Annual Option */}
+            <div
+              className={`flex items-start space-x-3 p-4 rounded-xl border transition hover:border-primary cursor-pointer ${
+                selectedCycle === "year" ? "border-primary bg-primary/5" : ""
+              }`}
+            >
               <RadioGroupItem value="year" id="year" />
-              <Label htmlFor="year" className="flex-1">
-                <p className="font-bold">Annual Billing</p>
-                <p className="text-sm text-muted-foreground">${annualPrice.toFixed(2)}/year (Save 10%)</p>
+              <Label htmlFor="year" className="flex-1 cursor-pointer">
+                <p className="font-semibold">Annual Billing</p>
+                <p className="text-sm text-muted-foreground">
+                  ${annualPrice.toFixed(2)}/year{" "}
+                  <span className="text-green-600 font-medium">(Save 10%)</span>
+                </p>
               </Label>
             </div>
           </RadioGroup>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-          <Button onClick={handleSave}>Save Changes</Button>
+
+        <DialogFooter className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="w-full sm:w-auto"
+          >
+            Cancel
+          </Button>
+          <Button onClick={handleSave} className="w-full sm:w-auto">
+            Save Changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

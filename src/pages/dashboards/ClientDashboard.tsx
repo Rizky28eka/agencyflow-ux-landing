@@ -55,7 +55,6 @@ const ClientDashboard = () => {
   ];
   return (
     <DashboardLayout
-      role="client"
       title="Client Dashboard"
       description="Project status and communication hub"
       headerIcon={<Briefcase className="h-8 w-8 text-primary" />}

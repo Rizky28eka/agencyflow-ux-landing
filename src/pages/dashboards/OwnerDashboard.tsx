@@ -68,7 +68,6 @@ const OwnerDashboard = () => {
 
   return (
     <DashboardLayout
-      role="owner"
       title="Owner Dashboard"
       description="Complete overview and control"
       headerIcon={<Crown className="h-8 w-8 text-primary" />}
