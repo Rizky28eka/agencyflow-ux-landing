@@ -39,6 +39,7 @@ import AdminSystemSettings from "./pages/dashboards/admin/SystemSettings";
 import AdminAuditLog from "./pages/dashboards/admin/AuditLog";
 import AdminIntegrations from "./pages/dashboards/admin/Integrations";
 import AdminSecurity from "./pages/dashboards/admin/Security";
+import UserDetails from "./pages/dashboards/admin/UserDetails";
 
 // Project Manager Dashboard Pages
 import ProjectManagerProjects from "./pages/dashboards/project-manager/Projects";
@@ -48,6 +49,7 @@ import RiskManagement from "./pages/dashboards/project-manager/RiskManagement";
 import ProjectDetails from "./pages/dashboards/project-manager/ProjectDetails";
 import AllTasks from "./pages/dashboards/project-manager/AllTasks";
 import TimeTrackingReport from "./pages/dashboards/project-manager/TimeTrackingReport";
+import TaskDetails from "./pages/dashboards/project-manager/TaskDetails";
 
 // Team Lead Dashboard Pages
 import TeamLeadApprovals from "./pages/dashboards/team-lead/Approvals";
@@ -59,6 +61,7 @@ import TeamLeadTimeManagement from "./pages/dashboards/team-lead/TimeManagement"
 import TeamLeadPerformance from "./pages/dashboards/team-lead/Performance";
 import TeamLeadMembers from "./pages/dashboards/team-lead/Members";
 import IndividualPerformance from "./pages/dashboards/team-lead/IndividualPerformance";
+import MemberDetails from "./pages/dashboards/team-lead/MemberDetails";
 
 // Member Dashboard Pages
 import MemberTasks from "./pages/dashboards/member/Tasks";
@@ -70,6 +73,7 @@ import MemberSettings from "./pages/dashboards/member/Settings";
 import KnowledgeBase from "./pages/dashboards/member/KnowledgeBase";
 import Article from "./pages/dashboards/member/Article";
 import EditArticle from "./pages/dashboards/member/EditArticle";
+import TaskDetailsPage from "./pages/dashboards/member/TaskDetails";
 
 // Finance Dashboard Pages
 import FinancePayroll from "./pages/dashboards/finance/Payroll";
@@ -85,6 +89,8 @@ import FinanceExpenseClaims from "./pages/dashboards/finance/ExpenseClaims";
 import CreateInvoice from "./pages/dashboards/finance/CreateInvoice";
 import ProfitAndLoss from "./pages/dashboards/finance/ProfitAndLoss";
 import CashFlow from "./pages/dashboards/finance/CashFlow";
+import ExpenseDetails from "./pages/dashboards/finance/ExpenseDetails";
+import PayrollDetails from "./pages/dashboards/finance/PayrollDetails";
 
 // Client Dashboard Pages
 import ClientProjects from "./pages/dashboards/client/Projects";
@@ -138,6 +144,7 @@ const App = () => (
 
           {/* Admin Dashboard Routes */}
           <Route path="/dashboard/admin/users" element={<AdminUsers />} />
+          <Route path="/dashboard/admin/users/:userId" element={<UserDetails />} />
           <Route path="/dashboard/admin/roles" element={<AdminRoles />} />
           <Route path="/dashboard/admin/reports" element={<AdminReports />} />
           <Route path="/dashboard/admin/settings" element={<AdminSystemSettings />} />
@@ -148,6 +155,7 @@ const App = () => (
           {/* Project Manager Dashboard Routes */}
           <Route path="/dashboard/project-manager/projects" element={<ProjectManagerProjects />} />
           <Route path="/dashboard/project-manager/projects/:projectId" element={<ProjectDetails />} />
+          <Route path="/dashboard/project-manager/tasks/:taskId" element={<TaskDetails />} />
           <Route path="/dashboard/project-manager/team" element={<ProjectManagerTeamCoordination />} />
           <Route path="/dashboard/project-manager/resource-management" element={<ResourceManagement />} />
           <Route path="/dashboard/project-manager/risk-management" element={<RiskManagement />} />
@@ -164,9 +172,11 @@ const App = () => (
           <Route path="/dashboard/team-lead/performance" element={<TeamLeadPerformance />} />
           <Route path="/dashboard/team-lead/performance/:memberId" element={<IndividualPerformance />} />
           <Route path="/dashboard/team-lead/members" element={<TeamLeadMembers />} />
+          <Route path="/dashboard/team-lead/members/:memberId" element={<MemberDetails />} />
 
           {/* Member Dashboard Routes */}
           <Route path="/dashboard/member/tasks" element={<MemberTasks />} />
+          <Route path="/dashboard/member/tasks/:taskId" element={<TaskDetailsPage />} />
           <Route path="/dashboard/member/time" element={<MemberTimeTracking />} />
           <Route path="/dashboard/member/submit-report" element={<MemberSubmitReport />} />
           <Route path="/dashboard/member/chat" element={<MemberTeamChat />} />
@@ -175,11 +185,14 @@ const App = () => (
           <Route path="/dashboard/member/kb" element={<KnowledgeBase />} />
           <Route path="/dashboard/member/kb/new" element={<EditArticle />} />
           <Route path="/dashboard/member/kb/:articleId" element={<Article />} />
+          <Route path="/dashboard/member/kb/:articleId/edit" element={<EditArticle />} />
 
           {/* Finance Dashboard Routes */}
           <Route path="/dashboard/finance/payroll" element={<FinancePayroll />} />
+          <Route path="/dashboard/finance/payroll/:employeeId" element={<PayrollDetails />} />
           <Route path="/dashboard/finance/forecasting" element={<FinanceForecasting />} />
           <Route path="/dashboard/finance/expenses" element={<FinanceExpenseManagement />} />
+          <Route path="/dashboard/finance/expenses/:expenseId" element={<ExpenseDetails />} />
           <Route path="/dashboard/finance/revenue" element={<FinanceRevenue />} />
           <Route path="/dashboard/finance/invoicing" element={<FinanceInvoicing />} />
           <Route path="/dashboard/finance/invoicing/new" element={<CreateInvoice />} />

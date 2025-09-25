@@ -7,22 +7,21 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { CheckSquare, User, Calendar, ArrowLeft, Edit, Trash2, MessageSquare, FileText, Paperclip, Users, Clock } from 'lucide-react';
+import { CheckSquare, Clock, User, MessageSquare, Calendar, ArrowLeft, Play, Pause, Square, FileText, Paperclip } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-const TaskDetails = () => {
+const TaskDetailsPage = () => {
   const { taskId } = useParams();
   const navigate = useNavigate();
 
-  const [task, setTask] = useState({
+  const [task] = useState({
     id: taskId || 'TASK-001',
-    name: 'Implement user authentication flow',
-    description: 'Create a complete user authentication system including login, registration, password reset, and email verification functionality. This should integrate with our existing backend API and follow security best practices.',
+    title: 'Implement user authentication flow',
+    description: 'Create a complete user authentication system including login, registration, password reset, and email verification functionality.',
     project: 'Mobile App Development',
     assignee: 'Mike Chen',
     reporter: 'Sarah Johnson',
@@ -34,7 +33,6 @@ const TaskDetails = () => {
     loggedHours: 8.5,
     progress: 53,
     labels: ['Frontend', 'Authentication', 'Security'],
-    watchers: ['Sarah Johnson', 'Emily Davis'],
     attachments: [
       { name: 'auth_flow_diagram.png', size: '2.1 MB', type: 'image' },
       { name: 'requirements.pdf', size: '850 KB', type: 'document' },
@@ -54,27 +52,18 @@ const TaskDetails = () => {
       },
     ],
     subtasks: [
-      { id: 1, name: 'Create login form UI', completed: true, assignee: 'Mike Chen' },
-      { id: 2, name: 'Implement form validation', completed: true, assignee: 'Mike Chen' },
-      { id: 3, name: 'Connect to authentication API', completed: false, assignee: 'Mike Chen' },
-      { id: 4, name: 'Add password reset functionality', completed: false, assignee: 'Mike Chen' },
-      { id: 5, name: 'Write unit tests', completed: false, assignee: 'Alex Rodriguez' },
-    ],
-    dependencies: [
-      { taskId: 'TASK-050', name: 'Setup backend API endpoints', status: 'Completed' },
-      { taskId: 'TASK-051', name: 'Database schema for users', status: 'In Progress' },
+      { name: 'Create login form UI', completed: true },
+      { name: 'Implement form validation', completed: true },
+      { name: 'Connect to authentication API', completed: false },
+      { name: 'Add password reset functionality', completed: false },
+      { name: 'Write unit tests', completed: false },
     ]
   });
 
   const [newComment, setNewComment] = useState('');
-  const [editForm, setEditForm] = useState({
-    name: task.name,
-    description: task.description,
-    assignee: task.assignee,
-    priority: task.priority,
-    dueDate: task.dueDate,
-    estimatedHours: task.estimatedHours,
-  });
+  const [timeEntry, setTimeEntry] = useState('');
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timerTime, setTimerTime] = useState('02:34:15');
 
   const handleAddComment = () => {
     if (newComment.trim()) {
@@ -83,112 +72,62 @@ const TaskDetails = () => {
     }
   };
 
-  const handleUpdateTask = () => {
-    setTask(prev => ({ ...prev, ...editForm }));
-    toast.success('Task updated successfully!');
+  const handleLogTime = () => {
+    if (timeEntry) {
+      toast.success(`${timeEntry} hours logged successfully!`);
+      setTimeEntry('');
+    }
+  };
+
+  const handleTimerToggle = () => {
+    setIsTimerRunning(!isTimerRunning);
+    toast.success(isTimerRunning ? 'Timer paused' : 'Timer started');
   };
 
   const handleStatusChange = (newStatus: string) => {
-    setTask(prev => ({ ...prev, status: newStatus }));
     toast.success(`Task status updated to ${newStatus}`);
-  };
-
-  const handleDeleteTask = () => {
-    toast.success('Task deleted successfully!');
-    navigate('/dashboard/project-manager/tasks');
-  };
-
-  const handleReassignTask = (newAssignee: string) => {
-    setTask(prev => ({ ...prev, assignee: newAssignee }));
-    toast.success(`Task reassigned to ${newAssignee}`);
   };
 
   return (
     <DashboardLayout
-      role="project-manager"
-      title={task.name}
-      description={`Task details for ${task.id} in ${task.project}`}
+      role="member"
+      title={task.title}
+      description={`Task details for ${task.id}`}
       headerIcon={<CheckSquare className="h-8 w-8 text-primary" />}
       headerAction={
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => navigate('/dashboard/project-manager/tasks')}>
+          <Button variant="outline" onClick={() => navigate('/dashboard/member/tasks')}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Tasks
           </Button>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline">
-                <Edit className="mr-2 h-4 w-4" />
-                Edit Task
+                <Clock className="mr-2 h-4 w-4" />
+                Log Time
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent>
               <DialogHeader>
-                <DialogTitle>Edit Task</DialogTitle>
+                <DialogTitle>Log Time for Task</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="task-name">Task Name</Label>
-                    <Input
-                      id="task-name"
-                      value={editForm.name}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="assignee">Assignee</Label>
-                    <Select value={editForm.assignee} onValueChange={(value) => setEditForm(prev => ({ ...prev, assignee: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Mike Chen">Mike Chen</SelectItem>
-                        <SelectItem value="Sarah Johnson">Sarah Johnson</SelectItem>
-                        <SelectItem value="Emily Davis">Emily Davis</SelectItem>
-                        <SelectItem value="Alex Rodriguez">Alex Rodriguez</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="priority">Priority</Label>
-                    <Select value={editForm.priority} onValueChange={(value) => setEditForm(prev => ({ ...prev, priority: value }))}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Low">Low</SelectItem>
-                        <SelectItem value="Medium">Medium</SelectItem>
-                        <SelectItem value="High">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="due-date">Due Date</Label>
-                    <Input
-                      id="due-date"
-                      type="date"
-                      value={editForm.dueDate}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, dueDate: e.target.value }))}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="estimated-hours">Estimated Hours</Label>
-                    <Input
-                      id="estimated-hours"
-                      type="number"
-                      value={editForm.estimatedHours}
-                      onChange={(e) => setEditForm(prev => ({ ...prev, estimatedHours: parseInt(e.target.value) }))}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="hours">Hours Worked</Label>
+                  <Input
+                    id="hours"
+                    type="number"
+                    step="0.5"
+                    placeholder="e.g., 2.5"
+                    value={timeEntry}
+                    onChange={(e) => setTimeEntry(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="work-description">Work Description</Label>
                   <Textarea
-                    id="description"
-                    value={editForm.description}
-                    onChange={(e) => setEditForm(prev => ({ ...prev, description: e.target.value }))}
-                    rows={4}
+                    id="work-description"
+                    placeholder="Describe what you worked on..."
                   />
                 </div>
               </div>
@@ -197,15 +136,11 @@ const TaskDetails = () => {
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button onClick={handleUpdateTask}>Save Changes</Button>
+                  <Button onClick={handleLogTime}>Log Time</Button>
                 </DialogClose>
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button variant="destructive" onClick={handleDeleteTask}>
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete
-          </Button>
         </div>
       }
     >
@@ -217,13 +152,13 @@ const TaskDetails = () => {
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <CardTitle className="text-2xl">{task.name}</CardTitle>
+                  <CardTitle className="text-2xl">{task.title}</CardTitle>
                   <div className="flex items-center space-x-2">
                     <Badge variant="outline">{task.project}</Badge>
-                    <Badge variant={task.priority === 'High' ? 'destructive' : task.priority === 'Medium' ? 'secondary' : 'outline'}>
+                    <Badge variant={task.priority === 'High' ? 'destructive' : 'secondary'}>
                       {task.priority} Priority
                     </Badge>
-                    <Badge variant={task.status === 'In Progress' ? 'default' : task.status === 'Completed' ? 'secondary' : 'outline'}>
+                    <Badge variant={task.status === 'In Progress' ? 'default' : 'outline'}>
                       {task.status}
                     </Badge>
                   </div>
@@ -246,9 +181,9 @@ const TaskDetails = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleStatusChange('Completed')}
+                    onClick={() => handleStatusChange('Done')}
                   >
-                    Complete
+                    Done
                   </Button>
                 </div>
               </div>
@@ -311,76 +246,27 @@ const TaskDetails = () => {
                   ))}
                 </div>
               </div>
-
-              {/* Watchers */}
-              <div>
-                <h4 className="font-semibold mb-2">Watchers</h4>
-                <div className="flex space-x-2">
-                  {task.watchers.map((watcher, index) => (
-                    <div key={index} className="flex items-center space-x-2 bg-muted/50 rounded-lg px-3 py-1">
-                      <User className="h-3 w-3" />
-                      <span className="text-sm">{watcher}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Dependencies */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Dependencies</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {task.dependencies.map((dep, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div>
-                      <p className="font-medium text-sm">{dep.name}</p>
-                      <p className="text-xs text-muted-foreground">Task ID: {dep.taskId}</p>
-                    </div>
-                    <Badge variant={dep.status === 'Completed' ? 'secondary' : 'default'}>
-                      {dep.status}
-                    </Badge>
-                  </div>
-                ))}
-              </div>
             </CardContent>
           </Card>
 
           {/* Subtasks */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Subtasks</CardTitle>
-                <Button size="sm" variant="outline">
-                  <CheckSquare className="mr-2 h-4 w-4" />
-                  Add Subtask
-                </Button>
-              </div>
+              <CardTitle>Subtasks</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 {task.subtasks.map((subtask, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        checked={subtask.completed}
-                        onChange={() => toast.success('Subtask updated!')}
-                        className="rounded"
-                      />
-                      <div>
-                        <span className={subtask.completed ? 'line-through text-muted-foreground' : ''}>
-                          {subtask.name}
-                        </span>
-                        <p className="text-xs text-muted-foreground">Assigned to: {subtask.assignee}</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm">
-                      <Edit className="h-4 w-4" />
-                    </Button>
+                  <div key={index} className="flex items-center space-x-3 p-3 bg-muted/50 rounded-lg">
+                    <input
+                      type="checkbox"
+                      checked={subtask.completed}
+                      onChange={() => toast.success('Subtask updated!')}
+                      className="rounded"
+                    />
+                    <span className={subtask.completed ? 'line-through text-muted-foreground' : ''}>
+                      {subtask.name}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -392,7 +278,7 @@ const TaskDetails = () => {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <MessageSquare className="mr-2 h-5 w-5" />
-                Comments & Activity
+                Comments
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -439,59 +325,31 @@ const TaskDetails = () => {
 
         {/* Sidebar */}
         <div className="lg:col-span-1 space-y-6">
-          {/* Task Actions */}
+          {/* Timer */}
           <Card>
             <CardHeader>
-              <CardTitle>Actions</CardTitle>
+              <CardTitle className="flex items-center">
+                <Clock className="mr-2 h-5 w-5" />
+                Time Tracker
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Users className="mr-2 h-4 w-4" />
-                    Reassign Task
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Reassign Task</DialogTitle>
-                  </DialogHeader>
-                  <div className="py-4">
-                    <Label>New Assignee</Label>
-                    <Select onValueChange={handleReassignTask}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select team member..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Mike Chen">Mike Chen</SelectItem>
-                        <SelectItem value="Sarah Johnson">Sarah Johnson</SelectItem>
-                        <SelectItem value="Emily Davis">Emily Davis</SelectItem>
-                        <SelectItem value="Alex Rodriguez">Alex Rodriguez</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                      <Button>Reassign</Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Calendar className="mr-2 h-4 w-4" />
-                Change Due Date
-              </Button>
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <CheckSquare className="mr-2 h-4 w-4" />
-                Create Subtask
-              </Button>
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <FileText className="mr-2 h-4 w-4" />
-                Clone Task
-              </Button>
+            <CardContent className="space-y-4">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">{timerTime}</div>
+                <p className="text-sm text-muted-foreground">Active timer</p>
+              </div>
+              <div className="flex justify-center space-x-2">
+                <Button
+                  size="sm"
+                  variant={isTimerRunning ? "outline" : "default"}
+                  onClick={handleTimerToggle}
+                >
+                  {isTimerRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                </Button>
+                <Button size="sm" variant="outline">
+                  <Square className="h-4 w-4" />
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
@@ -521,10 +379,6 @@ const TaskDetails = () => {
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Logged:</span>
                   <span className="font-medium">{task.loggedHours}h</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Remaining:</span>
-                  <span className="font-medium">{task.estimatedHours - task.loggedHours}h</span>
                 </div>
               </div>
             </CardContent>
@@ -561,10 +415,31 @@ const TaskDetails = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Quick Actions */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Quick Actions</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <Button variant="outline" size="sm" className="w-full justify-start">
+                <User className="mr-2 h-4 w-4" />
+                Assign to Someone Else
+              </Button>
+              <Button variant="outline" size="sm" className="w-full justify-start">
+                <Calendar className="mr-2 h-4 w-4" />
+                Change Due Date
+              </Button>
+              <Button variant="outline" size="sm" className="w-full justify-start">
+                <CheckSquare className="mr-2 h-4 w-4" />
+                Create Subtask
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </DashboardLayout>
   );
 };
 
-export default TaskDetails;
+export default TaskDetailsPage;

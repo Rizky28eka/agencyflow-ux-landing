@@ -16,6 +16,8 @@ export const rolePermissions: Record<Role, Permission[]> = {
     { resource: 'billing', actions: ['read', 'write'] },
     { resource: 'goals', actions: ['read', 'write', 'delete'] },
     { resource: 'reports', actions: ['read', 'write'] },
+    { resource: 'clients', actions: ['read', 'write', 'delete'] },
+    { resource: 'crm', actions: ['read', 'write', 'delete'] },
   ],
   ADMIN: [
     { resource: 'users', actions: ['read', 'write', 'delete'] },
@@ -50,6 +52,7 @@ export const rolePermissions: Record<Role, Permission[]> = {
     { resource: 'schedule', actions: ['read'] },
     { resource: 'chat', actions: ['read', 'write'] },
     { resource: 'reports', actions: ['write'] },
+    { resource: 'knowledge', actions: ['read', 'write'] },
   ],
   FINANCE: [
     { resource: 'finance', actions: ['read', 'write'] },
@@ -60,6 +63,8 @@ export const rolePermissions: Record<Role, Permission[]> = {
     { resource: 'tax', actions: ['read', 'write'] },
     { resource: 'reports', actions: ['read', 'write'] },
     { resource: 'forecasting', actions: ['read', 'write'] },
+    { resource: 'revenue', actions: ['read', 'write'] },
+    { resource: 'claims', actions: ['read', 'write'] },
   ],
   CLIENT: [
     { resource: 'projects', actions: ['read'] },
@@ -89,6 +94,8 @@ export const canAccessRoute = (role: Role, route: string): boolean => {
     '/dashboard/owner/billing': { resource: 'billing', action: 'read' },
     '/dashboard/owner/goals': { resource: 'goals', action: 'read' },
     '/dashboard/owner/reports': { resource: 'reports', action: 'read' },
+    '/dashboard/owner/clients': { resource: 'clients', action: 'read' },
+    '/dashboard/owner/crm': { resource: 'crm', action: 'read' },
     
     // Admin routes
     '/dashboard/admin': { resource: 'users', action: 'read' },
@@ -97,6 +104,7 @@ export const canAccessRoute = (role: Role, route: string): boolean => {
     '/dashboard/admin/settings': { resource: 'system', action: 'read' },
     '/dashboard/admin/audit-log': { resource: 'audit', action: 'read' },
     '/dashboard/admin/integrations': { resource: 'integrations', action: 'read' },
+    '/dashboard/admin/security': { resource: 'security', action: 'read' },
     
     // Project Manager routes
     '/dashboard/project-manager': { resource: 'projects', action: 'read' },
@@ -126,6 +134,7 @@ export const canAccessRoute = (role: Role, route: string): boolean => {
     '/dashboard/member/schedule': { resource: 'schedule', action: 'read' },
     '/dashboard/member/chat': { resource: 'chat', action: 'read' },
     '/dashboard/member/submit-report': { resource: 'reports', action: 'write' },
+    '/dashboard/member/kb': { resource: 'knowledge', action: 'read' },
     
     // Finance routes
     '/dashboard/finance': { resource: 'finance', action: 'read' },
@@ -138,6 +147,8 @@ export const canAccessRoute = (role: Role, route: string): boolean => {
     '/dashboard/finance/forecasting': { resource: 'forecasting', action: 'read' },
     '/dashboard/finance/revenue': { resource: 'finance', action: 'read' },
     '/dashboard/finance/claims': { resource: 'expenses', action: 'read' },
+    '/dashboard/finance/pnl': { resource: 'finance', action: 'read' },
+    '/dashboard/finance/cash-flow': { resource: 'finance', action: 'read' },
     
     // Client routes
     '/dashboard/client': { resource: 'projects', action: 'read' },

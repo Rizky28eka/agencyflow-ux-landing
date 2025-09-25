@@ -5,6 +5,7 @@ import { CheckSquare, Calendar, Flag, Plus, Filter, MoreHorizontal } from 'lucid
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Link } from 'react-router-dom';
 
 const MemberTasks = () => {
   // Mock data is now grouped by status for Kanban board
@@ -60,7 +61,9 @@ const MemberTasks = () => {
                   <Card key={task.id} className="bg-background">
                     <CardContent className="p-4 space-y-3">
                       <div className="flex justify-between items-start">
-                        <p className="font-semibold leading-tight">{task.title}</p>
+                        <Link to={`/dashboard/member/tasks/${task.id}`} className="font-semibold leading-tight hover:text-primary">
+                          {task.title}
+                        </Link>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-6 w-6 flex-shrink-0">
@@ -68,7 +71,9 @@ const MemberTasks = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent>
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <Link to={`/dashboard/member/tasks/${task.id}`}>View Details</Link>
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Add Comment</DropdownMenuItem>
                             <DropdownMenuItem>Attach File</DropdownMenuItem>
                             <DropdownMenuItem>Move to To Do</DropdownMenuItem>

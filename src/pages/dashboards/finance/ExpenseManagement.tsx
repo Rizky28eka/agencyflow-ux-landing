@@ -7,13 +7,14 @@ import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Receipt, Plus, Filter, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Link } from 'react-router-dom';
 
 const FinanceExpenseManagement = () => {
   const expenses = [
-    { id: 'EXP-001', date: '2024-01-22', category: 'Software', description: 'Figma Subscription (Annual)', amount: 540, status: 'Paid' },
-    { id: 'EXP-002', date: '2024-01-20', category: 'Marketing', description: 'Google Ads Campaign', amount: 1200, status: 'Paid' },
-    { id: 'EXP-003', date: '2024-01-18', category: 'Travel', description: 'Flight for Client Meeting', amount: 850, status: 'Reimbursed' },
-    { id: 'EXP-004', date: '2024-01-15', category: 'Office Supplies', description: 'New Monitors & Keyboards', amount: 2500, status: 'Paid' },
+    { id: 'EXP-001', date: '2024-01-22', category: 'Software', description: 'Figma Subscription (Annual)', amount: 540, status: 'Approved' },
+    { id: 'EXP-002', date: '2024-01-20', category: 'Marketing', description: 'Google Ads Campaign', amount: 1200, status: 'Approved' },
+    { id: 'EXP-003', date: '2024-01-18', category: 'Travel', description: 'Flight for Client Meeting', amount: 850, status: 'Approved' },
+    { id: 'EXP-004', date: '2024-01-15', category: 'Office Supplies', description: 'New Monitors & Keyboards', amount: 2500, status: 'Approved' },
     { id: 'EXP-005', date: '2024-01-25', category: 'Travel', description: 'Mike C. - Taxi for meeting', amount: 45, status: 'Pending' },
   ];
 
@@ -64,13 +65,13 @@ const FinanceExpenseManagement = () => {
                     </TableHeader>
                     <TableBody>
                         {expenses.map(exp => (
-                            <TableRow key={exp.id}>
+                            <TableRow key={exp.id} className="cursor-pointer hover:bg-muted/50" onClick={() => window.location.href = `/dashboard/finance/expenses/${exp.id}`}>
                                 <TableCell>{exp.date}</TableCell>
                                 <TableCell><Badge variant="outline">{exp.category}</Badge></TableCell>
                                 <TableCell className="font-medium">{exp.description}</TableCell>
-                                <TableCell><Badge variant={exp.status === 'Paid' || exp.status === 'Reimbursed' ? 'secondary' : 'default'}>{exp.status}</Badge></TableCell>
+                                <TableCell><Badge variant={exp.status === 'Approved' ? 'secondary' : 'default'}>{exp.status}</Badge></TableCell>
                                 <TableCell className="text-right font-bold">${exp.amount.toLocaleString()}</TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                                     {exp.status === 'Pending' ? (
                                         <div className="flex gap-2 justify-end">
                                             <Button size="sm" variant="outline">Reject</Button>
@@ -80,7 +81,9 @@ const FinanceExpenseManagement = () => {
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                <DropdownMenuItem>View Details</DropdownMenuItem>
+                                                <DropdownMenuItem asChild>
+                                                  <Link to={`/dashboard/finance/expenses/${exp.id}`}>View Details</Link>
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem>Edit</DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

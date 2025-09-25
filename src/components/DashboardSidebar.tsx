@@ -6,8 +6,7 @@ import {
   Shield, UserCheck, Calendar, CheckSquare, Clock, Star, Target, Plus,
   FileText, PieChart, CreditCard, Receipt, Calculator, Briefcase,
   Home, LogOut, User, Bell, List, Share2, AlertTriangle, Banknote, MessageSquare, BrainCircuit,
-  Trophy,
-  Award
+  Trophy, Award, Book, Handshake
 } from 'lucide-react';
 import {
   Sidebar,
@@ -36,13 +35,14 @@ const roleNavigation = {
     { title: 'Dashboard', url: '/dashboard/owner', icon: Home },
     { title: 'Analytics', url: '/dashboard/owner/analytics', icon: BarChart3 },
     { title: 'Team', url: '/dashboard/owner/team', icon: Users },
+    { title: 'Clients', url: '/dashboard/owner/clients', icon: Handshake },
+    { title: 'CRM', url: '/dashboard/owner/crm', icon: Users },
     { title: 'Finance', url: '/dashboard/owner/finance', icon: DollarSign },
     { title: 'Goal Tracking', url: '/dashboard/owner/goals', icon: Target },
     { title: 'Billing & Plan', url: '/billing', icon: CreditCard },
     { title: 'Settings', url: '/dashboard/owner/settings', icon: Settings },
     { title: 'Advanced Reports', url: '/dashboard/owner/reports', icon: FileText },
     { title: 'AI Insights', url: '/dashboard/owner/ai-insights', icon: BrainCircuit },
-    { title: 'Leaderboard', url: '/dashboard/owner/leaderboard', icon: Trophy },
   ],
   admin: [
     { title: 'Dashboard', url: '/dashboard/admin', icon: Home },
@@ -51,6 +51,7 @@ const roleNavigation = {
     { title: 'Reports', url: '/dashboard/admin/reports', icon: FileText },
     { title: 'Audit Log', url: '/dashboard/admin/audit-log', icon: List },
     { title: 'Integrations', url: '/dashboard/admin/integrations', icon: Share2 },
+    { title: 'Security', url: '/dashboard/admin/security', icon: Shield },
     { title: 'Settings', url: '/dashboard/admin/settings', icon: Settings },
   ],
   'project-manager': [
@@ -69,7 +70,7 @@ const roleNavigation = {
     { title: 'Schedule', url: '/dashboard/member/schedule', icon: Calendar },
     { title: 'Submit Report', url: '/dashboard/member/submit-report', icon: FileText },
     { title: 'Team Chat', url: '/dashboard/member/chat', icon: MessageSquare },
-    { title: 'Achievements', url: '/dashboard/member/achievements', icon: Award },
+    { title: 'Knowledge Base', url: '/dashboard/member/kb', icon: Book },
     { title: 'Settings', url: '/dashboard/member/settings', icon: Settings },
   ],
   'team-lead': [
@@ -94,6 +95,8 @@ const roleNavigation = {
     { title: 'Forecasting', url: '/dashboard/finance/forecasting', icon: BrainCircuit },
     { title: 'Budget Planning', url: '/dashboard/finance/budget', icon: Calculator },
     { title: 'Tax Calculations', url: '/dashboard/finance/tax', icon: Calculator },
+    { title: 'P&L Statement', url: '/dashboard/finance/pnl', icon: BarChart3 },
+    { title: 'Cash Flow', url: '/dashboard/finance/cash-flow', icon: TrendingUp },
   ],
   client: [
     { title: 'Dashboard', url: '/dashboard/client', icon: Home },
@@ -268,6 +271,21 @@ const getResourceFromUrl = (url: string): string => {
   if (url.includes('/submit-report')) return 'reports';
   if (url.includes('/chat')) return 'chat';
   if (url.includes('/ai-insights')) return 'ai-insights';
+  if (url.includes('/clients')) return 'clients';
+  if (url.includes('/crm')) return 'crm';
+  if (url.includes('/kb')) return 'knowledge';
+  if (url.includes('/security')) return 'security';
+  if (url.includes('/integrations')) return 'integrations';
+  if (url.includes('/payroll')) return 'payroll';
+  if (url.includes('/expenses')) return 'expenses';
+  if (url.includes('/invoicing')) return 'invoicing';
+  if (url.includes('/budget')) return 'budget';
+  if (url.includes('/tax')) return 'tax';
+  if (url.includes('/forecasting')) return 'forecasting';
+  if (url.includes('/revenue')) return 'revenue';
+  if (url.includes('/claims')) return 'claims';
+  if (url.includes('/pnl')) return 'finance';
+  if (url.includes('/cash-flow')) return 'finance';
   
   return 'dashboard'; // Default resource
 };

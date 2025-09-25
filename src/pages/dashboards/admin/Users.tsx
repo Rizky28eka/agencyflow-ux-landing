@@ -7,13 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Users, UserPlus, Shield, Edit, Trash2, MoreHorizontal, Eye } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Link } from 'react-router-dom';
 
 const AdminUsers = () => {
   const users = [
-    { name: 'John Smith', email: 'john@agency.com', role: 'Owner', status: 'Active', lastLogin: '2 hours ago' },
-    { name: 'Sarah Johnson', email: 'sarah@agency.com', role: 'Project Manager', status: 'Active', lastLogin: '1 day ago' },
-    { name: 'Mike Chen', email: 'mike@agency.com', role: 'Designer', status: 'Active', lastLogin: '3 hours ago' },
-    { name: 'Emily Davis', email: 'emily@agency.com', role: 'Developer', status: 'Inactive', lastLogin: '1 week ago' },
+    { id: 'user-001', name: 'John Smith', email: 'john@agency.com', role: 'Owner', status: 'Active', lastLogin: '2 hours ago' },
+    { id: 'user-002', name: 'Sarah Johnson', email: 'sarah@agency.com', role: 'Project Manager', status: 'Active', lastLogin: '1 day ago' },
+    { id: 'user-003', name: 'Mike Chen', email: 'mike@agency.com', role: 'Designer', status: 'Active', lastLogin: '3 hours ago' },
+    { id: 'user-004', name: 'Emily Davis', email: 'emily@agency.com', role: 'Developer', status: 'Inactive', lastLogin: '1 week ago' },
   ];
 
   return (
@@ -132,6 +133,12 @@ const AdminUsers = () => {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                       <DropdownMenuContent>
+                        <DropdownMenuItem asChild>
+                          <Link to={`/dashboard/admin/users/${user.id}`}>
+                            <Eye className="mr-2 h-4 w-4"/>
+                            View Details
+                          </Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem><Edit className="mr-2 h-4 w-4"/> Edit User</DropdownMenuItem>
                         <DropdownMenuItem><Eye className="mr-2 h-4 w-4"/> Impersonate</DropdownMenuItem>
                         <DropdownMenuItem className="text-red-500"><Trash2 className="mr-2 h-4 w-4"/> Delete User</DropdownMenuItem>

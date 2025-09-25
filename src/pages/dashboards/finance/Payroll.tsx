@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Download, Upload, DollarSign, Banknote, MoreHorizontal } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { Link } from 'react-router-dom';
 
 const FinancePayroll = () => {
   const payrollData = [
@@ -79,16 +80,19 @@ const FinancePayroll = () => {
                     </TableHeader>
                     <TableBody>
                         {payrollData.map(p => (
-                            <TableRow key={p.id}>
+                            <TableRow key={p.id} className="cursor-pointer hover:bg-muted/50" onClick={() => window.location.href = `/dashboard/finance/payroll/${p.id}`}>
                                 <TableCell className="font-medium">{p.name}</TableCell>
                                 <TableCell className="text-muted-foreground">{p.role}</TableCell>
                                 <TableCell>${p.salary.toLocaleString()}</TableCell>
                                 <TableCell><Badge variant={p.status === 'Paid' ? 'secondary' : 'default'}>{p.status}</Badge></TableCell>
                                 <TableCell>{p.payDate}</TableCell>
-                                <TableCell className="text-right">
+                                <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
                                         <DropdownMenuContent>
+                                            <DropdownMenuItem asChild>
+                                              <Link to={`/dashboard/finance/payroll/${p.id}`}>View Details</Link>
+                                            </DropdownMenuItem>
                                             <DropdownMenuItem>Edit Employee</DropdownMenuItem>
                                             <DropdownMenuItem>View Payslip</DropdownMenuItem>
                                         </DropdownMenuContent>

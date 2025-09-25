@@ -316,7 +316,7 @@ const AllTasks = () => {
                             </DialogContent>
                         </Dialog>
                         <DropdownMenuItem asChild>
-                            <Link to={`/dashboard/project-manager/tasks/${task.id}`}>View Details</Link>
+                          <Link to={`/dashboard/project-manager/tasks/${task.id}`}>View Details</Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
