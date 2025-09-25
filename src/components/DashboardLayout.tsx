@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { getRoleDisplayName, hasPermission } from '@/lib/rolePermissions';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { DashboardSidebar } from './DashboardSidebar';
+import { BreadcrumbNav } from './layout/BreadcrumbNav';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Shield } from 'lucide-react';
 
@@ -62,6 +63,7 @@ export function DashboardLayout({
           {/* Main Content */}
           <main className="flex-1 p-3 sm:p-4 md:p-6 lg:p-8">
             <div className="w-full max-w-full">
+              <BreadcrumbNav />
               {children}
             </div>
           </main>

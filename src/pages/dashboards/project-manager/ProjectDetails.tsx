@@ -10,17 +10,44 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 const ProjectDetails = () => {
-  // Mock data for a single project. In a real app, this would be fetched based on URL param.
-  const project = {
-    name: 'Website Redesign',
-    client: 'TechCorp',
-    description: 'A complete overhaul of the TechCorp corporate website to improve user experience, modernize the design, and migrate to a new CMS. Key objectives include improving lead generation by 20% and reducing bounce rate by 30%.',
-    status: 'In Progress',
-    progress: 75,
-    deadline: '2024-02-15',
-    budget: 50000,
-    spent: 35000,
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+
+  // Mock data based on projectId
+  const projectData = {
+    '1': {
+      name: 'Website Redesign',
+      client: 'TechCorp',
+      description: 'A complete overhaul of the TechCorp corporate website to improve user experience, modernize the design, and migrate to a new CMS.',
+      status: 'In Progress',
+      progress: 75,
+      deadline: '2024-02-15',
+      budget: 50000,
+      spent: 35000,
+    },
+    '2': {
+      name: 'Mobile App Development',
+      client: 'StartupXYZ',
+      description: 'Native mobile application development for iOS and Android platforms with user authentication and real-time features.',
+      status: 'Planning',
+      progress: 25,
+      deadline: '2024-03-20',
+      budget: 75000,
+      spent: 18750,
+    },
+    '3': {
+      name: 'Brand Identity Package',
+      client: 'RetailCo',
+      description: 'Complete brand identity development including logo design, brand guidelines, and marketing materials.',
+      status: 'Review',
+      progress: 90,
+      deadline: '2024-01-30',
+      budget: 25000,
+      spent: 22500,
+    }
   };
+
+  const project = projectData[projectId as keyof typeof projectData] || projectData['1'];
 
   const tasks = [
     { id: 'TASK-101', name: 'Design new homepage mockups', assignee: 'Sarah J.', status: 'Completed', dueDate: '2024-01-15' },
@@ -45,11 +72,15 @@ const ProjectDetails = () => {
   return (
     <DashboardLayout
       role="project-manager"
-      title={project.name}
-      description={`Details for project with ${project.client}`}
+      title={`${project.name} - ${project.client}`}
+      description={project.description}
       headerIcon={<Target className="h-8 w-8 text-primary" />}
       headerAction={
         <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={() => navigate('/dashboard/project-manager/projects')}>
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Projects
+            </Button>
             <Button variant="outline"><Share2 className="mr-2 h-4 w-4"/> Share</Button>
             <Button><Edit className="mr-2 h-4 w-4" /> Edit Project</Button>
         </div>

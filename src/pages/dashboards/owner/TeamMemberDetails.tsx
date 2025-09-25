@@ -10,25 +10,55 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Mail, Phone, Edit, Trash2, Award, Briefcase, Users } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 const TeamMemberDetails = () => {
+  const { memberId } = useParams();
+  const navigate = useNavigate();
+
+  // Mock data based on memberId
+  const memberData = {
+    '1': {
+      name: 'Sarah Johnson',
+      role: 'Project Manager',
+      email: 'sarah@agency.com',
+      phone: '+1 (555) 987-6543',
+      avatar: '/placeholder.svg',
+      status: 'Active',
+      joinDate: 'January 15, 2022',
+      performance: 95,
+      department: 'Operations',
+      projects: [
+        { name: 'Website Redesign', status: 'On Track' },
+        { name: 'Mobile App', status: 'Completed' },
+        { name: 'Brand Identity', status: 'At Risk' },
+      ],
+      tasksCompleted: 128,
+      tasksPending: 12,
+    },
+    '2': {
+      name: 'Mike Chen',
+      role: 'Lead Designer',
+      email: 'mike@agency.com',
+      phone: '+1 (555) 123-4567',
+      avatar: '/placeholder.svg',
+      status: 'Active',
+      joinDate: 'March 10, 2022',
+      performance: 88,
+      department: 'Design',
+      projects: [
+        { name: 'Brand Identity', status: 'On Track' },
+        { name: 'E-commerce Platform', status: 'Completed' },
+      ],
+      tasksCompleted: 95,
+      tasksPending: 8,
+    }
+  };
+
   const [member, setMember] = useState({
-    name: 'Sarah Johnson',
-    role: 'Project Manager',
-    email: 'sarah@agency.com',
-    phone: '+1 (555) 987-6543',
-    avatar: '/placeholder.svg',
-    status: 'Active',
-    joinDate: 'January 15, 2022',
-    performance: 85,
-    projects: [
-      { name: 'Project Alpha', status: 'On Track' },
-      { name: 'Project Beta', status: 'Completed' },
-      { name: 'Project Gamma', status: 'At Risk' },
-    ],
-    tasksCompleted: 128,
-    tasksPending: 12,
+    id: memberId || '1',
+    ...(memberData[memberId as keyof typeof memberData] || memberData['1'])
   });
 
   const [formData, setFormData] = useState({
@@ -60,9 +90,15 @@ const TeamMemberDetails = () => {
   return (
     <DashboardLayout
       role="owner"
-      title="Team Member Details"
+      title={`Team Member: ${member.name}`}
       description={`Profile for ${member.name}`}
       headerIcon={<Users className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button variant="outline" onClick={() => navigate('/dashboard/owner/team')}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Team
+        </Button>
+      }
     >
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-6">

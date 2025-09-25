@@ -17,47 +17,96 @@ const PayrollDetails = () => {
   const { employeeId } = useParams();
   const navigate = useNavigate();
 
-  const [employee] = useState({
-    id: employeeId || 'EMP-001',
-    name: 'Sarah Johnson',
-    role: 'Project Manager',
-    email: 'sarah@agency.com',
-    avatar: '/placeholder.svg',
-    employeeId: 'EMP-001',
-    department: 'Operations',
-    hireDate: '2023-03-15',
-    payrollInfo: {
-      baseSalary: 7500,
-      overtime: 450,
-      bonus: 1000,
-      deductions: {
-        taxes: 1890,
-        insurance: 250,
-        retirement: 375,
+  // Mock data based on employeeId
+  const employeeData = {
+    'EMP-001': {
+      id: 'EMP-001',
+      name: 'Sarah Johnson',
+      role: 'Project Manager',
+      email: 'sarah@agency.com',
+      avatar: '/placeholder.svg',
+      employeeId: 'EMP-001',
+      department: 'Operations',
+      hireDate: '2023-03-15',
+      payrollInfo: {
+        baseSalary: 7500,
+        overtime: 450,
+        bonus: 1000,
+        deductions: {
+          taxes: 1890,
+          insurance: 250,
+          retirement: 375,
+        },
+        netPay: 6435,
+        payPeriod: 'January 1-31, 2024',
+        payDate: '2024-01-31',
+        status: 'Processed',
       },
-      netPay: 6435,
-      payPeriod: 'January 1-31, 2024',
-      payDate: '2024-01-31',
-      status: 'Processed',
+      timeTracking: {
+        regularHours: 160,
+        overtimeHours: 9,
+        totalHours: 169,
+        hourlyRate: 46.88,
+      },
+      benefits: [
+        { name: 'Health Insurance', amount: 150, type: 'Deduction' },
+        { name: 'Dental Insurance', amount: 50, type: 'Deduction' },
+        { name: 'Vision Insurance', amount: 25, type: 'Deduction' },
+        { name: 'Life Insurance', amount: 25, type: 'Deduction' },
+        { name: '401(k) Contribution', amount: 375, type: 'Deduction' },
+      ],
+      payHistory: [
+        { period: 'December 2023', grossPay: 8200, netPay: 6150, status: 'Paid' },
+        { period: 'November 2023', grossPay: 7950, netPay: 5985, status: 'Paid' },
+        { period: 'October 2023', grossPay: 7500, netPay: 5625, status: 'Paid' },
+      ]
     },
-    timeTracking: {
-      regularHours: 160,
-      overtimeHours: 9,
-      totalHours: 169,
-      hourlyRate: 46.88,
-    },
-    benefits: [
-      { name: 'Health Insurance', amount: 150, type: 'Deduction' },
-      { name: 'Dental Insurance', amount: 50, type: 'Deduction' },
-      { name: 'Vision Insurance', amount: 25, type: 'Deduction' },
-      { name: 'Life Insurance', amount: 25, type: 'Deduction' },
-      { name: '401(k) Contribution', amount: 375, type: 'Deduction' },
-    ],
-    payHistory: [
-      { period: 'December 2023', grossPay: 8200, netPay: 6150, status: 'Paid' },
-      { period: 'November 2023', grossPay: 7950, netPay: 5985, status: 'Paid' },
-      { period: 'October 2023', grossPay: 7500, netPay: 5625, status: 'Paid' },
-    ]
+    'EMP-002': {
+      id: 'EMP-002',
+      name: 'Mike Chen',
+      role: 'Lead Designer',
+      email: 'mike@agency.com',
+      avatar: '/placeholder.svg',
+      employeeId: 'EMP-002',
+      department: 'Design',
+      hireDate: '2023-06-20',
+      payrollInfo: {
+        baseSalary: 6800,
+        overtime: 0,
+        bonus: 500,
+        deductions: {
+          taxes: 1460,
+          insurance: 250,
+          retirement: 340,
+        },
+        netPay: 5750,
+        payPeriod: 'January 1-31, 2024',
+        payDate: '2024-01-31',
+        status: 'Processed',
+      },
+      timeTracking: {
+        regularHours: 160,
+        overtimeHours: 0,
+        totalHours: 160,
+        hourlyRate: 42.50,
+      },
+      benefits: [
+        { name: 'Health Insurance', amount: 150, type: 'Deduction' },
+        { name: 'Dental Insurance', amount: 50, type: 'Deduction' },
+        { name: 'Vision Insurance', amount: 25, type: 'Deduction' },
+        { name: 'Life Insurance', amount: 25, type: 'Deduction' },
+        { name: '401(k) Contribution', amount: 340, type: 'Deduction' },
+      ],
+      payHistory: [
+        { period: 'December 2023', grossPay: 7300, netPay: 5475, status: 'Paid' },
+        { period: 'November 2023', grossPay: 6800, netPay: 5100, status: 'Paid' },
+        { period: 'October 2023', grossPay: 6800, netPay: 5100, status: 'Paid' },
+      ]
+    }
+  };
+
+  const [employee] = useState({
+    ...(employeeData[employeeId as keyof typeof employeeData] || employeeData['EMP-001'])
   });
 
   const [editSalary, setEditSalary] = useState(employee.payrollInfo.baseSalary);
@@ -334,3 +383,4 @@ const PayrollDetails = () => {
 };
 
 export default PayrollDetails;
+    },

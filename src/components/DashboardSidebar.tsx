@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { hasPermission, getRoleDisplayName } from '@/lib/rolePermissions';
 import { 
-  Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap,
+  Crown, Users, DollarSign, TrendingUp, Settings, BarChart3, Building, Zap, ArrowLeft,
   Shield, UserCheck, Calendar, CheckSquare, Clock, Star, Target, Plus,
   FileText, PieChart, CreditCard, Receipt, Calculator, Briefcase,
   Home, LogOut, User, Bell, List, Share2, AlertTriangle, Banknote, MessageSquare, BrainCircuit,
@@ -234,6 +234,15 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
 
       <SidebarFooter className="border-t">
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              onClick={() => navigate('/')}
+              tooltip={state === 'collapsed' ? 'Back to Home' : undefined}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to Home</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton
               onClick={handleLogout}

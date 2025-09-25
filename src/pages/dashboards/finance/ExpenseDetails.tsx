@@ -17,24 +17,50 @@ const ExpenseDetails = () => {
   const { expenseId } = useParams();
   const navigate = useNavigate();
 
+  // Mock data based on expenseId
+  const expenseData = {
+    'EXP-001': {
+      id: 'EXP-001',
+      date: '2024-01-22',
+      category: 'Software',
+      description: 'Figma Subscription (Annual)',
+      amount: 540,
+      status: 'Approved',
+      submittedBy: 'Mike Chen',
+      submittedDate: '2024-01-22',
+      approvedBy: 'Finance Manager',
+      approvedDate: '2024-01-23',
+      paymentMethod: 'Company Credit Card',
+      vendor: 'Figma Inc.',
+      receiptUrl: '/placeholder-receipt.pdf',
+      notes: 'Annual subscription for design team. Includes advanced features and team collaboration tools.',
+      tags: ['Design Tools', 'Annual Subscription', 'Team License'],
+      project: 'General Operations',
+      billable: false,
+    },
+    'EXP-002': {
+      id: 'EXP-002',
+      date: '2024-01-20',
+      category: 'Marketing',
+      description: 'Google Ads Campaign',
+      amount: 1200,
+      status: 'Approved',
+      submittedBy: 'Alex Rodriguez',
+      submittedDate: '2024-01-20',
+      approvedBy: 'Finance Manager',
+      approvedDate: '2024-01-21',
+      paymentMethod: 'Company Credit Card',
+      vendor: 'Google LLC',
+      receiptUrl: '/placeholder-receipt.pdf',
+      notes: 'Monthly advertising campaign for client acquisition.',
+      tags: ['Marketing', 'Advertising', 'Client Acquisition'],
+      project: 'Marketing Campaign Q1',
+      billable: true,
+    }
+  };
+
   const [expense, setExpense] = useState({
-    id: expenseId || 'EXP-001',
-    date: '2024-01-22',
-    category: 'Software',
-    description: 'Figma Subscription (Annual)',
-    amount: 540,
-    status: 'Approved',
-    submittedBy: 'Mike Chen',
-    submittedDate: '2024-01-22',
-    approvedBy: 'Finance Manager',
-    approvedDate: '2024-01-23',
-    paymentMethod: 'Company Credit Card',
-    vendor: 'Figma Inc.',
-    receiptUrl: '/placeholder-receipt.pdf',
-    notes: 'Annual subscription for design team. Includes advanced features and team collaboration tools.',
-    tags: ['Design Tools', 'Annual Subscription', 'Team License'],
-    project: 'General Operations',
-    billable: false,
+    ...(expenseData[expenseId as keyof typeof expenseData] || expenseData['EXP-001'])
   });
 
   const [isEditing, setIsEditing] = useState(false);

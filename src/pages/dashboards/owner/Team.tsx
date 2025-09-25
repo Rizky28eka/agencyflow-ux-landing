@@ -101,7 +101,7 @@ const OwnerTeam = () => {
                         </TableRow>
                         </TableHeader>
                         <TableBody>
-                        {teamMembers.map((member) => (
+                        {teamMembers.map((member, index) => (
                             <TableRow key={member.id}>
                             <TableCell>
                                 <div className="font-medium">{member.name}</div>
@@ -121,7 +121,9 @@ const OwnerTeam = () => {
                                 </div>
                             </TableCell>
                             <TableCell className="text-right">
-                                <Link to={`/dashboard/owner/team/${member.id}`}>View Details</Link>
+                                <Link to={`/dashboard/owner/team/${index + 1}`}>
+                                  <Button variant="outline" size="sm">View Details</Button>
+                                </Link>
                             </TableCell>
                             </TableRow>
                         ))}

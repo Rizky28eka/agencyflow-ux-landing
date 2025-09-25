@@ -1,12 +1,55 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { CheckCircle, Clock, Download, File, Send, Briefcase, ThumbsUp, ThumbsDown, Eye, MessageCircle } from 'lucide-react';
+import { CheckCircle, Clock, Download, File, Send, Briefcase, ThumbsUp, ThumbsDown, Eye, MessageCircle, ArrowLeft } from 'lucide-react';
 import { DashboardLayout } from '@/components/DashboardLayout';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const ClientProjectDetails = () => {
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+
+  // Mock data based on projectId
+  const projectData = {
+    '1': {
+      name: 'Website Redesign',
+      description: 'Complete redesign of the corporate website with modern UI/UX',
+      status: 'In Progress',
+      progress: 75,
+      startDate: '2024-01-01',
+      expectedCompletion: '2024-02-15',
+      teamSize: 5,
+      budget: 50000,
+      spent: 37500
+    },
+    '2': {
+      name: 'Mobile App Development',
+      description: 'Native mobile application for iOS and Android platforms',
+      status: 'Planning',
+      progress: 25,
+      startDate: '2024-01-15',
+      expectedCompletion: '2024-03-20',
+      teamSize: 8,
+      budget: 75000,
+      spent: 18750
+    },
+    '3': {
+      name: 'Brand Identity Package',
+      description: 'Complete brand identity including logo, guidelines, and assets',
+      status: 'Review',
+      progress: 90,
+      startDate: '2023-12-01',
+      expectedCompletion: '2024-01-30',
+      teamSize: 3,
+      budget: 25000,
+      spent: 22500
+    }
+  };
+
+  const project = projectData[projectId as keyof typeof projectData] || projectData['1'];
+
   const timeline = [
     { status: 'Completed', title: 'Project Kick-off', date: '2024-01-01' },
     { status: 'Completed', title: 'Initial Mockups Delivered', date: '2024-01-15' },
@@ -31,10 +74,44 @@ const ClientProjectDetails = () => {
   return (
     <DashboardLayout
       role="client"
-      title="Project: Website Redesign"
-      description="View timeline, deliverables, and provide feedback."
+      title={`Project: ${project.name}`}
+      description={project.description}
       headerIcon={<Briefcase className="h-8 w-8 text-primary" />}
+      headerAction={
+        <Button variant="outline" onClick={() => navigate('/dashboard/client/projects')}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Projects
+        </Button>
+      }
     >
+      {/* Project Overview */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-2xl">{project.name}</CardTitle>
+          <p className="text-muted-foreground">{project.description}</p>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Status</p>
+              <p className="font-semibold text-lg">{project.status}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Progress</p>
+              <p className="font-semibold text-lg">{project.progress}%</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Budget Used</p>
+              <p className="font-semibold text-lg">${project.spent.toLocaleString()} / ${project.budget.toLocaleString()}</p>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-muted-foreground">Team Size</p>
+              <p className="font-semibold text-lg">{project.teamSize} members</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       <Tabs defaultValue="overview">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>

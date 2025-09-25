@@ -186,11 +186,11 @@ const OwnerFinance = () => {
               <TableBody>
                 {recentTransactions.map((trx) => (
                   <TableRow key={trx.id} className="cursor-pointer hover:bg-muted/50">
-                    <TableCell className="font-medium"><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.id}</Link></TableCell>
-                    <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.date}</Link></TableCell>
-                    <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">{trx.description}</Link></TableCell>
+                    <TableCell className="font-medium"><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block hover:text-primary">{trx.id}</Link></TableCell>
+                    <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block hover:text-primary">{trx.date}</Link></TableCell>
+                    <TableCell><Link to={`/dashboard/finance/transactions/${trx.id}`} className="block hover:text-primary">{trx.description}</Link></TableCell>
                     <TableCell className={`text-right font-semibold ${trx.type === 'Income' ? 'text-green-600' : 'text-red-600'}`}>
-                      <Link to={`/dashboard/finance/transactions/${trx.id}`} className="block">
+                      <Link to={`/dashboard/finance/transactions/${trx.id}`} className="block hover:opacity-80">
                           <div className="flex items-center justify-end">
                           {trx.type === 'Income' ? <ArrowUp className="h-4 w-4 mr-1" /> : <ArrowDown className="h-4 w-4 mr-1" />}
                           ${Math.abs(trx.amount).toLocaleString()}
@@ -205,7 +205,7 @@ const OwnerFinance = () => {
           {/* Mobile Card List */}
           <div className="sm:hidden space-y-4">
             {recentTransactions.map((trx) => (
-              <Link to={`/dashboard/finance/transactions/${trx.id}`} key={trx.id} className="block">
+              <Link to={`/dashboard/finance/transactions/${trx.id}`} key={trx.id} className="block hover:opacity-90">
                 <Card className="hover:bg-muted/50">
                   <CardContent className="p-4 flex justify-between items-center">
                     <div>

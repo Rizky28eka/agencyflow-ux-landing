@@ -68,9 +68,12 @@ const Navbar = () => {
           <div className="flex items-center">
             <div className="flex items-center space-x-2">
               <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg bg-gradient-to-br from-primary to-accent"></div>
-              <span className="text-lg sm:text-xl font-bold truncate max-w-[120px]">
+              <button 
+                onClick={() => navigate('/')}
+                className="text-lg sm:text-xl font-bold truncate max-w-[120px] hover:text-primary transition-colors"
+              >
                 AgencyFlow
-              </span>
+              </button>
             </div>
           </div>
 

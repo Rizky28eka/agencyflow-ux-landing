@@ -10,30 +10,57 @@ import { toast } from 'sonner';
 const InvoiceDetails = () => {
   const { invoiceId } = useParams();
 
-  // Mock data - in a real app, you'd fetch this based on invoiceId
-  const invoice = {
-    id: invoiceId || 'INV-2024-001',
-    date: '2024-01-01',
-    dueDate: '2024-01-15',
-    amount: 99.00,
-    status: 'paid' as const,
-    plan: 'Professional Plan',
-    period: 'January 1, 2024 - January 31, 2024',
-    client: {
-      name: 'Maksim Lakna',
-      company: 'AgencyFlow Inc.',
-      address: '123 Design St, Creativity City, 10101',
-      email: 'maksim@agencyflow.com'
-    },
-    items: [
-      {
-        description: 'Professional Plan Subscription',
-        quantity: 1,
-        price: 99.00,
-        total: 99.00,
+  // Mock data based on invoiceId
+  const invoiceData = {
+    'INV-2024-001': {
+      id: 'INV-2024-001',
+      date: '2024-01-01',
+      dueDate: '2024-01-15',
+      amount: 99.00,
+      status: 'paid' as const,
+      plan: 'Professional Plan',
+      period: 'January 1, 2024 - January 31, 2024',
+      client: {
+        name: 'Maksim Lakna',
+        company: 'AgencyFlow Inc.',
+        address: '123 Design St, Creativity City, 10101',
+        email: 'maksim@agencyflow.com'
       },
-    ],
+      items: [
+        {
+          description: 'Professional Plan Subscription',
+          quantity: 1,
+          price: 99.00,
+          total: 99.00,
+        },
+      ],
+    },
+    'INV-2023-012': {
+      id: 'INV-2023-012',
+      date: '2023-12-01',
+      dueDate: '2023-12-15',
+      amount: 99.00,
+      status: 'paid' as const,
+      plan: 'Professional Plan',
+      period: 'December 1, 2023 - December 31, 2023',
+      client: {
+        name: 'Maksim Lakna',
+        company: 'AgencyFlow Inc.',
+        address: '123 Design St, Creativity City, 10101',
+        email: 'maksim@agencyflow.com'
+      },
+      items: [
+        {
+          description: 'Professional Plan Subscription',
+          quantity: 1,
+          price: 99.00,
+          total: 99.00,
+        },
+      ],
+    }
   };
+
+  const invoice = invoiceData[invoiceId as keyof typeof invoiceData] || invoiceData['INV-2024-001'];
 
   const handlePrint = () => {
     window.print();
