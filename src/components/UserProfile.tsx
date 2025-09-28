@@ -15,10 +15,10 @@ export const UserProfile = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [profileData, setProfileData] = useState({
-    firstName: user?.user_metadata?.first_name || '',
-    lastName: user?.user_metadata?.last_name || '',
-    company: user?.user_metadata?.company || '',
-    skills: user?.user_metadata?.skills || [],
+    firstName: user?.name?.split(' ')[0] || '',
+    lastName: user?.name?.split(' ')[1] || '',
+    company: '',
+    skills: [] as string[],
   });
   const [newSkill, setNewSkill] = useState('');
 
@@ -73,7 +73,7 @@ export const UserProfile = () => {
     <Card className="max-w-md">
       <CardHeader className="text-center">
         <Avatar className="w-20 h-20 mx-auto mb-4">
-          <AvatarImage src={user.user_metadata?.avatar_url} />
+          <AvatarImage src="" />
           <AvatarFallback className="text-lg">{initials}</AvatarFallback>
         </Avatar>
         <CardTitle>{displayName}</CardTitle>

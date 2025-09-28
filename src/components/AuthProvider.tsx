@@ -32,16 +32,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (data: LoginData) => {
     try {
       setError(null);
-      const response = await api.post<AuthResponse>('/api/auth/login', data);
-      const { token, user } = response;
+      const { data: authData, error } = await api.auth.signIn({
+        email: data.email,
+        password: data.password
+      });
 
-      setToken(token);
+      if (error) throw error;
+      if (!authData.user) throw new Error("No user data received");
+
+      const user: User = {
+        id: authData.user.id,
+        name: authData.user.user_metadata?.name || authData.user.email?.split('@')[0] || 'User',
+        email: authData.user.email!,
+        role: 'OWNER' // Default role, should be fetched from profiles table
+      };
+
       setUser(user);
-
-      localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(user));
-
-      navigate('/dashboard/owner'); // Default redirect
+      navigate('/dashboard/owner');
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err);
@@ -57,7 +65,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (data: RegisterData) => {
     try {
       setError(null);
-      await api.post('/api/auth/register', data);
+      const { error } = await api.auth.signUp({
+        email: data.email,
+        password: data.password
+      });
+
+      if (error) throw error;
+      
+      // After successful signup, try to login
       await login({ email: data.email, password: data.password });
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -71,7 +86,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await api.auth.signOut();
     setUser(null);
     setToken(null);
     setError(null);
@@ -94,8 +110,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     login,
     register,
     logout,
+    loading: isLoading,
     isLoading,
-    isAuthenticated: !!(token && user),
+    isAuthenticated: !!user,
     error,
     setUserRole,
   };

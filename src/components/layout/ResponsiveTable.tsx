@@ -3,9 +3,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Card, CardContent } from '@/components/ui/card';
 
 interface Column<TData extends Record<string, unknown>> {
-  key: keyof TData;
+  key: string;
   label: string;
-  render?: (value: TData[keyof TData], row: TData) => ReactNode;
+  render?: (value: any, row: TData) => ReactNode;
   className?: string;
 }
 
@@ -29,8 +29,8 @@ export const ResponsiveTable = <TData extends Record<string, unknown>>({
         <Table>
           <TableHeader>
             <TableRow>
-              {columns.map((column) => (
-                <TableHead key={column.key} className={column.className}>
+              {columns.map((column, colIndex) => (
+                <TableHead key={colIndex} className={column.className}>
                   {column.label}
                 </TableHead>
               ))}
@@ -43,9 +43,9 @@ export const ResponsiveTable = <TData extends Record<string, unknown>>({
                 className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}
                 onClick={() => onRowClick?.(row)}
               >
-                {columns.map((column) => (
-                  <TableCell key={column.key} className={column.className}>
-                    {column.render ? column.render(row[column.key], row) : row[column.key]}
+                {columns.map((column, colIndex) => (
+                  <TableCell key={colIndex} className={column.className}>
+                    {column.render ? column.render(row[column.key as keyof TData], row) : String(row[column.key as keyof TData] || '')}
                   </TableCell>
                 ))}
               </TableRow>
@@ -63,11 +63,11 @@ export const ResponsiveTable = <TData extends Record<string, unknown>>({
             ) : (
               <Card className={onRowClick ? "cursor-pointer hover:bg-muted/50" : ""}>
                 <CardContent className="p-4">
-                  {columns.slice(0, 3).map((column) => (
-                    <div key={column.key} className="flex justify-between items-center py-1">
+                  {columns.slice(0, 3).map((column, colIndex) => (
+                    <div key={colIndex} className="flex justify-between items-center py-1">
                       <span className="text-sm text-muted-foreground">{column.label}:</span>
                       <span className="font-medium">
-                        {column.render ? column.render(row[column.key], row) : row[column.key]}
+                        {column.render ? column.render(row[column.key as keyof TData], row) : String(row[column.key as keyof TData] || '')}
                       </span>
                     </div>
                   ))}
